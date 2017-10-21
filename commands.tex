@@ -1,0 +1,508 @@
+
+\newcommand{\Att}{\textsc{Attack}}
+\newcommand{\Hyb}{\textsc{Hybrid}}
+\newcommand{\Idl}{\textsc{Ideal}}
+\newcommand{\Lzy}{\textsc{Lazy}}
+
+
+\newcommand{\OR}{\mathsf{OR}}
+\newcommand{\AND}{\mathsf{AND}}
+
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{propo}[thm]{Proposition}
+\newtheorem{clm}[thm]{Claim}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{assm}[thm]{Assumption}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{obs}[thm]{Observation}
+\newtheorem{egs}[thm]{Example}
+\newtheorem{fct}[thm]{Fact}
+\newtheorem{expr}{Experiment}
+\newtheorem{cons}[thm]{Construction}
+\newtheorem{nte}[thm]{Note}
+\newtheorem{aim}[thm]{Aim}
+
+% keys mathsf
+%\newcommand{\sk}{\mathsf{sk}}
+%\newcommand{\SK}{\mathsf{SK}}
+%\newcommand{\pk}{\mathsf{pk}}
+%\newcommand{\PK}{\mathsf{PK}}
+%\newcommand{\dk}{\mathsf{dk}}
+%\newcommand{\DK}{\mathsf{DK}}
+
+
+%\newcommand{\att}{\cA}
+%\newcommand{\prd}{\cP}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+\newcommand{\remove}[1]{}
+\newcommand{\num}[1]{{\bf (#1)}}
+
+\newcommand{\procfont}[1]{\mathsc{#1}}
+\newcommand{\tablefont}[1]{\mathsf{#1}}
+
+\newcommand{\mpk}{\pi}
+\newcommand{\msk}{\varfont{msk}}
+\newcommand{\usk}{\varfont{dk}}
+\newcommand{\usknew}{\overline{\varfont{dk}}}
+\newcommand{\ctxt}{\varfont{C}}
+\newcommand{\ctxtnew}{\overline{\varfont{C}}}
+\newcommand{\IBE}{\schemefont{IBE}}
+\newcommand{\IBEnew}{\overline{\schemefont{IBE}}}
+\newcommand{\mskspace}{{\cal S}}
+%\newcommand{\kg}{{\cal K}}
+\newcommand{\kg}{\mathsf{Kg}}
+\newcommand{\kgnew}{\overline{{\cal K}}}
+%\newcommand{\pg}{{\cal P}}
+\newcommand{\pg}{\mathsf{Pg}}
+\newcommand{\Enc}{\enc}
+\newcommand{\Encnew}{\encnew}
+\newcommand{\Dec}{\decc}
+\newcommand{\Decnew}{\deccnew}
+
+\def\vk{\mathit{vk}}
+\def\pars{\pi}
+\def\ek{\varfont{ek}}
+\def\pk{\varfont{pk}}
+\def\sk{\varfont{sk}}
+\newcommand{\vecsk}{\mathbf{sk}}
+\newcommand{\vecpk}{\mathbf{pk}}
+\newcommand{\vecm}{\mathbf{m}}
+\newcommand{\vecM}{\mathbf{M}}
+\def\dk{\varfont{dk}}
+\def\ak{\varfont{ak}}
+\def\stateinfo{\varfont{st}}
+\def\st{\varfont{state}}
+\def\stt{\varfont{St}}
+\newcommand{\RO}{H}
+\newcommand{\keygen}{KG}
+\newcommand{\pargen}{PG}
+\newcommand{\trapdoor}{Td}
+\newcommand{\test}{Test}
+%\newcommand{\setup}{Setup}
+\renewcommand{\AE}{\mathcal{AE}}
+%\newcommand{\enc}{\mathcal{E}}
+\newcommand{\enc}{\mathsf{Enc}}
+%\newcommand{\decc}{\mathcal{D}}
+\newcommand{\decc}{\mathsf{Dec}}
+\newcommand{\eval}{\mathsf{Eval}}
+\newcommand{\genc}{\algfont{\Enc}}
+\newcommand{\dec}{\mathsf{Dec}}
+\newcommand{\gdec}{\algfont{\Dec}}
+%\newcommand{\com}{Com}
+\newcommand{\ver}{Ver}
+\newcommand{\open}{\ver}
+\def\Hash{H}
+
+\newcommand{\Funcs}{\mathsf{Funcs}}
+
+\newcommand{\ol}{\overline}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\nin}{\not \in}
+
+\newcommand{\es}{\varnothing} % empty set
+\newcommand{\se}{\subseteq}
+\newcommand{\sm}{\setminus}
+\newcommand{\nse}{\not \se}
+\newcommand{\nf}[2]{\nicefrac{#1}{#2}}
+\newcommand{\rv}[1]{\mathbf{#1}} % Random Variable
+\newcommand{\mal}[1]{\widehat{#1}} % Malicious version of the alg
+
+\newcommand{\schemefont}[1]{{\mathsf{#1}}}
+\newcommand{\primfont}[1]{{\mathsf{#1}}}
+\newcommand{\algfont}[1]{{\mathsf{#1}}}
+\newcommand{\advfont}[1]{{\mathsf{#1}}}
+\newcommand{\orfont}[1]{\mathsc{#1}}
+\newcommand{\varfont}[1]{\mathit{#1}}
+\newcommand{\randvarfont}[1]{\mathbf{#1}}
+\newcommand{\constfont}[1]{\mathtt{#1}}
+\newcommand{\notionfont}[1]{\mathrm{#1}}
+\newcommand{\eventfont}[1]{{\mathsc{#1}}}
+\newcommand{\vectorfont}[1]{\mathslbf{#1}}
+\newcommand{\transformfont}[1]{\mathsf{#1}}
+
+
+\newcommand{\tuple}[1]{\langle{#1}\rangle}
+\def\from{\mbox{from}\ }
+\def\From{\mbox{From}\ }
+\def\bits{\{0,1\}}
+\def\cross{\times}
+\newcommand{\xor}{{\oplus}}
+\newcommand{\Colon}{{:\;\;}}
+\newcommand{\mystrut}{\rule{0em}{15pt}}
+\newcommand{\namestrut}{\rule{0em}{20pt}}
+\def\poly{\mathop{\rm poly}\nolimits}
+\def\emptystring{\varepsilon}
+\def\emptyid{()}
+\newcommand{\Dom}{\mathsf{Dom}}
+\newcommand{\DomR}{\mathsf{DomR}}
+\newcommand{\Rng}{\mathsf{Rng}}
+\newcommand{\RngR}{\mathsf{RngR}}
+\newcommand{\Keys}{\mathsf{Keys}}
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calEE}{{\cal EE}}
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\goesto}{{\rightarrow}}
+\newcommand{\eqdef}{\;\stackrel{\rm def}{=}\;}
+\newcommand{\then}{{\;;\;\;}}   % for [ ; ; ; : ] notation
+\newcommand{\andthen}{{\;:\;\;}}
+\def\union{\cup}
+\def\bigunion{\bigcup}
+\def\intersection{\cap}
+\def\bigintersection{\bigcap}
+\def\suchthatt{\: :\:}
+\newcommand{\suchthat}{{\mbox{s.t.\ }}}
+\def\next{\:;\:}
+\def\nextt{\:;\:}
+\newcommand{\sett}[1]{\{#1\}}
+\newcommand{\set}[2]{\{\:#1 \suchthatt #2\:\}}
+\newcommand{\setsize}[1]{\left|{#1}\right|}
+\def\leqq{\;\leq\;}
+\def\eqq{\;=\;}
+\def\geqq{\;\geq\;}
+\def\equivv{\;\equiv\;}
+\def\prn#1{\left(#1\right)}
+\newcommand{\getsr}{{\:{\leftarrow{\hspace*{-3pt}\raisebox{.75pt}{$\scriptscriptstyle\$$}}}\:}}
+% \def\getsr{\stackrel{{\scriptscriptstyle\$}}{\leftarrow}}
+% \renewcommand{\choose}[2]{{{#1}\atopwithdelims(){#2}}}
+
+\newcommand{\Var}{{\mbox{\bf Var}}}
+\newcommand{\E}{\mathbf{E}}
+\newcommand{\EE}[1]{{\E\left[{#1}\right]}}
+\newcommand{\EEE}[2]{{\E_{#1}\left[{#2}\right]}}
+\newcommand{\Prob}[1]{{\Pr\left[\,{#1}\,\right]}}
+\newcommand{\probb}[2]{{\Pr}_{#1}\left[\,{#2}\,\right]}
+\newcommand{\probbs}[3]{{\Pr}^{#1}_{#2}\left[\,{#3}\,\right]}
+\newcommand{\probbp}[2]{{\Pr}_{#1}'\left[\,{#2}\,\right]}
+\newcommand{\Probb}[2]{{{\Pr}_{#1}\left[\,{#2}\,\right]}}
+\newcommand{\Probbp}[2]{{{\Pr}_{#1}'\left[\,{#2}\,\right]}}
+\newcommand{\condProb}[2]{{\Pr}\left[\,#1\,|\,#2\,\right]}
+\newcommand{\CondProb}[2]{{\Pr}\left[\: #1\:\left|\right.\:#2\:\right]}
+\newcommand{\CondProbb}[3]{{\Pr}_{#1}\left[\: #2\:\left|\right.\:#3\:\right]}
+\newcommand{\CondProbbp}[3]{%
+{\Pr}_{#1}^{'}\left[\: #2\:\left|\right.\:#3\:\right]}
+
+
+% ===================================================================
+\newcommand{\kwfont}[1]{{\ensuremath{\mathrm{#1}}}}
+\newcommand{\kwfunction}{{\kwfont{function}\ }}
+\newcommand{\kwlabel}{{\kwfont{label}\ }}
+\newcommand{\kwfor}{{\kwfont{for}\ }}
+\newcommand{\kwand}{{\kwfont{and}\ }}
+\newcommand{\kwor}{{\kwfont{or}\ }}
+\newcommand{\kwnot}{{\kwfont{not}}}
+\newcommand{\kwdo}{{\kwfont{do}\ }}
+\newcommand{\kwreturn}{{\kwfont{return}\ }}
+\newcommand{\kwReturn}{{\kwfont{Return}\ }}
+\newcommand{\kwalgorithm}{{\ensuremath{\mathbf{Algorithm}\ }}}
+\newcommand{\kwprotocol}{{\kwfont{Protocol}\ }}
+\newcommand{\kwexperiment}{{\kwfont{Experiment}\ }}
+\newcommand{\kwadversary}{{\kwfont{Adversary}\ }}
+\newcommand{\kworacle}{{\kwfont{Oracle}\ }}
+\newcommand{\kwuntil}{{\kwfont{until}\ }}
+\newcommand{\kwrepeat}{{\kwfont{repeat}\ }}
+\newcommand{\kwif}{{\kwfont{If}\ }}
+\newcommand{\kwthen}{{\kwfont{Then}\ }}
+\newcommand{\kwelse}{{\kwfont{Else}\ }}
+\newcommand{\kwabort}{{\kwfont{abort}\ }}
+\newcommand{\kwgoto}{{\kwfont{goto}\ }}
+\newcommand{\kwwhile}{{\kwfont{while}\ }}
+\newcommand{\kwparse}{{\kwfont{parse}\ }}
+\newcommand{\kwas}{{\kwfont{as}\ }}
+\newcommand{\kwstatic}{{\kwfont{static}\ }}
+\newcommand{\kwrun}{{\kwfont{run}\ }}
+\newcommand{\kwbegin}{{\kwfont{begin}\ }}
+\newcommand{\kwend}{{\kwfont{end}\ }}
+\newcommand{\kwstart}{{\kwfont{start}\ }}
+\newcommand{\kwcontinue}{{\kwfont{continue}\ }}
+\newcommand{\kwdefine}{{\kwfont{define}\ }}
+\newcommand{\kwflip}{{\kwfont{flip}\ }}
+\newcommand{\kwlet}{{\kwfont{let}\ }}
+\newcommand{\kwof}{{\kwfont{of}\ }}
+\newcommand{\kwcase}{{\kwfont{case}\ }}
+\newcommand{\kwswitch}{{\kwfont{switch}\ }}
+\newcommand{\kwpick}{{\kwfont{pick}\ }}
+\newcommand{\kwset}{{\kwfont{set}\ }}
+\newcommand{\kwcompute}{{\kwfont{compute}\ }}
+\newcommand{\comment}[1]{\hspace{15pt}{\small /$\!\!$/\ #1}}
+\newcommand{\Comment}[1]{\hspace{5pt}{/$\!\!$/\ #1}}
+\newcommand{\sComment}[1]{\hspace{2pt}{/$\!\!$/#1}}
+
+\newcommand{\Coins}{\mathsf{Coins}}
+
+\newcommand{\ProbExp}[2]{{\Pr}\left[\: #1\:\suchthatt\:#2\:\right]}
+
+\newcommand{\PRG}{\schemefont{PRG}}
+\newcommand{\PRGpg}{\schalg{PRG}{Ev}}
+\newcommand{\PRGkg}{\schalg{PRG}{Kg}}
+
+\newcommand{\FSE}{\schemefont{FSE}}
+
+\newcommand{\PE}{\schemefont{PE}}
+\newcommand{\FE}{\schemefont{FE}}
+\newcommand{\setup}{\mathsf{Setup}}
+\newcommand{\keyder}{\mathsf{KeyDer}}
+
+\newcommand{\OT}{\schemefont{OT}}
+\newcommand{\Send}{\procfont{Sender}}
+\newcommand{\Rec}{\procfont{Receiver}}
+\newcommand{\PKE}{\schemefont{PKE}}
+\newcommand{\FPKE}{\schemefont{FPKE}}
+\newcommand{\DPKE}{\schemefont{DPKE}}
+\newcommand{\DE}{\schemefont{DE}}
+\newcommand{\PKEpg}{\schalg{PKE}{Pg}}
+\newcommand{\oPKEpg}{\overline{{\cal P}}}
+\newcommand{\PKEEnc}{\schalg{PKE}{Enc}}
+\newcommand{\oPKEEnc}{\schalg{\overline{PKE}}{Enc}}
+\newcommand{\PKEDec}{\schalg{PKE}{Dec}}
+\newcommand{\oPKEDec}{\overline{{\cal D}}}
+\newcommand{\PKEkg}{\schalg{PKE}{Kg}}
+\newcommand{\oPKEkg}{\overline{{\cal K}}}
+\newcommand{\PKEpk}{\mathit{ek}}
+\newcommand{\PKEPK}{\schalg{PKE}{PK}}
+\newcommand{\PKESK}{\schalg{PKE}{SK}}
+\newcommand{\oPKEpk}{\overline{\mathit{ek}}}
+\newcommand{\PKEsk}{\mathit{dk}}
+\newcommand{\oPKEsk}{\overline{\mathit{dk}}}
+\newcommand{\PKEpars}{\pi}
+\newcommand{\oPKEpars}{\overline{\pi}}
+
+\newcommand{\SE}{\schemefont{SE}}
+\newcommand{\SEpg}{{\cal P}}
+\newcommand{\SEEnc}{{\cal E}}
+\newcommand{\SEDec}{{\cal D}}
+\newcommand{\SEkg}{{\cal K}}
+\newcommand{\SEkey}{K}
+\newcommand{\SEpars}{\pi}
+
+%%%  English %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\etal}{et~al.\ }
+\newcommand{\aka}{also known as,\ }
+\newcommand{\resp}{resp.,\ }
+\newcommand{\ie}{i.e.,\ }
+\newcommand{\wolog}{w.l.o.g.\ }
+\newcommand{\Wolog}{W.l.o.g.\ }
+\newcommand{\eg}{e.g.,\ }
+\newcommand{\Eg}{E.g.,\ }
+\newcommand{\wrt} {with respect to\ }
+\newcommand{\cf}{{cf.,\ }}
+
+%%%  math %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\round}[1]{\lfloor #1 \rceil}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\angles}[1]{\langle #1 \rangle}
+\newcommand{\parens}[1]{( #1 )}
+\newcommand{\bracks}[1]{[ #1 ]}
+\newcommand{\bra}[1]{\langle#1\rvert}
+\newcommand{\ket}[1]{\lvert#1\rangle}
+
+
+\newcommand{\adjRound}[1]{\left\lfloor #1 \right\rceil} % Adjusted Round
+\newcommand{\adjCeil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\adjFloor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\adjAngles}[1]{\left\langle #1 \right\rangle}
+\newcommand{\adjParens}[1]{\left( #1 \right)}
+\newcommand{\adjBracks}[1]{\left[ #1 \right]}
+\newcommand{\adjBra}[1]{\left\langle#1\right\rvert}
+\newcommand{\adjKet}[1]{\left\lvert#1\right\rangle}
+\newcommand{\adjSet}[1]{\left\{ #1 \right\}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\third}{\tfrac{1}{3}}
+\newcommand{\quarter}{\tfrac{1}{4}}
+%\newcommand{\eqdef}{:=}
+%\newcommand{\zo}{\{0,1\}}
+
+
+
+
+\newcommand{\cA}{{\mathcal A}}
+\newcommand{\cB}{{\mathcal B}}
+\newcommand{\cC}{{\mathcal C}}
+\newcommand{\cD}{{\mathcal D}}
+\newcommand{\cE}{{\mathcal E}}
+\newcommand{\cF}{{\mathcal F}}
+\newcommand{\cG}{{\mathcal G}}
+\newcommand{\cH}{{\mathcal H}}
+\newcommand{\cI}{{\mathcal I}}
+\newcommand{\cJ}{{\mathcal J}}
+\newcommand{\cK}{{\mathcal K}}
+\newcommand{\cL}{{\mathcal L}}
+\newcommand{\cM}{{\mathcal M}}
+\newcommand{\cN}{{\mathcal N}}
+\newcommand{\cO}{{\mathcal O}}
+\newcommand{\cP}{{\mathcal P}}
+\newcommand{\cQ}{{\mathcal Q}}
+\newcommand{\cR}{{\mathcal R}}
+\newcommand{\cS}{{\mathcal S}}
+\newcommand{\cT}{{\mathcal T}}
+\newcommand{\cU}{{\mathcal U}}
+\newcommand{\cV}{{\mathcal V}}
+\newcommand{\cW}{{\mathcal W}}
+\newcommand{\cX}{{\mathcal X}}
+\newcommand{\cY}{{\mathcal Y}}
+\newcommand{\cZ}{{\mathcal Z}}
+
+\newcommand{\bfA}{\mathbf{A}}
+\newcommand{\bfB}{\mathbf{B}}
+\newcommand{\bfC}{\mathbf{C}}
+\newcommand{\bfD}{\mathbf{D}}
+\newcommand{\bfE}{\mathbf{E}}
+\newcommand{\bfF}{\mathbf{F}}
+\newcommand{\bfG}{\mathbf{G}}
+\newcommand{\bfH}{\mathbf{H}}
+\newcommand{\bfI}{\mathbf{I}}
+\newcommand{\bfJ}{\mathbf{J}}
+\newcommand{\bfK}{\mathbf{K}}
+\newcommand{\bfL}{\mathbf{L}}
+\newcommand{\bfM}{\mathbf{M}}
+\newcommand{\bfN}{\mathbf{N}}
+\newcommand{\bfO}{\mathbf{O}}
+\newcommand{\bfP}{\mathbf{P}}
+\newcommand{\bfQ}{\mathbf{Q}}
+\newcommand{\bfR}{\mathbf{R}}
+\newcommand{\bfS}{\mathbf{S}}
+\newcommand{\bfT}{\mathbf{T}}
+\newcommand{\bfU}{\mathbf{U}}
+\newcommand{\bfV}{\mathbf{V}}
+\newcommand{\bfW}{\mathbf{W}}
+\newcommand{\bfX}{\mathbf{X}}
+\newcommand{\bfY}{\mathbf{Y}}
+\newcommand{\bfZ}{\mathbf{Z}}
+
+
+\newcommand{\bfa}{\mathbf{a}}
+\newcommand{\bfb}{\mathbf{b}}
+\newcommand{\bfc}{\mathbf{c}}
+\newcommand{\bfd}{\mathbf{d}}
+\newcommand{\bfe}{\mathbf{e}}
+\newcommand{\bff}{\mathbf{f}}
+\newcommand{\bfg}{\mathbf{g}}
+\newcommand{\bfh}{\mathbf{h}}
+\newcommand{\bfi}{\mathbf{i}}
+\newcommand{\bfj}{\mathbf{j}}
+\newcommand{\bfk}{\mathbf{k}}
+\newcommand{\bfl}{\mathbf{l}}
+\newcommand{\bfm}{\mathbf{m}}
+\newcommand{\bfn}{\mathbf{n}}
+\newcommand{\bfo}{\mathbf{o}}
+\newcommand{\bfp}{\mathbf{p}}
+\newcommand{\bfq}{\mathbf{q}}
+\newcommand{\bfr}{\mathbf{r}}
+\newcommand{\bfs}{\mathbf{s}}
+\newcommand{\bft}{\mathbf{t}}
+\newcommand{\bfu}{\mathbf{u}}
+\newcommand{\bfv}{\mathbf{v}}
+\newcommand{\bfw}{\mathbf{w}}
+\newcommand{\bfx}{\mathbf{x}}
+\newcommand{\bfy}{\mathbf{y}}
+\newcommand{\bfz}{\mathbf{z}}
+
+
+
+\newcommand{\sfA}{\mathsf{A}}
+\newcommand{\sfB}{\mathsf{B}}
+\newcommand{\sfC}{\mathsf{C}}
+\newcommand{\sfD}{\mathsf{D}}
+\newcommand{\sfE}{\mathsf{E}}
+\newcommand{\sfF}{\mathsf{F}}
+\newcommand{\sfG}{\mathsf{G}}
+\newcommand{\sfH}{\mathsf{H}}
+\newcommand{\sfI}{\mathsf{I}}
+\newcommand{\sfJ}{\mathsf{J}}
+\newcommand{\sfK}{\mathsf{K}}
+\newcommand{\sfL}{\mathsf{L}}
+\newcommand{\sfM}{\mathsf{M}}
+\newcommand{\sfN}{\mathsf{N}}
+\newcommand{\sfO}{\mathsf{O}}
+\newcommand{\sfP}{\mathsf{P}}
+\newcommand{\sfQ}{\mathsf{Q}}
+\newcommand{\sfR}{\mathsf{R}}
+\newcommand{\sfS}{\mathsf{S}}
+\newcommand{\sfT}{\mathsf{T}}
+\newcommand{\sfU}{\mathsf{U}}
+\newcommand{\sfV}{\mathsf{V}}
+\newcommand{\sfW}{\mathsf{W}}
+\newcommand{\sfX}{\mathsf{X}}
+\newcommand{\sfY}{\mathsf{Y}}
+\newcommand{\sfZ}{\mathsf{Z}}
+
+\newcommand{\sfa}{\mathsf{a}}
+\newcommand{\sfb}{\mathsf{b}}
+\newcommand{\sfc}{\mathsf{c}}
+\newcommand{\sfd}{\mathsf{d}}
+\newcommand{\sfe}{\mathsf{e}}
+\newcommand{\sff}{\mathsf{f}}
+\newcommand{\sfg}{\mathsf{g}}
+\newcommand{\sfh}{\mathsf{h}}
+\newcommand{\sfi}{\mathsf{i}}
+\newcommand{\sfj}{\mathsf{j}}
+\newcommand{\sfk}{\mathsf{k}}
+\newcommand{\sfl}{\mathsf{l}}
+\newcommand{\sfm}{\mathsf{m}}
+\newcommand{\sfn}{\mathsf{n}}
+\newcommand{\sfo}{\mathsf{o}}
+\newcommand{\sfp}{\mathsf{p}}
+\newcommand{\sfq}{\mathsf{q}}
+\newcommand{\sfr}{\mathsf{r}}
+\newcommand{\sfs}{\mathsf{s}}
+\newcommand{\sft}{\mathsf{t}}
+\newcommand{\sfu}{\mathsf{u}}
+\newcommand{\sfv}{\mathsf{v}}
+\newcommand{\sfw}{\mathsf{w}}
+\newcommand{\sfx}{\mathsf{x}}
+\newcommand{\sfy}{\mathsf{y}}
+\newcommand{\sfz}{\mathsf{z}}
+
+\newcommand{\eps}{\epsilon}
+%\newcommand{\e}{\epsilon}
+\newcommand{\veps}{\varepsilon}
+%\newcommand{\vare}{\varepsilon}
+\newcommand{\vphi}{\varphi}
+\newcommand{\vsigma}{\varsigma}
+\newcommand{\vrho}{\varrho}
+\newcommand{\vpi}{\varpi}
+\newcommand{\tO}{\widetilde{O}}
+\newcommand{\tOmega}{\widetilde{\Omega}}
+\newcommand{\tTheta}{\widetilde{\Theta}}
+\newcommand{\field}{\ensuremath \Bbbk}
+\newcommand{\reals}{\ensuremath \mathbb{R}}
+
+\newcommand{\client}{\mathsl{client}}
+\newcommand{\server}{\mathsl{server}}
+\newcommand{\TTP}{\procfont{TTP}}
+\newcommand{\rec}{\mathsf{rec}}
+\newcommand{\doc}{\mathsf{doc}}
+\newcommand{\pred}{\mathsf{pred}}
+\newcommand{\scrub}{\mathsf{scrub}}
+
+\newcommand{\ODS}{\schemefont{ODS}}
+\newcommand{\commit}{\mathsf{Commit}}
+\newcommand{\query}{\mathsf{Query}}
+\newcommand{\DB}{\mathsf{DB}}
