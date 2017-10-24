@@ -1,0 +1,146 @@
+\section{Component A:  Property-Preserving Encryption for Proximity}
+
+In spatial databases, nearest neighbor queries (\emph{e.g.}, finding the closest soldier in the field) and clustering queries are pervasive.  Algorithms for executing these query types need to perform the fundamental operation of \emph{distance comparison} between points in the database, \emph{i.e.}, determining which of two candidates points are closer to a target point.  We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving enryption} (DCPE).  We propose to study DCRE and DCPE analogously to the on-going study of order-revealing and order-preserving encryption.  
+This leads to the following questions:
+
+\begin{question}
+Can we design efficient DCPE?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient DCRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' DCPE with better security?
+\end{question}
+
+To answer the first question, in on-going work we have found that distance comparison preserving functions do not seem to have a nice ``recursive'' property as in the case of order-preserving functions, which was crucially exploited by~\cite{EC:BCLO09}.  However, based on computer experiments, we conjecture that \emph{distance-comparison preserving functions are approximately distance-preserving}.    So far, we have proven this conjecture in one dimension.
+
+%On the one hand, this would be depressing because it would mean that DCPE may not be able to provide much better security than \emph{distance-preserving} encryption, which seeks weak. 
+If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme. 
+Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
+We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheOne11} to answer the question of what privacy such a scheme provides.  
+
+\textbf{Outline of proposed work}
+\begin{itemize}
+\item Biometric data is being stored online and is privacy sensitive.
+\item There do not exist strong approaches to protect biometric data stored online while allowing search.
+\item We will produce searchable encryption that simultaneously protects privacy while allowing search for important use cases.
+\item If we don't, data breaches will continue to reveal individuals' sensitive information and this information cannot be recovered or modified.
+\item Some tasks:
+\begin{itemize}
+\item New definitions
+\item Tokenizing with LSH to not leak on subfeatures
+\item LSH with threshold schemes.
+\item Direct indexing mechanism
+\item Support more metrics
+\item Implement results
+\end{itemize}
+\item Extend noisy protected search to more scenarios including new definitions and new constructions.  In particular, consider scenarios that require security against the client and provide security constructions.
+\item Construct backend direct indexing mechanisms designed for noisy data
+\item Tailor noisy, protected search based on near-term applications (iris, fingerprint, photo including face photos).  Consider multiple use cases including: consumer-grade authentication, law enforcement (criminal investigation), identity cards of the future (real-ID), known person, office of personal management stores all fingerprints.
+\end{itemize}
+
+
+\textbf{Open problems discussion:} 
+\begin{itemize}
+\item Understand the set of LSH and how they can be used for practical noisy sources.
+\item Is there any power to interactive solutions?  Everything I've seen is single message each way.
+\item Integrate LSH and an m-out-of-n search scheme to mitigate the leakage associated with the Kuzu scheme.
+\item Design a stronger primitive than LSH that has some entropy preservation properties so we can talk about what cost there is in revealing when LSH collisions occur.  Adam's student did some work on distance preserving transforms.  Ben is thinking about this as well.  
+\item None of these schemes talk about updates.  Is there anything interesting to consider there?
+\end{itemize}
+
+\paragraph{Prior Work}
+These primitives have been implicitly studied in many prior works.  These works primarily differ in how many points should be comparable.  As an example, a fuzzy extractor~\cite{DRS04} can be seen as an approximate distance preserving encryption where the distance only preserved around one point which is selected at key generation.  However, fuzzy extractors shrink the area around the selected point.  A weaker version called a pseudoentropic isometry~\cite{cryptoeprint:2016:1100} was recently constructed by the co-PI (albeit it only for large alphabet Hamming metrics).
+
+GRECS constructs a scheme where multiple points (logarithmic in a graph size) are comparable with input points~\cite{meng2015grecs}.  The authors show that by providing comparison with a random set of points and taking the minimum it is possible to approximate all pairs distance.
+Finally, the work on fuzzy searchable encryption by Boldyreva and Chenette can be viewed as building a distance comparison preserving function~\cite{boldyreva2014efficient}.  They allow comparisons between any two points, their approach is based on tags and is designed not to be distance-preserving but only distance comparison preserving.
+
+\ben{These are my notes from last year, still need to condense}
+
+Work by Li et al.~\cite{li2010fuzzy,wang2013efficient} that was published at INFOCOM 2010.  
+
+\paragraph{Summary of Techniques}  Here we focus on how they deal with noise.  We ignore the searching index structure in the rest of their work.  This work is compatible with an arbitrary index structure.  The scheme is built on a system that can handle keyword equality.  The basic idea of this paper is to expand noise into a set of possible neighbors.  Three strategies are proposed:
+
+\begin{enumerate}
+\item When inserting a keyword, for example `Alice', also insert all of the neighbors into the index structure.  For example if considering Hamming distance of $1$, insert `Blice', `Clice', etc.  This technique results in an index structure size proportional to the number of neighbors.  Furthermore, the number of neighbors is leaked to the server as well documents that have neighboring keywords.  However, search proceeds the same way as in standard equality search.  The authors note that this approach is not tenable for any large amount of noise.
+\item The second technique is a hybrid technique where both the inserted keyword set and the searched queries are modified.  Instead of inserting `Alice', `Blice', etc. the following keywords are inserted `*lice', `A*lice', etc.  Then when performing the search the querier with the word `Alica' asks all documents containing one of `*lice', ..., `Alic*', etc.  Note that this approach requires as underlying scheme that can handle disjunctive queries.  As such there may be more leakage associated with this approach.
+\item The third approach is to insert word GRAMS.  The idea is to insert all possible nearby substrings of a particular length.  I didn't really follow their discussion well on why this was better than the wildcard based approach.  But this technique seems to be similar to what is being done in conjunctive search system out of IBM research.
+\end{enumerate}
+
+\paragraph{Security}
+This work never presents a formal definition of security.  They roughly say that the server is allowed to learn ``the outcome and the pattern of search queries.''  They claim to be using the security definition of Curtmola et al.~\cite{curtmola2011searchable}.  For their basic scheme they leak when two documents have the same neighbor which is the same as leaking if they are within twice the noise tolerance.  
+
+\paragraph{Major gaps}
+This paper presents a relatively weak efficiency guarantees.  All of the schemes involve exhaustively listing the neighbors in one form or another.  Furthermore, the number of neighbors and the neighborhood pattern of all documents is revealed.
+
+\subsubsection{Efficient Similarity Search over Encrypted Data}
+Work by Kuzu, Islam, and Kantarcioglu~\cite{kuzu2012efficient}.  I don't know the reputation of the conference IEEE Conference on Data Engineering.  
+
+\paragraph{Summary of Techniques} The basic idea is to build fuzzy search over a primitive called locality sensitive hashing.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.  It is often used to construct efficient algorithms for solving the nearest neighbor problem~\cite{datar2004locality,slaney2008locality}.  
+
+\begin{definition}
+Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$, for $r_1< r_2$ and $p_1 >p_2$, locality sensitive hash if for any $x, y$ the following hold:
+\begin{itemize}
+\item If $d(x, y) \le r_1$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \ge p_1$, and 
+\item If $d(x, y) \ge r_2$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \le p_2$.
+\end{itemize}
+\end{definition}
+
+The idea of this work is to sample multiple locality sensitive hashes and insert the results of each hash into the keyword index.  Then the client will query for all results that match each locality sensitive hash (again this requires the ability to perform disjunctive queries).\footnote{More precisely, they build an inverted index for each locality sensitive hash that allows them to retrieve the document identifiers.}  The client locally retrieves results and then restricts to those documents that have a high number of hash matches.  With good probability, these will correspond to those records that were close to the original query.  Note this scheme overcomes the limitations of~\cite{li2010fuzzy} and allows fuzzy searching even in the case of an exponential number of neighbors (assuming a good locality-sensitive hash) is known for the metric space.
+
+\paragraph{Security}  This scheme has several important security drawbacks.  We separate these into client and server concerns.
+
+\begin{itemize}
+\item \textbf{Client} There is no security provided against the client.  They consider the two party model.  Notice that the client retrieves all records that match even a single locality sensitive hash.  It is clients responsibility to determine which of these documents are relevant.  \textbf{Possible extension:} This seems a very obvious place for improvement, using an m-out-of-n technique would allow the client to directly retrieve these records.  Would need to worry about number of required hashes and the leakage for this type of query.
+\item \textbf{Server} The provided security against the server is quite weak.  They acknowledge that many SSE schemes leak when two documents share the same keyword or feature.  This work projects a single feature to multiple subfeatures and leaks equality of those as well.  This seems crucial to their approach.  Its not clear how much is revealed by learning this partial information.  \textbf{Possible work:} Seems like a natural place to consider inference attacks.
+\end{itemize}
+
+\paragraph{Major gaps} As stated above, the provided security is not very strong.  The scheme is fairly space efficient.  It would be interesting to really explore the space of locality sensitive hashing and see what is appropriate.  It would be great to hide the subfeature patterns that are revealed by this scheme.  Note that they actually appear to have implemented this scheme.
+
+\subsubsection{Identification with Encrypted Biometric Data}
+This work of Bringer et al.~\cite{bringer2011identification} is a journal version of a work that was presented at ICC~\cite{bringer2009error}.  It uses similar techniques to the work of Kuzu et al.~\cite{kuzu2012efficient} and neither work cites the other.  Given the proximity in time my assumption is that the two works were developed independently.  They also build locality sensitive hashing.  They add a Bloom filter to check membership.  The idea is to insert the result of the LSH into the Bloom filter and then search for each keyword.  Most of their technical work is in combining the Bloom filter and LSH.  Since their definitions don't allow for leakage they use PIR to actually perform the lookups throughout their scheme.  Thus, this scheme is unlikely to actually be implemented.
+
+
+\paragraph{Security} Unlike the work of Kuzu et al. this work considers three parties, a sender, receiver, and a server.  However, their definitions of security are very strange.  They consider two notions called sender and receiver privacy.  Sender privacy says that the server can't tell which of two records is being inserted.  Receiver privacy is the same, a server can't tell which of two records was retrieved.  So despite considering three parties there is no provided security against the sender or receiver.
+
+\paragraph{Major Gaps}  While this scheme has a stronger notion of security that Kuzu et al. all of the complexity is hidden by using PIR for the actual retrieval.  Furthermore the system still does not consider any notion of security against the data owner or data querier.  There's a lot of things that are just abstracted away.  Would need to figure out these details for a reals scheme.
+
+\subsection{Component A-III:  Property-Preserving Encryption for Graph Data} 
+
+For graph data, shortest path and disease propagation queries are common.  Previous work looks at supporting shortest path queries in the context of searchable symmetric encryption.  Accordingly, we propose to investigate \emph{shortest path revealing  and preserving encryption} (SPRE and SPPE) and \emph{random walk revealing and preserving encryption} (RWRE and RWPE).   We believe that the study of such encryption schemes will lead to interesting questions in graph theory.  We will particularly try to leverage work on differentially private graph sanitization. 
+
+Regarding shortest path revealing schemes: 
+
+\begin{question}
+Can we design efficient SPPE?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient SPRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' SPPE with better security?
+\end{question}
+
+And then regarding random walk preserving schemes:
+
+\begin{question}
+Can we design efficient RWPE?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient RWRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' RWPE with better security?
+\end{question}
+
+
