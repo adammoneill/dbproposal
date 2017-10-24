@@ -245,6 +245,36 @@ If this conjecture is true, then for the first question we could equivalently tu
 Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
 We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheOne11} to answer the question of what privacy such a scheme provides.  
 
+\textbf{Outline of proposed work}
+\begin{itemize}
+\item Biometric data is being stored online and is privacy sensitive.
+\item There do not exist strong approaches to protect biometric data stored online while allowing search.
+\item We will produce searchable encryption that simultaneously protects privacy while allowing search for important use cases.
+\item If we don't, data breaches will continue to reveal individuals' sensitive information and this information cannot be recovered or modified.
+\item Some tasks:
+\begin{itemize}
+\item New definitions
+\item Tokenizing with LSH to not leak on subfeatures
+\item LSH with threshold schemes.
+\item Direct indexing mechanism
+\item Support more metrics
+\item Implement results
+\end{itemize}
+\item Extend noisy protected search to more scenarios including new definitions and new constructions.  In particular, consider scenarios that require security against the client and provide security constructions.
+\item Construct backend direct indexing mechanisms designed for noisy data
+\item Tailor noisy, protected search based on near-term applications (iris, fingerprint, photo including face photos).  Consider multiple use cases including: consumer-grade authentication, law enforcement (criminal investigation), identity cards of the future (real-ID), known person, office of personal management stores all fingerprints.
+\end{itemize}
+
+
+\textbf{Open problems discussion:} 
+\begin{itemize}
+\item Understand the set of LSH and how they can be used for practical noisy sources.
+\item Is there any power to interactive solutions?  Everything I've seen is single message each way.
+\item Integrate LSH and an m-out-of-n search scheme to mitigate the leakage associated with the Kuzu scheme.
+\item Design a stronger primitive than LSH that has some entropy preservation properties so we can talk about what cost there is in revealing when LSH collisions occur.  Adam's student did some work on distance preserving transforms.  Ben is thinking about this as well.  
+\item None of these schemes talk about updates.  Is there anything interesting to consider there?
+\end{itemize}
+
 \paragraph{Prior Work}
 These primitives have been implicitly studied in many prior works.  These works primarily differ in how many points should be comparable.  As an example, a fuzzy extractor~\cite{DRS04} can be seen as an approximate distance preserving encryption where the distance only preserved around one point which is selected at key generation.  However, fuzzy extractors shrink the area around the selected point.  A weaker version called a pseudoentropic isometry~\cite{cryptoeprint:2016:1100} was recently constructed by the co-PI (albeit it only for large alphabet Hamming metrics).
 
@@ -259,7 +289,7 @@ Work by Li et al.~\cite{li2010fuzzy,wang2013efficient} that was published at INF
 
 \begin{enumerate}
 \item When inserting a keyword, for example `Alice', also insert all of the neighbors into the index structure.  For example if considering Hamming distance of $1$, insert `Blice', `Clice', etc.  This technique results in an index structure size proportional to the number of neighbors.  Furthermore, the number of neighbors is leaked to the server as well documents that have neighboring keywords.  However, search proceeds the same way as in standard equality search.  The authors note that this approach is not tenable for any large amount of noise.
-\item The second technique is a hybrid technique where both the inserted keyword set and the searched queries are modified.  Instead of inserting `Alice', `Blice', etc. the following keywords are inserted `*lice', `A*lice', etc.  Then when performing the search the querier with the word `Alica' asks all documents containing one of `*lica', ..., `Alic*', etc.  Note that this approach requires as underlying scheme that can handle disjunctive queries.  As such there may be more leakage associated with this approach.
+\item The second technique is a hybrid technique where both the inserted keyword set and the searched queries are modified.  Instead of inserting `Alice', `Blice', etc. the following keywords are inserted `*lice', `A*lice', etc.  Then when performing the search the querier with the word `Alica' asks all documents containing one of `*lice', ..., `Alic*', etc.  Note that this approach requires as underlying scheme that can handle disjunctive queries.  As such there may be more leakage associated with this approach.
 \item The third approach is to insert word GRAMS.  The idea is to insert all possible nearby substrings of a particular length.  I didn't really follow their discussion well on why this was better than the wildcard based approach.  But this technique seems to be similar to what is being done in conjunctive search system out of IBM research.
 \end{enumerate}
 
@@ -269,7 +299,7 @@ This work never presents a formal definition of security.  They roughly say that
 \paragraph{Major gaps}
 This paper presents a relatively weak efficiency guarantees.  All of the schemes involve exhaustively listing the neighbors in one form or another.  Furthermore, the number of neighbors and the neighborhood pattern of all documents is revealed.
 
-\subsection{Efficient Similarity Search over Encrypted Data}
+\subsubsection{Efficient Similarity Search over Encrypted Data}
 Work by Kuzu, Islam, and Kantarcioglu~\cite{kuzu2012efficient}.  I don't know the reputation of the conference IEEE Conference on Data Engineering.  
 
 \paragraph{Summary of Techniques} The basic idea is to build fuzzy search over a primitive called locality sensitive hashing.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.  It is often used to construct efficient algorithms for solving the nearest neighbor problem~\cite{datar2004locality,slaney2008locality}.  
@@ -293,7 +323,7 @@ The idea of this work is to sample multiple locality sensitive hashes and insert
 
 \paragraph{Major gaps} As stated above, the provided security is not very strong.  The scheme is fairly space efficient.  It would be interesting to really explore the space of locality sensitive hashing and see what is appropriate.  It would be great to hide the subfeature patterns that are revealed by this scheme.  Note that they actually appear to have implemented this scheme.
 
-\subsection{Identification with Encrypted Biometric Data}
+\subsubsection{Identification with Encrypted Biometric Data}
 This work of Bringer et al.~\cite{bringer2011identification} is a journal version of a work that was presented at ICC~\cite{bringer2009error}.  It uses similar techniques to the work of Kuzu et al.~\cite{kuzu2012efficient} and neither work cites the other.  Given the proximity in time my assumption is that the two works were developed independently.  They also build locality sensitive hashing.  They add a Bloom filter to check membership.  The idea is to insert the result of the LSH into the Bloom filter and then search for each keyword.  Most of their technical work is in combining the Bloom filter and LSH.  Since their definitions don't allow for leakage they use PIR to actually perform the lookups throughout their scheme.  Thus, this scheme is unlikely to actually be implemented.
 
 
