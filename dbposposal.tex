@@ -407,13 +407,8 @@ Can we design ``partial'' RWPE with better security?
 \subsection{Component B-II:  }
 
 
-\section{Component C: Leakage-Abuse Attacks and Defenses}
-
-\subsection{Component C-I: Extensions to Recent Attacks}
-
-\subsection{Component C-II:  Attack Mitigations}
-
-\paragraph*{Modularity.}  One mitigation of the attacks we propose to look at is \emph{modularity} in the sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheOne11}.  The idea of M-OPE is to apply a secret random offset modulo the largest possible message to a message before encrypting it (the secret random offset is chosen once and fixed in the secret key), so that everything gets ``shifted.''  Although similar attacks seem to apply to M-OPE, we propose to investigate more fine-grained modularity as a defense.  In the specific case of order-preserving encryption, we propose \emph{digit-modular} OPE (DM-OPE) where there is a secret modular offset applied to each digit.  The base in which the data is written could even itself be secret.  It becomes more complicated to make range queries with DM-OPE, as it requires an exponential number of queries in the number of ``wrap around'' digits in the query.  However, we propose to investigate approximating the queries efficiently (with some false positives that the client can filter out).
+\section{Component C: Leakage-Abuse Defenses}
+\input{leakage-defense}
 
 \section{Prior Accomplishments and NSF Support}
 
@@ -428,7 +423,7 @@ Supplement to Award \#IIP-1362046,   2014 - 2019, \$8,000.
 \section{Schedule and Management Plan}
 
 \bibliographystyle{alpha}
-\bibliography{cryptobib/Bencrypto,cryptobib/abbrev3,cryptobib/crypto,new}
+\bibliography{Bencrypto,cryptobib/abbrev3,cryptobib/crypto,new}
 
 
 
