@@ -1,8 +1,29 @@
 
-\subsection{Component C-I: Extensions to Recent Attacks}
+\subsection{Component C-I:  Attack Mitigations}
 
-\subsection{Component C-II:  Attack Mitigations}
+\iffalse
+\paragraph*{Modularity.}  One mitigation of the attacks we propose to look at
+is \emph{modularity} in the sense of modular order-preserving encryption
+(M-OPE)~\cite{C:BolCheOne11}.  The idea of M-OPE is to apply a secret random
+offset modulo the largest possible message to a message before encrypting it
+(the secret random offset is chosen once and fixed in the secret key), so that
+everything gets ``shifted.''  Although similar attacks seem to apply to M-OPE,
+we propose to investigate more fine-grained modularity as a defense.  In the
+specific case of order-preserving encryption, we propose \emph{digit-modular}
+OPE (DM-OPE) where there is a secret modular offset applied to each digit.  The
+base in which the data is written could even itself be secret.  It becomes more
+complicated to make range queries with DM-OPE, as it requires an exponential
+number of queries in the number of ``wrap around'' digits in the query.
+However, we propose to investigate approximating the queries efficiently (with
+some false positives that the client can filter out).
+\fi
 
-\paragraph*{Modularity.}  One mitigation of the attacks we propose to look at is \emph{modularity} in the sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheOne11}.  The idea of M-OPE is to apply a secret random offset modulo the largest possible message to a message before encrypting it (the secret random offset is chosen once and fixed in the secret key), so that everything gets ``shifted.''  Although similar attacks seem to apply to M-OPE, we propose to investigate more fine-grained modularity as a defense.  In the specific case of order-preserving encryption, we propose \emph{digit-modular} OPE (DM-OPE) where there is a secret modular offset applied to each digit.  The base in which the data is written could even itself be secret.  It becomes more complicated to make range queries with DM-OPE, as it requires an exponential number of queries in the number of ``wrap around'' digits in the query.  However, we propose to investigate approximating the queries efficiently (with some false positives that the client can filter out).
 
+\paragraph*{POPE: Partial order preserving encoding.} A co-PI recently
+introduced a new cryptographic mechanism, called POPE, to range queries over
+encrypted data that is optimized to support insert-heavy
+workload~\cite{CCS:RACY16}.  POPE provides much stronger security than previous
+order-preserving encryptions for the following reasons: 
 
+\begin{itemize}
+\item The search 
