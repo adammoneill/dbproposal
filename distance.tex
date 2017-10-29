@@ -1,6 +1,36 @@
+%!TEX root = dbproposal.tex
+
 \section{Component A:  Property-Preserving Encryption for Proximity}
 
-In spatial databases, nearest neighbor queries (\emph{e.g.}, finding the closest soldier in the field) and clustering queries are pervasive.  Algorithms for executing these query types need to perform the fundamental operation of \emph{distance comparison} between points in the database, \emph{i.e.}, determining which of two candidates points are closer to a target point.  We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving enryption} (DCPE).  We propose to study DCRE and DCPE analogously to the on-going study of order-revealing and order-preserving encryption.  
+In spatial databases, nearest neighbor queries (\emph{e.g.}, finding the closest soldier in the field) and clustering queries are pervasive.  Algorithms for executing these query types need to perform the fundamental operation of \emph{distance comparison} between points in the database, \emph{i.e.}, determining which of two candidates points are closer to a target point.  Similarly, in large scale biometric databases the fundamental operation is comparison of the distance between a target point and all stored points. \ben{need examples of databases, india, other countries?}  There is some work on computing distance on encrypted data (reviewed below).  The work does not evaluate the fundamental soundness of the techniques and does not work for metrics that are necessary for deployed databases.
+
+There are two common techniques used in proximity graphs.  The first technique relies on computing the distance between two points $a$ and $b$.  This distance can be granular for example $d(a, b) =15$ according to a metric $d$ or course $a$ and $b$ are either equal, close, far, or neither.  Usually, users expect equal, close, far, and near to function as a metric.  Thus, for the time being we consider a functionality that allows queries of the type $d(a,b)$.  We call property-preserving encryption that achieves this functionality \emph{distance revealing encryption} or DRE.
+
+The second technique does not allow explicit computation of the distance between $a$ and $b$.  Instead it takes a triple of points $a,b$ and $c$ and outputs the bit $d(a,c)<d(b,c)$.  That is, whether $a$ or $b$ is closer to $c$.  This type of computation is frequently used in learning algorithms.  \ben{Adam is this right?}  We call a property-preserving encryption that achieves this functionality \emph{distance-comparison revealing encryption} or DCRE.
+
+Our research in proximity will follow three threads: 1) constructing distance revealing encryption 3) constructing distance comparison revealing encryption and 3) approximate distance revealing: connecting distance revealing and distance comparison revealing encryption.
+
+\subsection{Component A-I: Constructing Distance Revealing Encryption}
+\paragraph{Prior Work}
+The notion of distance-revealing encryption has been implicitly studied in prior work.  The most relevant This work of Boldyreva and Chenette appeared at FSE in 2014~\cite{boldyreva2014efficient}.  It is the only work I'm aware of that comes from the theoretical crypto community.  
+
+\paragraph{Summary of Techniques}  This paper can primarily be viewed as contributing to understanding the feasibility of this problem.  They consider a general closeness metric where two items can be ``close'', ``near'', or ``far.''  A fuzzy SSE scheme should be required to return all close records and no far records.  Using this general notion they construct a scheme very similar to Li et al.~\cite{li2010fuzzy}.  However, they pad the number of neighbors so this is not revealed to the server.  They view the problem as constructing a graph of what items in the metric space are close.  They then insert into index all edges of this graph (the scheme of Li et al. can be viewed as inserted neighboring vertices).  Then searching is performed by retrieving all indicent edges of the search term.
+
+The work shows that for an arbitrary closeness graph it is necessary to have a ciphertext length proportional to the maximum degree of this graph.  
+
+Their second contribution is to relax their definition to allow leakage.  They say they are going to reveal some local structure.  They then have a construction using lattices.  Basically they map the input point to the nearest lattice point.  The information that is revealed is exactly the offset to the lattice point.  This is very similar to what is done in the basic fuzzy extractor construction~\cite{DBLP:journals/siamcomp/DodisORS08}.
+
+The work also briefly mentions LSH but this is covered better in other works.
+
+\paragraph{Security}  Their general construction for closeness domains appears to be relatively secure.  As they mention this construction is unlikely to be secure for all but the smallest distances.  \ben{Looking back I don't understand the sentence above.}  The interpretation of their relaxed definition depends entirely on the nature of this local information.  This originally wasn't thought to be a problem in the fuzzy extractor world.  However, there are distributions where the entire point is determined by exactly the local information that is revealed.
+
+\paragraph{Major Gaps}
+This work is a good overview of some of the foundational issues and why this problem might be hard.  Their second contribution appears connected to fuzzy extractors and could be considered for other distance notions.  Their definition is fairly relaxed and is based on the indistinguishability definitions used for things like deterministic encryption.\footnote{There is a lot of detail in the second part of the paper that I didn't follow all the way.  May be worth having a conversation since Adam knows both authors well.}
+
+
+
+\subsection{Component A-II: Distance Comparison Revealing Encryption}
+We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  We propose to study DCRE and DCPE analogously to the on-going study of order-revealing and order-preserving encryption.  
 This leads to the following questions:
 
 \begin{question}
@@ -12,16 +42,20 @@ Can we design efficient DCPE?  What security can be achieved by such schemes?
 Can we design efficient DCRE with better security?
 \end{question}
 
-\begin{question}
-Can we design ``partial'' DCPE with better security?
-\end{question}
-
 To answer the first question, in on-going work we have found that distance comparison preserving functions do not seem to have a nice ``recursive'' property as in the case of order-preserving functions, which was crucially exploited by~\cite{EC:BCLO09}.  However, based on computer experiments, we conjecture that \emph{distance-comparison preserving functions are approximately distance-preserving}.    So far, we have proven this conjecture in one dimension.
 
 %On the one hand, this would be depressing because it would mean that DCPE may not be able to provide much better security than \emph{distance-preserving} encryption, which seeks weak. 
 If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme. 
 Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
 We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheOne11} to answer the question of what privacy such a scheme provides.  
+
+\subsection{Component A-III: Approximate Distance Revealing Encryption}
+\paragraph{Prior Work}
+A fuzzy extractor~\cite{EC:DodReySmi04} can be seen as an approximate distance preserving encryption where the distance only preserved around one point which is selected at setup.  However, fuzzy extractors shrink the area around the selected point.  A weaker version called a pseudoentropic isometry~\cite{EPRINT:ABCFG16} was recently constructed by the co-PI (albeit it only for large alphabet Hamming metrics).
+
+GRECS constructs a scheme where multiple points (logarithmic in a graph size) are comparable with input points~\cite{meng2015grecs}.  The authors show that by providing comparison with a random set of points and taking the minimum it is possible to approximate all pairs distance.
+Finally, the work on fuzzy searchable encryption by Boldyreva and Chenette can be viewed as building a distance comparison preserving function~\cite{boldyreva2014efficient}.  They allow comparisons between any two points, their approach is based on tags and is designed not to be distance-preserving but only distance comparison preserving.
+
 
 \textbf{Outline of proposed work}
 \begin{itemize}
@@ -54,10 +88,6 @@ We can show that independent random such perturbations yields a function that, w
 \end{itemize}
 
 \paragraph{Prior Work}
-These primitives have been implicitly studied in many prior works.  These works primarily differ in how many points should be comparable.  As an example, a fuzzy extractor~\cite{DRS04} can be seen as an approximate distance preserving encryption where the distance only preserved around one point which is selected at key generation.  However, fuzzy extractors shrink the area around the selected point.  A weaker version called a pseudoentropic isometry~\cite{cryptoeprint:2016:1100} was recently constructed by the co-PI (albeit it only for large alphabet Hamming metrics).
-
-GRECS constructs a scheme where multiple points (logarithmic in a graph size) are comparable with input points~\cite{meng2015grecs}.  The authors show that by providing comparison with a random set of points and taking the minimum it is possible to approximate all pairs distance.
-Finally, the work on fuzzy searchable encryption by Boldyreva and Chenette can be viewed as building a distance comparison preserving function~\cite{boldyreva2014efficient}.  They allow comparisons between any two points, their approach is based on tags and is designed not to be distance-preserving but only distance comparison preserving.
 
 \ben{These are my notes from last year, still need to condense}
 

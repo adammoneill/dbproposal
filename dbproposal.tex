@@ -1,0 +1,328 @@
+\documentclass[11pt]{article}
+
+\usepackage{fullpage,varwidth,url}
+\usepackage{amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{relsize}
+\usepackage{color}
+%
+%    \setlength{\evensidemargin}{-0.2in}
+%    \setlength{\oddsidemargin}{-0.2in}
+%    \setlength{\textwidth}{6.9in}
+%    \setlength{\textheight}{9.5in}
+%    \setlength{\topmargin}{-0.35in}
+%    \setlength{\headheight}{0in}
+%    \setlength{\headsep}{0in}
+%    \setlength{\footskip}{0.5in}
+\title{{{\Large{TWC: Small:  Next-Generation Secure Outsourced Databases}}}}
+%\author{Sanjam Garg \\University of California, Berkeley \and 	Mohammad Mahmoody \\ University of Virginia\and Adam O'Neill \\Georgetown University}
+
+
+%\usepackage{anysize} % to set up document margins.
+%\marginsize{1.1in}{1.1in}{1.1in}{1.0in}
+%\vspace{-1mm}
+\usepackage{times}
+\usepackage{etex}
+\usepackage{framed}
+\input{commands}
+
+\newcommand{\sanjam}[1]{\textcolor{red}{Sanjam: #1}}
+\newcommand{\moh}[1]{}%{\textcolor{red}{Moh: #1}}
+\newcommand{\adam}[1]{\textcolor{red}{Adam: #1}}
+\newcommand{\ben}[1]{\textcolor{red}{Ben: #1}}
+
+%---
+\newtheorem{definition}{Definition}[section]
+\newtheorem{question}{Question}[section]
+\newtheorem{fact}{Fact}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{claim}{Claim}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{hypothesis}{Hypothesis}[section]
+\newtheorem{observation}{Observation}[section]
+\theoremstyle{remark}
+\newtheorem{construction}{Construction}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{example}{Example}[section]
+
+\newcommand{\pone}{\mbox{$P_1$}}
+\newcommand{\ptwo}{\mbox{$P_2$}}
+
+\renewcommand{\S}{{\cal S}}
+\newcommand{\F}{{\cal F}}
+\newcommand{\G}{{\mathbb{G}}}
+
+\newcommand{\vecx}{{\mathbf{x}}}
+\newcommand{\vecy}{{\mathbf{y}}}
+
+\newcommand{\numcorr}{{\mathsf{ncorr}}}
+\newcommand{\numencq}{{\mathsf{nencq}}}
+\newcommand{\numkeyq}{{\mathsf{nkeyq}}}
+
+
+\renewenvironment{proof}{\noindent{\bf Proof:~~}}{\qed}
+\newcommand{\BPF}{\begin{proof}} \newcommand {\EPF}{\end{proof}}
+\newenvironment{proofsketch}{\noindent{\bf Proof Sketch:~~}}{\qed}
+\newcommand{\BPFS}{\begin{proofsketch}} \newcommand {\EPFS}{\end{proofsketch}}
+
+%\def\qed{\quad\blackslug\lower 8.5pt\null\par}
+
+
+\newcommand{\BPR}{\begin{myprotocol}}   \newcommand{\EPR}{\end{myprotocol}}
+\newcommand{\ourfigg}[5]{
+{\begin{figure}[#4]
+\begin{center}
+\framebox[\width][c]{
+    \small
+    \hbox{\quad
+    \begin{varwidth}[c]{0.9\textwidth}
+    %\begin{center}
+    \begin{myfigure}
+    [#1]
+    \label{#2}
+    \end{myfigure}
+    %\end{center}
+    \vspace{-3ex}
+    #5
+    \end{varwidth}
+    \quad}
+    }
+    \begin{center} #3 \end{center}
+    \vspace{-6ex}
+\end{center}
+\end{figure}
+} }
+
+
+% USAGE: \ourfig{TITLE}{LABEL}{CAPTION}{BODY}
+\newcommand{\ourfig}[4]{\ourfigg{#1}{#2}{#3}{htb}{#4}}
+
+\newcommand{\prott}[5]{
+{\begin{figure}[#4]
+\begin{center}
+\framebox[\width][c]{
+    \small
+    \hbox{\quad
+    \begin{varwidth}[c]{0.9\textwidth}
+    %\begin{center}
+    \begin{myprotocol}
+    [#1]
+    \label{#2}
+    \end{myprotocol}
+    %\end{center}
+    \vspace{-3ex}
+    #5
+    \end{varwidth}
+    \quad}
+    }
+    \begin{center} #3 \end{center}
+    \vspace{-6ex}
+\end{center}
+\end{figure}
+} }
+
+% USAGE: \prot{TITLE}{LABEL}{CAPTION}{BODY}
+\newcommand{\prot}[4]{\prott{#1}{#2}{#3}{htb}{#4}}
+
+\newcommand{\view}{{\sf view}}
+\newcommand{\trans}{{\sf trans}}
+\newcommand{\com}{Z}
+\newcommand{\cecom}{{\sf CECom}}
+\newcommand{\mxcom}{{\sf MXCom}}
+\newcommand{\mxzk}{{\sf MXZK}}
+\newcommand{\nmmxcom}{{\sf NMMXCom}}
+\newcommand{\gen}{{\sf Gen}}
+
+
+\newcommand{\crsgen}{{\sf CRSGen}}
+\newcommand{\crs}{{\sf CRS}}
+
+
+\newcommand{\Commit}{{\sf Com}}
+
+
+\newcommand{\scheme} {{\mathcal{S}}}
+
+\newcommand{\siggen} {{\sf SigKeyGen}}
+\newcommand{\sig} {{\sf Sig}}
+
+%\newcommand{\size} {{\sf SIZE}}
+\newcommand{\state} {\mathrm{state}}
+
+\newcommand{\idx} {\mathrm{index}}
+
+\newcommand{\kdm}{{\scriptscriptstyle\mathrm{KDM}}}
+\newcommand{\skdm}{{\scriptscriptstyle\mathrm{SKDM}}}
+\newcommand{\cpa}{{\scriptscriptstyle\mathrm{CPA}}}
+\newcommand{\new}{{\scriptscriptstyle\mathrm{NEW}}}
+
+
+\newcommand{\rsetup}[1]{\R({\sf setup}, #1 ) }
+\newcommand{\rquery}[1]{\R({\sf query}, #1 ) }
+\newcommand{\rchall}[1]{\R({\sf challenge}, #1 ) }
+\newcommand{\rfinal}[1]{\R({\sf final}, #1 ) }
+\newcommand{\iO}{i\mathcal{O}}
+
+\newcommand{\PRF}{{\mathsf{F}}}
+\newcommand{\PRFGen}{\mathsf{PRF{.}Gen}}
+\newcommand{\PRFPunc}{\mathsf{PRF{.}Punc}}
+\newcommand{\seed}{\ensuremath{{K}}}
+\newcommand{\secpar}{\secparam}
+\newcommand{\Adv}{\mathcal{A}}
+\newcommand{\rsample}{\gets}
+
+\newcommand{\tf}{\mathrm{tf}}
+\newcommand{\idf}{\mathrm{idf}}
+\newcommand{\df}{\mathrm{df}}
+\newcommand{\p}{\mathrm{P}}
+
+
+
+\date{}
+\begin{document}
+
+\maketitle
+%\vspace{-20mm}
+%\begin{abstract}
+%ent results have resolved functional encryption for all circuits. Does this solve most problems for functional encryption. We think not. In this paper we present the future vision for functional encryption. Our vision for functional encryption is to realize encryption systems which (at least asymptotically) approach the efficiency levels approached in insecure solutions.
+%\end{abstract}
+\vspace{-20mm}
+
+\section{Introduction}
+
+\subsection{Background and Motivation} 
+
+In modern society, data is often stored at rest for later use.  Databases are pervasive and the task of organizing and maintaining data is often off-loaded to an external provider. However, this means the external provider must be trusted with confidentiality of the data.  To mitigate this, an attractive solution is for a client to encrypt its data, under a key only it knows, before sending it to the external provider.  However, standard encryption hides all partial information about the data and does not allow efficient query processing.  Recent work in the cryptographic community has tried to address this problem by providing specialized encryption schemes and other secure database outsourcing protocols that both provide confidentiality to the extent possible and allow efficient query processing.  \textbf{However, this work has so far been mainly limited to very basic SQL functionality and key-value stores, which are outdated}.  The goal of this proposal is to bring us beyond this basic functionality to ``next-generation'' functionality that practitioners expect.  
+\ben{This isn't next gen, isn't current but that doesn't sound nearly as good}
+
+\subsection{This Proposal} \label{subsec-prop}
+
+The goal of this proposal is create new secure outsourced database protocols in line with the real-world functionality practitioners expect.  Real-world databases often store spatial, time-series, or graph data~\cite{SP:FVYSHG17}.  We focus on extending two key approaches to secure outsourced databases to these cases: Protocols based on \emph{property-preserving encryption} like CryptDB, and protocols based on \emph{secure multiparty computation} like BlindSeer.  Finally, we plan to extend recent leakage-abuse attacks to our new protocols and propose novel mitigations.
+
+\paragraph*{Proposed contributions in brief.}
+In sum, the main proposed contributions are:
+\begin{itemize}
+\item Design advanced types of property-preserving and partially-property preserving encryption schemes for use on spacial, time series, and graph data.
+\item Design extensions of BlindSeer to handle such data.
+\item Extend recent attacks on databases that use property-preserving encryption and propose novel mitigations of these attacks. 
+\end{itemize}
+
+\paragraph*{Intellectual merit and research team.}  
+
+ \paragraph*{Broader Impacts.}
+
+\subsection{Related Work}
+
+We do not address approaches based on searchable symmetric encryption or functional encryption.  
+
+\input{distance}
+
+
+\subsection{Component A-II:  Property-Preserving Encryption for Time Series Data} 
+
+In time series data one is often interested in correlations and anomalies.  Accordingly, we propose to look at \emph{correlation revealing and preserving encryption}  (CRE and CPE) and \emph{anomaly revealing and preserving encryption} (ARE and APE).  In other words, in the ``preserving'' case we are interested in perturbing statistical data in a way that preserves statistics or the fact that a point is an anomaly.  
+
+Regarding correlation revealing schemes
+\begin{question}
+Can we design efficient CPE for correlations of interest?  Which correlations should we target?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient CRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' CPE with better security?
+\end{question}
+
+
+Regarding anomaly  evealing schemes
+\begin{question}
+Can we design efficient APE?  How should anomaly thresholds be set?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient ARE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' APE with better security?
+\end{question}
+
+\subsection{Component A-III:  Property-Preserving Encryption for Graph Data} 
+
+For graph data, shortest path and disease propagation queries are common.  Previous work looks at supporting shortest path queries in the context of searchable symmetric encryption.  Accordingly, we propose to investigate \emph{shortest path revealing  and preserving encryption} (SPRE and SPPE) and \emph{random walk revealing and preserving encryption} (RWRE and RWPE).   We believe that the study of such encryption schemes will lead to interesting questions in graph theory.  We will particularly try to leverage work on differentially private graph sanitization. 
+
+Regarding shortest path revealing schemes: 
+
+\begin{question}
+Can we design efficient SPPE?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient SPRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' SPPE with better security?
+\end{question}
+
+And then regarding random walk preserving schemes:
+
+\begin{question}
+Can we design efficient RWPE?  What security can be achieved by such schemes?
+\end{question}
+
+
+\begin{question}
+Can we design efficient RWRE with better security?
+\end{question}
+
+\begin{question}
+Can we design ``partial'' RWPE with better security?
+\end{question}
+
+
+ \section{Component B: Approaches Based on Secure Multiparty Computation}
+ %We note that to the best of our knowledge, no prior protocols supporting search on encrypted data support (efficient) relevance ranking. 
+
+\subsection{Component B-I:  }
+
+\subsection{Component B-II:  }
+
+
+\section{Component C: Leakage-Abuse Defenses}
+\input{leakage-defense}
+
+\section{Prior Accomplishments and NSF Support}
+
+\textbf{Adam O'Neill:}
+In his Ph.D.~work, the PI  developed the notions of deterministic encryption~\cite{C:BelBolOne07,ABO07,C:BolFehOne08,C:BFOR08,TCC:FulNeiRey12} and order-preserving encryption~\cite{EC:BCLO09,C:BolCheOne11} to help enable search on encrypted data with processing time comparable to that for unencrypted data, while providing as-strong-as-possible security guarantees subject to this constraint.
+The PI has also worked on  instantiating random oracles~\cite{C:KilOneSmi10,TCC:GoyONeRao11,EC:LewONeSmi13},   aggregate signatures~\cite{CCS:BGOY07,AC:GLOW12}, deniable encryption~\cite{C:OnePeiWat11},  chosen-ciphertext security~\cite{EC:KilMohOne10,PKC:DFMO14}, and  functional encryption~\cite{EPRINT:ONeill10b,C:DIJOPP13, CANS:BelONe13}.   %Furthermore, he collaborated with database faculty George Kollios on refinements to order-preserving encryption~\cite{}.
+Since joining Georgetown, he has also been working on  applications of indistinguishability obfuscation~\cite{DGLOZ14} and on integrating cryptography with emerging applications, such as outsourced database systems using modular order-preserving encryption~\cite{SIGMOD:MCOKC15} and  privacy preserving network provenance using structured encryption~\cite{LOSZZ14}.
+
+Prior support: ``Program Obfuscation: From Theory to Practice." NSF Research Experiences for Undergraduates Supplement (PI).
+Supplement to Award \#IIP-1362046,   2014 - 2019, \$8,000.
+
+\textbf{Benjamin Fuller:}
+In his Ph.D.~work, the co-PI worked on deterministic encryption with Dr. O'Neill \cite{TCC:FulNeiRey12,JC:FulONeRey15}.  His main focus was on cryptography with noise developing new fuzzy extractors~\cite{AC:FulMenRey13,AC:FulReySmi16,EC:CFPRS16}.  Fuzzy extractors can be thought of as a special case of distance preserving encryption where only a single point is comparable.  He then oversaw evaluation and implementation of encrypted search systems at MIT Lincoln Laboratory as part of the IARPA SPAR project~\cite{spar_baa} including BLIND SEER codeveloped by Dr. Choi.  Since joining the University of Connecticut in 2016, his work has focused on driving cryptography to practice including authentication and fuzzy extractors~\cite{EPRINT:HFDD17,EPRINT:BKFY17,EPRINT:ABCFG16}, database search~\cite{SP:FVYSHG17}, and multi-party computation~\cite{EPRINT:CunFulYak16}.  
+
+Prior NSF support: not applicable.
+
+\textbf{Seung Geol Choi:}
+\section{Schedule and Management Plan}
+
+\bibliographystyle{alpha}
+\bibliography{Bencrypto,cryptobib/abbrev3,cryptobib/crypto,new}
+
+
+
+
+
+\end{document}
