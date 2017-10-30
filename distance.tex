@@ -18,15 +18,30 @@ The notion of distance-revealing encryption has been implicitly studied in prior
 \paragraph{Proposed Work}
 There is a scattering of work on variants of distance-revealing encryption but there is not a solid theoretic foundation for the object.  Previous work defines noisy searchable encryption schemes but never explicitly define distance-revealing encryption although this primitive is implicitly constructed.  Given the history of order-preserving encryption it seems prudent to understand the theoretical object and whether it offers meaningful security guarantees in realistic applications.
 
-Ongoing work by the PIs indicates the viability of this structure is highly metric dependent.  Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = \{ 1\le i\le \ell | a_i \neq b_i\}$.  Let $f:[\ell] \rightarrow [\ell]$ be a permutation on the integers $1,..., \ell$, let $g_i: \mathcal{M}\rightarrow \mathcal{M}$ and let $mask\in \mathcal{M}^\ell$.  Let $x\in\mathcal{M}^\ell$ be a plaintext points.  A distance-preserving encryption scheme $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$ must be of the form $\enc(x) = f(g_1(x_1),..., g_\ell(x_\ell)) \oplus mask$.  For polynomial size $\mathcal{M}$ an adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs.  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which we now know was necessary.
+Ongoing work by the PIs indicates the viability of this structure is highly metric dependent.  Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = \{ 1\le i\le \ell | a_i \neq b_i\}$.  Let $f:[\ell] \rightarrow [\ell]$ be a permutation on the integers $1,..., \ell$, let $g_i: \mathcal{M}\rightarrow \mathcal{M}$.  Let $x\in\mathcal{M}^\ell$ be a plaintext points.  A distance-preserving encryption scheme $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$ must be of the form $\enc(x) = f(g_1(x_1),..., g_\ell(x_\ell))$.  Intuitively the permutation $f$ rotates the dimensions will the permutations $g_i$ shuffle individual dimensions.  These are the only operations that preserve distance across the entire dataset.
 
-\paragraph{Tasks}
+ For polynomial size $\mathcal{M}$ an adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary Hamming distance).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which we now know was necessary.
+ 
+ \textbf{Extensions} Other metrics.  What if distance is only course grained?  Can you provide similar analysis?
+
+\paragraph{Understanding ideal distance-revealing encryption}
+\paragraph{Constructions based on Fuzzy Extractors}
+Fuzzy extractors derive stable keys from noisy sources~\cite{EC:DodReySmi04}.  They consist of a pair of algorithms $\gen(a)$ which produces a stable key $key$ and a public value $p$, the algorithm $\rep(b, p)$ outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are showing that is possible to combine a distance preserving encryption with a fuzzy extractor to create a distance-revealing encryption.  Here we present a form where comparisons are only possible between a set of stored ciphertexts and query ciphertexts.  This form is sufficient to instantiate noisy searchable encryption.  Let $a_i$ be a plaintext to be stored.  Rather than directly storing $\enc(a_i)$ the client does the following:
+
 \begin{enumerate}
-\item Understand the viability of distance-preserving encryption for other metrics.
-\item How strong can the ideal object be for distance-revealing encryption.
-\item Constructions based on fuzzy extractors.
+\item Generates $c_i \leftarrow \enc(a_i)$.
+\item Runs $k_i, p_i \leftarrow \gen(c_i)$.
+\item Outputs $p_i, H(k_i)$
 \end{enumerate}
 
+Here we assume that $H$ is an appropriate keyed collision-resistant hash function.  Then to search for $b$, the client encrypts $\enc(b)$ and presents this to the server which can rerun the fuzzy extractor for all stored terms.  This limits leakage to only search terms.
+
+\ben{still to do}
+\begin{enumerate}
+\item Figure out what is needed from the fuzzy extractor
+\item How do we make this more symmetric?
+\item Does this work for all metrics?
+\end{enumerate}
 
 \subsection{Component A-II: Distance Comparison Revealing Encryption}
 We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  We propose to study DCRE and DCPE analogously to the on-going study of order-revealing and order-preserving encryption.  
