@@ -1,29 +1,102 @@
 
-\subsection{Component C-I:  Attack Mitigations}
 
-\iffalse
-\paragraph*{Modularity.}  One mitigation of the attacks we propose to look at
-is \emph{modularity} in the sense of modular order-preserving encryption
-(M-OPE)~\cite{C:BolCheOne11}.  The idea of M-OPE is to apply a secret random
-offset modulo the largest possible message to a message before encrypting it
-(the secret random offset is chosen once and fixed in the secret key), so that
-everything gets ``shifted.''  Although similar attacks seem to apply to M-OPE,
-we propose to investigate more fine-grained modularity as a defense.  In the
-specific case of order-preserving encryption, we propose \emph{digit-modular}
-OPE (DM-OPE) where there is a secret modular offset applied to each digit.  The
-base in which the data is written could even itself be secret.  It becomes more
-complicated to make range queries with DM-OPE, as it requires an exponential
-number of queries in the number of ``wrap around'' digits in the query.
-However, we propose to investigate approximating the queries efficiently (with
-some false positives that the client can filter out).
-\fi
+\subsection{Component C-I:  Enhancing security of M-POPE}
+One mitigation of the attacks we propose to look at is \emph{modularity} in the
+sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheOne11}.  The
+idea of M-OPE is to apply a secret random offset modulo the largest possible
+message to a message before encrypting it (the secret random offset is chosen
+once and fixed in the secret key), so that everything gets ``shifted.''
+Although similar attacks seem to apply to M-OPE, we propose to investigate more
+fine-grained modularity as a defense. 
+
+\paragraph{Random offset for each digit.}
+In particular, we propose \emph{digit-modular} OPE (DM-OPE) where there is a
+secret modular offset applied to each digit.  The base in which the data is
+written could even itself be secret.  It becomes more complicated to make range
+queries with DM-OPE, as it requires an exponential number of queries in the
+number of ``wrap around'' digits in the query.  However, we propose to
+investigate approximating the queries efficiently (with some false positives
+that the client can filter out).
 
 
-\paragraph*{POPE: Partial order preserving encoding.} A co-PI recently
-introduced a new cryptographic mechanism, called POPE, to range queries over
-encrypted data that is optimized to support insert-heavy
-workload~\cite{CCS:RACY16}.  POPE provides much stronger security than previous
-order-preserving encryptions for the following reasons: 
+\subsection{Component C-II:  Enhancing security of POPE}
+A co-PI recently introduced a new cryptographic approach, called POPE, to
+supporting range queries over encrypted data, providing stronger security than
+previous order-preserving encryptions~\cite{CCS:RACY16}.  In contrast to
+existing OPE schemes, the server builds a novel indexing structure called a
+POPE tree, in which each node has a {\it unsorted buffer} and a sorted list of
+elements.  Thanks to this, the scheme can perform {\it lazy indexing, by
+sorting values only when necessary}. In particular, on each range query the
+scheme sorts the part of the data that is accessed during the search, leaving
+much of the data untouched.
+
+\paragraph{Less leakage.}
+In this proposal, we plan to investigate whether we can further reduce the
+leakage of the POPE scheme. 
+
+\begin{question}
+Can we reduce the leakage for the POPE scheme?
+\end{question}
+
+We observe that in POPE, each search query gradually leaks the ordering
+information mainly for the following reasons: 
 
 \begin{itemize}
-\item The search 
+\item The tree is essentially a search tree. For example, the elements on the
+  left sub-tree is is smaller than those on the right.
+ 
+\item Once a ciphertext comes in a POPE tree, it never changes. This {\em
+  deterministic} nature allows the attacker to trace when the ciphertext came
+  in the tree, and how it was brought down to some leaf node.  
+\end{itemize}
+
+We plan to address those issue by taking the following approaches:
+
+\begin{itemize}
+\item {\it Shuffle child links in a tree node.} Since POPE is an interactive
+  protocol, when a tree node is created, we can slightly modify the protocol so
+    that the client additionally change the order of links to its children.
+    Note that with this modification, still the search can be implemented
+    correctly thanks to the client's correct guidance when navigating the tree
+    nodes. 
+    
+ 
+\item  {\it Re-randomize the encryptions.} We observe that POPE can use a
+  randomize encryption. Therefore, by re-randomizing encryptions, when they go
+    down the tree (along with the shuffling idea above), we can erase the trace
+    to a certain degree. 
+\end{itemize}
+
+
+
+\paragraph{Leakage over time.}
+While POPE allows each search query to {\it gradually} leak the ordering
+information of the underlying plaintexts, {\em most} of the ordering
+information will be leaked over many queries. This begs the following question: 
+
+\begin{question}
+Can we still maintain a sufficient number of incomparable elements, even after
+  many range queries have been performed?  
+\end{question}
+
+
+One promising approach is taking advantage of ORAM (Oblivious Random Acess
+Memory). Although they are too slow to used throughout the entire system
+containing a large amount of data, we hope that ORAMs can be used effectively
+for achieving stronger privacy for the sensitive sub-part of the system (e.g.,
+the bottom parts of the POPE tree).  In fact, ORAMs have been used to minimize
+the leakage for SSE (symmetric searchable encryption) schemes which support
+keyword search over encrypted data~\cite{NDSS:StePapShi14,C:GarMohPap16}. We
+plan investigate whether some part POPE trees can be modified and incorporated
+with ORAMs so that the resulting system enjoys stronger privacy while only
+having marginal performance
+degradation.  
+
+\paragraph{Forward security.} todo: cite some searchable encryption and mention some techniques. 
+
+\begin{question}
+Can we modify the POPE system to achieve forward security?
+\end{question}
+
+
+todo: blind seer?
