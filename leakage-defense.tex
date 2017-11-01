@@ -89,9 +89,9 @@ parameter, new $L$ leaf nodes are created, and the ciphertexts are partitioned
 into $L$ newly created buffers. This procedure greatly reduces the number of
 ciphertexts in unsorted buffers and affects the security; in the worst case,
 some unsorted buffer will have only a single ciphertext. With more careful
-partitioning, we can greatly reduce the leakage stemming from this procedure.
-We plan to theoretically explore and practically measure the tradeoff of our
-approach in terms of performance vs security. 
+partitioning, we can maintain the number of incomparable pairs to be reasonably
+high even over many queries. 
+
 
 Another possible direction is taking advantage of ORAM (Oblivious Random Acess
 Memory). Although they are too slow to used throughout the entire system
