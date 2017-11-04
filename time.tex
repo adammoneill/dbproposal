@@ -1,6 +1,15 @@
-\section{Component B:  Property-Preserving Encryption for Time Series Data} 
+\section{Encryption for Time Series Data}
 
-In time series data one is often interested in correlations and anomalies.  Accordingly, we propose to look at \emph{correlation revealing and preserving encryption}  (CRE and CPE) and \emph{anomaly revealing and preserving encryption} (ARE and APE).  In other words, in the ``preserving'' case we are interested in perturbing statistical data in a way that preserves statistics or the fact that a point is an anomaly.  
+A Time Series Database (TSDB) is a optimized for time-stamped or time series data. Time series are measurements or events that are tracked, monitored, downsampled, and aggregated over time.  We identify several fundamental operations on time series:
+\begin{itemize}
+\item Detecting correlation, that is, how ``close''  two time series are to each other.  This could be, for example, in terms of Euclidean distance or edit distance.
+\item Detecting periods, that is, detecting periodicity in the time series and possibly period length.
+\item Detecting bursts, that is, when, say, the average of some consecutive values is above a certain threshold
+\item Detecting anomalies, that is, when a value in the time series is very different from the others.
+\end{itemize}
+
+We are interested in encryption schemes that allow this detection to be done on encrypted data.
+An interesting case concerns encryption that \emph{preserves} either correlation, periodicity, bursts, or anomalies.  That is, we view encryption as transforming a time series into another time series.  We conjecture that such encryption that preserves either correlation, periodicity, bursts, or anomalies can be characterized by simple operations on the time series like scaling or binning.  Unfortunately, such operations do not seem to provide much security.  
 
 Regarding correlation revealing schemes
 \begin{question}
