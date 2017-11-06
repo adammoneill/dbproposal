@@ -30,6 +30,13 @@ sorting values only when necessary}. In particular, on each range query the
 scheme sorts the part of the data that is accessed during the search, leaving
 much of the data untouched.
 
+More attractively, POPE also has forward security (i.e., updating an element
+don't leak information about the other elements), although the paper didn't
+consider this notion. This is because the scheme doesn't maintain any other
+index structure except the POPE tree. So, to update an element, one can simply
+delete the element from the node it belongs and insert an updated element to
+the unsorted buffer of the root. 
+
 \paragraph{Less leakage.}
 In this proposal, we plan to investigate whether we can further reduce the
 leakage of the POPE scheme. 
@@ -103,12 +110,6 @@ keyword search over encrypted data~\cite{NDSS:StePapShi14,C:GarMohPap16}. We
 plan investigate whether some part POPE trees can be modified and incorporated
 with ORAMs so that the resulting system enjoys stronger privacy while only
 having marginal performance degradation.  
-
-\paragraph{Forward security.} todo: cite some searchable encryption and mention some techniques. 
-
-\begin{question}
-Can we modify the POPE system to achieve forward security?
-\end{question}
 
 
 todo: blind seer?
