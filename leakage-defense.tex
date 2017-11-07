@@ -20,15 +20,6 @@ that the client can filter out).
 
 
 \subsection{Component C-II:  Enhancing security of POPE}
-A co-PI recently introduced a new cryptographic approach, called POPE, to
-supporting range queries over encrypted data, providing stronger security than
-previous order-preserving encryptions~\cite{CCS:RACY16}.  In contrast to
-existing OPE schemes, the server builds a novel indexing structure called a
-POPE tree, in which each node has a {\it unsorted buffer} and a sorted list of
-elements.  Thanks to this, the scheme can perform {\it lazy indexing, by
-sorting values only when necessary}. In particular, on each range query the
-scheme sorts the part of the data that is accessed during the search, leaving
-much of the data untouched.
 
 More attractively, POPE also has forward security (i.e., updating an element
 don't leak information about the other elements), although the paper didn't
