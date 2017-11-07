@@ -1,34 +1,129 @@
 \documentclass[11pt]{article}
 
 \usepackage[margin=.75in]{geometry}
+\usepackage{titlesec}
+\titlespacing{\paragraph}{%
+  0pt}{%              left margin
+  0.5\baselineskip}{% space before (vertical)
+  1em}%               space after (horizontal)
+
 
 \begin{document}
 
 
-\begin{centering}
+\begin{center}
 \LARGE
-Project Summary
-\hline
-\end{centering}
+Project Summary 
+\end{center}
 
-\paragraph{Background:}  
-The growth of data volume is outpacing organizations' ability to manage and organize this data. Organizations are turning to external cloud providers to manage their data needs.  In the information age, this data is many online businesses most valuable asset.  This migration presents a serious risk: can cloud providers be trusted to maintain confidentiality of the data?  Encryption can preserve confidentiality at the cost of removing the data' organization.  However, the very utility of the stored data derives from the ability to quickly query, process, and derive insights.  Ideally, we could use more sophisticated cryptography to create databases capable of efficiently answering a client's queries without revealing information to the server.  
+\vspace{-1em}
+\noindent \hrulefill
 
-Two research threads have focused on closing this gap (collectively known as searchable encryption).
-Property-preserving encryption creates symmetric encryption techniques compatible with an unprotected database. Examples include deterministic encryption which can answer equality queries and order-preserving encryption which can answer range queries. Academic teams, start-up companies, and Fortune 500 companies all offer versions of property-preserving encryption.  Recent attacks against these schemes indicate even ideal property-preserving encryption can't be secure for many applications.
 
-The second thread starts from generic secure multi-party computation and optimizes solutions for common database tasks.  This approach requires redesign of database indexing mechanisms.  This approach results in better security at the cost of decreased efficiency.  Furthermore, both approaches only offer SQL and NoSQL functionality.
 
-Emerging databases include large scale graph databases, analytic databases, and biometric databases.  These databases share a fundamental operation: computing distance/proximity of tuples of points.  The proposed research will use proximity queries as a case study to introduce a third approach to encrypted search between property-preserving encryption and multi-party computation based approaches.  The proposed approach is to use standard database indexing mechanisms but (interactively) involve the client to help with sensitive operations. Previous instantiations of this approach including property-revealing encryption and partial property-preserving encryption.  We will extend these techniques to handle distance queries, dynamic data, forward security, and formally analyze leakage (deviation from an ideal functionality).
+\paragraph{Motivation.}
+%The growth of data volume is outpacing organizations' ability to manage and
+%organize this data. Organizations are turning to external cloud providers to
+%manage their data needs.  In the information age, this data is many online
+%businesses most valuable asset.  This migration presents a serious risk: can
+%cloud providers be trusted to maintain confidentiality of the data?  Encryption
+%can preserve confidentiality at the cost of removing the data' organization.
+%However, the very utility of the stored data derives from the ability to
+%quickly query, process, and derive insights.  Ideally, we could use more
+%sophisticated cryptography to create databases capable of efficiently answering
+%a client's queries without revealing information to the server.  
+%
+The growth of data volume is outpacing organizations' ability to manage and
+organize this data, and organizations are turning to external cloud providers
+to manage their data needs.  
+%
+This migration presents a challenge of maintaining confidentiality of their
+valuable data asset, so the data is often outsourced in an encrypted from. 
+%
+However, employing encryption comes at the cost of disabling the cloud server
+from {\em quickly processing the data in the plaintext form and answering
+complex queries from the client}. 
+%
+Ideally, we could use more sophisticated cryptography to {\em create databases
+capable of efficiently answering a client's queries without revealing
+information to the cloud server}.  
 
-To show the promise of this approach, the proposed research will proximity functionality of the two standard approaches.  The research will show that for many metric spaces, the ideal object for distance-preserving encryption computation is weaker than order-preserving encryption.  Furthermore, we will extend multi-party computation based techniques.  We expect unacceptable overhead in networks with realistic latency.
-\paragraph{Intellectual Merits:}  
+\paragraph{Previous works.}
+Two research threads have focused on closing this gap.
+%(collectively known as
+%searchable encryption).  
+Property-preserving encryption creates symmetric encryption techniques
+compatible with an unprotected database. Examples include deterministic
+encryption which can answer equality queries and order-preserving encryption
+which can answer range queries. Academic teams, start-up companies, and Fortune
+500 companies all offer variants of property-preserving encryption.
+%Recent attacks against these schemes indicate even ideal property-preserving
+%encryption can't be secure for many applications.
+%
+The second thread starts from generic secure multi-party computation and
+optimizes solutions for common database tasks. This approach requires redesign
+of database indexing mechanisms and results in better security at the cost of
+decreased efficiency. 
+%
+We note that so far, both approaches offer only the {\em limited functionality
+of SQL and NoSQL}. 
 
-Encrypted databases and searchable encryption has a rich history rooted in the design of oblivious random access machines.  The current landscape is littered with approaches with uncertain security or inadequate functionality.  Recent leakage inference attacks have taught us the impact of leakage and forward security.  At the same time, the rapid deployment of property-preserving techniques has reinforced the importance of simplicity, efficiency and backward compatibility.  These two developments inform the core of our approach: using interactivity to strengthen property-preserving encryption.
+\paragraph{Proposed work.}
+Emerging databases include large scale graph databases, analytic databases, and
+biometric databases. These databases share a fundamental operation: {\em
+computing distance/proximity of tuples of points}. The proposed research will
+consider proximity queries as a case study and give constructions supporting
+these queries. 
 
-\paragraph{Broader Impacts:}
+To show the promise of this approach, we will first show that for many metric
+spaces, the ideal object for distance-preserving encryption has a weaker
+security requirement than that for order-preserving encryption, thereby opening
+the door to more customized, efficient constructions. Then, we will give
+customized schemes of property-preserving encryption for distance/proximity. 
 
-The confidentiality of data is a core societal tenant.  Deployed encrypted databases provide little security and may even hurt by providing a false sense of security.  There is a tremendous need for research in this area to understand the tradeoffs between security, functionality, and efficiency.
+In addition, we will also attempt a third approach to encrypted search for
+proximity which lies between property-preserving encryption and multi-party
+computation (MPC) based approaches. The resulting constructions will have
+better security than the property-preserving encryption schemes and better
+efficiency than MPC-based schemes. In particular, the proposed approach will
+use standard database indexing mechanisms but (interactively) involve the
+client to help with sensitive operations. This approach has been used in the
+context of order-preserving encryption, and we will extend these techniques to
+{\em handle distance queries and dynamic data}.
 
-The PIs are committed to broad dissemination of research material.  The PIs have participated in large scale evaluation of searchable encryption, working on both constructions and attacks.  Furthermore, the PIs have open-sourced previous work including work on searchable encryption.  Lastly, all PIs are dedicated to engaging with undergraduates, with one of the PIs being at an undergraduate only institution, the US Naval Academy.
+Lastly, the proposed research will improve existing constructions to have
+better security by reducing the leakage and providing forward security.  
+
+%To show the promise of this approach, the proposed research will first give
+%constructions for the proximity functionality of the two standard approaches.
+%
+%and show that for many metric spaces, the ideal object for distance-preserving
+%encryption computation has a different characteristic from that for the
+%order-preserving encryption,   
+%
+%Furthermore, we will extend multi-party computation based techniques.  We
+%expect unacceptable overhead in networks with realistic latency.  
+
+\paragraph{Intellectual merits.}  
+Encrypted databases and searchable encryption has a rich history rooted in the
+design of oblivious random access machines.  The current landscape is littered
+with approaches with uncertain security or inadequate functionality.  Recent
+leakage inference attacks have taught us the impact of leakage and forward
+security.  At the same time, the rapid deployment of property-preserving
+techniques has reinforced the importance of simplicity, efficiency and backward
+compatibility.  These two developments inform the core of our approach: using
+interactivity to strengthen property-preserving encryption.
+
+\paragraph{Broader impacts.}
+The confidentiality of data is a core societal tenant.  Deployed encrypted
+databases provide little security and may even hurt by providing a false sense
+of security.  There is a tremendous need for research in this area to
+understand the tradeoffs between security, functionality, and efficiency.
+
+The PIs are committed to broad dissemination of research material.  The PIs
+have participated in large scale evaluation of searchable encryption, working
+on both constructions and attacks.  Furthermore, the PIs have open-sourced
+previous work including work on searchable encryption.  Lastly, all PIs are
+dedicated to engaging with undergraduates, with two co-PIs being at an
+undergraduate only institution, the US Naval Academy.  
 \end{document}
