@@ -1,0 +1,153 @@
+%!TEX root = dbproposal.tex
+
+\section{Introduction}
+
+The importance of collecting and storing data is universal, with use cases in governmental~\cite{Powers2014}, commercial~\cite{Linoff:2002:MWT:560274,insightdata}, and personal sectors~\cite{Mons2011}.  Tremendous value can be extracted from data, enabling better decisions, improved health and economic growth.
+
+This data is stored in database systems which have a rich history in both academia and the commercial spaces.  The volume of this data is growing exponentially and is outpacing organizations' ability to manage and
+organize this data.  Organizations are turning to external cloud providers
+to manage their data needs.  
+%
+Nation-state actors target other governments' systems, corporate repositories, and individual data for espionage and competitive advantages~\cite{apt1}.   Attacks occur against both government~\cite{CyberAttacksOPM} and commercial~\cite{CyberAttacks,gressin2017equifax} datasets.
+
+The natural response to this risk is to encrypted data before outsourcing. 
+%
+However, employing encryption comes at the cost of disabling the cloud server
+from {\em quickly processing the data in the plaintext form and answering
+complex queries from the client}. 
+%
+Ideally, we could use more sophisticated cryptography to {\em create databases
+capable of efficiently answering a client's queries without revealing
+information to the cloud server}.  
+
+
+Secure outsourced database search use advanced cryptography to achieve this goal.  This field encompasses a variety of cryptographic techniques, including property-preserving encryption or PPE~\cite{EC:PanRou12}, searchable symmetric encryption or SSE~\cite{CCS:CGKO06}, private information retrieval by keyword~\cite{EPRINT:ChoGilNao98}.  
+
+This research has largely split into two research threads: PPE which emphasizes background compatibility and use of legacy database management systems and searchable encryption which emphases security.  PPE creates symmetric encryption techniques
+compatible with an unprotected database. Examples include deterministic
+encryption~\cite{C:BelBolONe07} which can answer equality queries and order-preserving encryption~\cite{C:BolCheONe11,EC:BCLO09}
+which can answer range queries. Academic teams, start-up companies (including Bitglass, Ciphercloud, Crypteron, PreVeil, Skyhigh, ZeroDB) and Fortune
+500 companies (including Microsoft's SQL Server 2016 and Azure and Google's Encrypted BigQuery)  offer variants of property-preserving encryption.
+%Recent attacks against these schemes indicate even ideal property-preserving
+%encryption can't be secure for many applications.
+%
+SSE schemes can be viewed as starting from secure multi-party computation and
+optimizes solutions for common database tasks. This approach requires redesign
+of database indexing mechanisms and results in better security at the cost of
+decreased efficiency. 
+
+These systems have been implemented at moderate scale.  Both property-preserving solutions~\cite{EPRINT:PodBoePop16,CACM:PRZB12} and searchable encryption~\cite{SP:PKVKMC14,SP:FVKKKM15,C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15,RSA:IKLO16} solutions have been tested on datasets with billions of records.
+
+%
+%  Folks--we need to be careful here.  DBMS functions are much broader than search; there's transformation and presentation, access control, backup, recovery management, etc., and we're talking about none of that here.
+
+
+\subsection{Use Cases}
+Emerging databases include large scale graph databases, analytic databases, and
+biometric databases. 
+\begin{enumerate}
+\item Sentence about operations in graph databases
+\item Sentence about analytic
+\item In large scale biometric databases, the fundamental operation is comparison of the distance between a target point and all stored points. Often, biometric databases return the nearest match if the distance is less than some threshold.  For example, the Aadhaar system in India links biometrics with a unique 12 digit number with over 1 billion numbers issued~\cite{daugman2014600}.
+\end{enumerate}
+
+These databases share a fundamental operation: {\em
+computing distance/proximity of tuples of points}. The proposed research will
+consider proximity queries as a case study and give constructions supporting
+these queries. 
+
+
+\subsection{Inadequacy of Prior Work}
+
+In 2000, Song, Wagner, and Perrig provided the first scheme with communication proportional to the description of the query and the server performing (roughly) a linear scan of the encrypted database~\cite{SP:SonWagPer00}.  Since that time there has been tremendous work and both PPE and SSE approaches can handle much of SQL and NoSQL queries for billions of records.  However, neither approach is capable of handling inherently geometric data that is prominent in many current applications. (There is some work on computing shortest path in networks~\cite{CCS:MKNK15})  Furthermore, each approach also has a second weakness:
+\begin{enumerate}
+\item PPE has been subject to a number of leakage-abuse attacks that show that order-preserving encryption (and sometimes deterministic encryption) cannot be safely used in most cases.
+\item SSE is blah blah....S
+\end{enumerate}
+
+
+
+
+We do not address approaches based on fully-homomorphic encryption or functional encryption.  These solutions are too slow to be used for the scale of current data sets.
+
+
+\subsection{Proposed work.}
+Emerging databases include large scale graph databases, analytic databases, and
+biometric databases. These databases share a fundamental operation: {\em
+computing distance/proximity of tuples of points}. The proposed research will
+consider proximity queries as a case study and give constructions supporting
+these queries. 
+
+To show the promise of this approach, we will first show that for many metric
+spaces, the ideal object for distance-preserving encryption has a weaker
+security requirement than that for order-preserving encryption, thereby opening
+the door to more customized, efficient constructions. Then, we will give
+customized schemes of property-preserving encryption for distance/proximity. 
+
+In addition, we will also attempt a third approach to encrypted search for
+proximity which lies between property-preserving encryption and multi-party
+computation (MPC) based approaches. The resulting constructions will have
+better security than the property-preserving encryption schemes and better
+efficiency than MPC-based schemes. In particular, the proposed approach will
+use standard database indexing mechanisms but (interactively) involve the
+client to help with sensitive operations. This approach has been used in the
+context of order-preserving encryption, and we will extend these techniques to
+{\em handle distance queries and dynamic data}.
+
+Lastly, the proposed research will improve existing constructions to have
+better security by reducing the leakage and providing forward security.  
+
+%To show the promise of this approach, the proposed research will first give
+%constructions for the proximity functionality of the two standard approaches.
+%
+%and show that for many metric spaces, the ideal object for distance-preserving
+%encryption computation has a different characteristic from that for the
+%order-preserving encryption,   
+%
+%Furthermore, we will extend multi-party computation based techniques.  We
+%expect unacceptable overhead in networks with realistic latency.  
+
+
+The goal of this proposal is create new secure outsourced database protocols in line with the real-world functionality practitioners expect.  Real-world databases often store spatial, time-series, or graph data~\cite{SP:FVYSHG17}.  We focus on extending two key approaches to secure outsourced databases to these cases: Protocols based on \emph{property-preserving encryption} like CryptDB, and protocols based on \emph{secure multiparty computation} like BlindSeer.  Finally, we plan to extend recent leakage-abuse attacks to our new protocols and propose novel mitigations.
+
+\ben{update this to be in line with project summary}
+
+\paragraph*{Proposed contributions in brief.}
+In sum, the main proposed contributions are:
+\begin{itemize}
+\item Design advanced types of property-preserving and partially-property preserving encryption schemes for use on spacial, time series, and graph data.
+\item Design extensions of BlindSeer to handle such data.
+\item Extend recent attacks on databases that use property-preserving encryption and propose novel mitigations of these attacks. 
+\end{itemize}
+
+
+\paragraph{Intellectual merits.}  
+Encrypted databases and searchable encryption has a rich history rooted in the
+design of oblivious random access machines.  The current landscape is littered
+with approaches with uncertain security or inadequate functionality.  Recent
+leakage inference attacks have taught us the impact of leakage and forward
+security.  At the same time, the rapid deployment of property-preserving
+techniques has reinforced the importance of simplicity, efficiency and backward
+compatibility.  These two developments inform the core of our approach: using
+interactivity to strengthen property-preserving encryption.
+
+\paragraph{Broader impacts.}
+The confidentiality of data is a core societal tenant.  Deployed encrypted
+databases provide little security and may even hurt by providing a false sense
+of security.  There is a tremendous need for research in this area to
+understand the tradeoffs between security, functionality, and efficiency.
+
+The PIs are committed to broad dissemination of research material.  The PIs
+have participated in large scale evaluation of searchable encryption, working
+on both constructions and attacks.  Furthermore, the PIs have open-sourced
+previous work including work on searchable encryption.  Lastly, all PIs are
+dedicated to engaging with undergraduates, with two co-PIs being at an
+undergraduate only institution, the US Naval Academy.  
+
+
+
+\paragraph*{Intellectual merit and research team.}  
+
+ \paragraph*{Broader Impacts.}
+
+

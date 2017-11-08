@@ -190,34 +190,7 @@
 %\end{abstract}
 \vspace{-20mm}
 
-\section{Introduction}
-
-\subsection{Background and Motivation} 
-
-In modern society, data is often stored at rest for later use.  Databases are pervasive and the task of organizing and maintaining data is often off-loaded to an external provider. However, this means the external provider must be trusted with confidentiality of the data.  To mitigate this, an attractive solution is for a client to encrypt its data, under a key only it knows, before sending it to the external provider.  However, standard encryption hides all partial information about the data and does not allow efficient query processing.  Recent work in the cryptographic community has tried to address this problem by providing specialized encryption schemes and other secure database outsourcing protocols that both provide confidentiality to the extent possible and allow efficient query processing.  \textbf{However, this work has so far been mainly limited to very basic SQL functionality and key-value stores, which are outdated}.  The goal of this proposal is to bring us beyond this basic functionality to ``next-generation'' functionality that practitioners expect.  
-\ben{This isn't next gen, isn't current but that doesn't sound nearly as good}
-
-\subsection{This Proposal} \label{subsec-prop}
-
-The goal of this proposal is create new secure outsourced database protocols in line with the real-world functionality practitioners expect.  Real-world databases often store spatial, time-series, or graph data~\cite{SP:FVYSHG17}.  We focus on extending two key approaches to secure outsourced databases to these cases: Protocols based on \emph{property-preserving encryption} like CryptDB, and protocols based on \emph{secure multiparty computation} like BlindSeer.  Finally, we plan to extend recent leakage-abuse attacks to our new protocols and propose novel mitigations.
-
-\ben{update this to be in line with project summary}
-
-\paragraph*{Proposed contributions in brief.}
-In sum, the main proposed contributions are:
-\begin{itemize}
-\item Design advanced types of property-preserving and partially-property preserving encryption schemes for use on spacial, time series, and graph data.
-\item Design extensions of BlindSeer to handle such data.
-\item Extend recent attacks on databases that use property-preserving encryption and propose novel mitigations of these attacks. 
-\end{itemize}
-
-\paragraph*{Intellectual merit and research team.}  
-
- \paragraph*{Broader Impacts.}
-
-\subsection{Related Work}
-
-We do not address approaches based on searchable symmetric encryption or functional encryption.  
+\input{introduction}
 
 \input{distance}
 
