@@ -115,9 +115,25 @@ The goal of this proposal is create new secure outsourced database protocols in 
 \paragraph*{Proposed contributions in brief.}
 In sum, the main proposed contributions are:
 \begin{itemize}
-\item Design advanced types of property-preserving and partially-property preserving encryption schemes for use on spacial, time series, and graph data.
-\item Design extensions of BlindSeer to handle such data.
-\item Extend recent attacks on databases that use property-preserving encryption and propose novel mitigations of these attacks. 
+\item Constructions of PPE designed for proximity queries
+\begin{enumerate}
+\item Analysis of security provided by distance-preserving encryption for common metrics
+\item Design of distance-revealing encryption
+\item Design of approximate distance-revealing encryption and equivalence with distance-comparison revealing encryption.
+\end{enumerate}
+\item Use of interactivity to achieve added functionality:
+\begin{enumerate}
+\item Proximity using Partial Distance-Preserving Encryption
+\item Substring Search using Partial Suffix Tree Encryption
+\item Improved efficiency of MPC approaches in 2 party setting
+\item Improved dynamism for interactive approaches
+\end{enumerate}
+\item Use of interactivity to achieve improved security:
+\begin{enumerate}
+\item Modular partial order-preserving encryption
+\item Forward security for POPE
+\item Merge of Ostrovsky and POPE
+\end{enumerate}
 \end{itemize}
 
 
