@@ -82,4 +82,23 @@ bottom-right point $(y_1, y_2)$ can be described with range queries and
 conjunctions as follows: $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2.
 $$ This techinque can be easily extended to data with multiple dimensions. 
 
-%\paragraph{Proximity of high-dimentional data.}
+\paragraph{A graph structure and computing the shortest path.}
+Using Bloom filters we can encode a graph structure as follows:
+\begin{itemize}
+\item For each arc $(a, b)$ from vertex $a$ to vertex $b$, we insert an
+  encryption $c = \Enc((a,b) \| w(a,b) )$, where $w(a,b)$ is the weight of the arc
+    $(a,b)$. Moreover, have the ciphrtext $c$ indexed by a BF keyword `$\sf arc$:a*'. 
+\end{itemize}
+
+Given the above graph encryption, we can find all the neighbors of vertex $v_1$
+along with the weight of the associated arc. Therefore, we can run variants of
+Dijkstra's algorithm and compute compute the shortest path, given two vertices
+$v_1$ and $v_2$ and a limit on the maximum number of arcs. 
+
+\paragraph{Both of the above functionalities.}
+Since BlindSeer is based on the Bloom filters, one can create a database that
+encrypts both proxmity information and a graph structure, only by adding
+relevant keyword index appropriately.
+%
+Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
+client would enjoy a much richer set of functionalities.  
