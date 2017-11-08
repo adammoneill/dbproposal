@@ -1,6 +1,6 @@
 \subsection{Extending BlindSeer}
 
-\paragraph{Prior work.} A co-PI developed
+\paragraph{Prior work.} A co-PI was a member of the team that developed
 BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}, which is a database management system
 that provides privacy.
 
@@ -73,17 +73,13 @@ settings. For use cases where this new setting is appropriate, our simplified
 construction will provide a solution running {\em at least x10 faster than the
 original system}.  
 
-\paragraph{Supporting a rich set of functionalities.}
-We note that BlindSeer provides a rich set of functionality including
-conjunctions and range query. 
+\paragraph{Proximity of high-dimentional data.}
+BlindSeer already provides conjunctions and range queries, based on which we
+can support the funcitonality of proximity in a Euclidean space. 
+In particular, a query that searches for the points $(x, y)$ in DB that belongs
+to a 2D rectangle defined by the top-left point $(x_1, y_1)$ and the
+bottom-right point $(y_1, y_2)$ can be described with range queries and
+conjunctions as follows: $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2.
+$$ This techinque can be easily extended to data with multiple dimensions. 
 
-Based on this, we can support various types of queries. 
-\begin{itemize}
-\item Spatial data. A query that searches for the points $(x, y)$ in DB that
-belongs to a 2D square defined by the top-left point $(x_1, y_1)$ and the
-bottom-right point $(y_1, y_2)$ can be described with range queries and conjunctions as follows:
-  $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2 $$
-
-\item ***to do: What else? 
-\end{itemize}
-
+%\paragraph{Proximity of high-dimentional data.}
