@@ -61,59 +61,26 @@ these queries.
 
 In 2000, Song, Wagner, and Perrig provided the first scheme with communication proportional to the description of the query and the server performing (roughly) a linear scan of the encrypted database~\cite{SP:SonWagPer00}.  Since that time there has been tremendous work and both PPE and SSE approaches can handle much of SQL and NoSQL queries for billions of records.  However, neither approach is capable of handling inherently geometric data that is prominent in many current applications. (There is some work on computing shortest path in networks~\cite{CCS:MKNK15})  Furthermore, each approach also has a second weakness:
 \begin{enumerate}
-\item PPE has been subject to a number of leakage-abuse attacks that show that order-preserving encryption (and sometimes deterministic encryption) cannot be safely used in most cases.
-\item SSE is blah blah....S
+\item PPE has been subject to a number of leakage-abuse attacks that show that order-preserving encryption (and sometimes deterministic encryption) cannot be safely used in most cases~\cite{CCS:NavKamWri15,CCS:CGPR15,CCS:KKNO16,CCS:PouWri16,CCS:GMNRS16,EPRINT:GSBNR16,EPRINT:ZhaKatPap16}.
+\item SSE offers more limited functionality and efficiency than PPE based solutions.  The fastest SSE based solutions report overhead of roughly 300\%~\cite{C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15} while PPE based solutions report overhead of around 30\%~\cite{CACM:PRZB12}.  We are only aware of a single SSE solution that can handle JOIN statements~\cite{EPRINT:KamMoa16}.  As of this writing, the information  leaked by this scheme is not clear.  Recall that these solutions usually replace the entire database software stack with a custom cryptographic approach.  We posit that the lack of backward compatibility and difficulty of managing these systems also hurts industry adoption.  Industry adoption has been dominated by PPE solutions.
 \end{enumerate}
 
-
-
-
+It seems unlikely the academic community can prevent the deployment of PPE systems.  It is imperative to ask if it is possible to design an approach which retains the benefits of PPE including backward compatibility, use of legacy software, improved visibility of data processing.  The core of our approach is to only overload operators (for comparison, equality, proximity) using interactive protocols but allow databases systems to operate ``unencrypted'' otherwise.  
 We do not address approaches based on fully-homomorphic encryption or functional encryption.  These solutions are too slow to be used for the scale of current data sets.
 
 
 \subsection{Proposed work.}
-Emerging databases include large scale graph databases, analytic databases, and
-biometric databases. These databases share a fundamental operation: {\em
-computing distance/proximity of tuples of points}. The proposed research will
+Our goal is to create a third approach to achieving secure outsourced databases: restricting cryptographic operations to database operators (used to create index structures) but allowing these operators to call interactive protocols. The proposed research will
 consider proximity queries as a case study and give constructions supporting
 these queries. 
 
 To show the promise of this approach, we will first show that for many metric
-spaces, the ideal object for distance-preserving encryption has a weaker
-security requirement than that for order-preserving encryption, thereby opening
-the door to more customized, efficient constructions. Then, we will give
-customized schemes of property-preserving encryption for distance/proximity. 
-
-In addition, we will also attempt a third approach to encrypted search for
-proximity which lies between property-preserving encryption and multi-party
-computation (MPC) based approaches. The resulting constructions will have
+spaces, we first show the ideal object for distance-preserving encryption is rather weak encouraging investigation of distance-revealing and approximate distance revealing encryption.  We will then show that interactivity can greatly increase the security of this construction, similar to a recent interactive version of order-preserving encryption~\cite{CCS:RACY16}. The resulting constructions will have
 better security than the property-preserving encryption schemes and better
 efficiency than MPC-based schemes. In particular, the proposed approach will
 use standard database indexing mechanisms but (interactively) involve the
-client to help with sensitive operations. This approach has been used in the
-context of order-preserving encryption, and we will extend these techniques to
-{\em handle distance queries and dynamic data}.
-
-Lastly, the proposed research will improve existing constructions to have
-better security by reducing the leakage and providing forward security.  
-
-%To show the promise of this approach, the proposed research will first give
-%constructions for the proximity functionality of the two standard approaches.
-%
-%and show that for many metric spaces, the ideal object for distance-preserving
-%encryption computation has a different characteristic from that for the
-%order-preserving encryption,   
-%
-%Furthermore, we will extend multi-party computation based techniques.  We
-%expect unacceptable overhead in networks with realistic latency.  
-
-
-The goal of this proposal is create new secure outsourced database protocols in line with the real-world functionality practitioners expect.  Real-world databases often store spatial, time-series, or graph data~\cite{SP:FVYSHG17}.  We focus on extending two key approaches to secure outsourced databases to these cases: Protocols based on \emph{property-preserving encryption} like CryptDB, and protocols based on \emph{secure multiparty computation} like BlindSeer.  Finally, we plan to extend recent leakage-abuse attacks to our new protocols and propose novel mitigations.
-
-\ben{update this to be in line with project summary}
-
-\paragraph*{Proposed contributions in brief.}
-In sum, the main proposed contributions are:
+client to help with sensitive operations. 
+In summary, the main proposed contributions are:
 \begin{itemize}
 \item Constructions of PPE designed for proximity queries
 \begin{enumerate}
@@ -160,10 +127,5 @@ previous work including work on searchable encryption.  Lastly, all PIs are
 dedicated to engaging with undergraduates, with two co-PIs being at an
 undergraduate only institution, the US Naval Academy.  
 
-
-
-\paragraph*{Intellectual merit and research team.}  
-
- \paragraph*{Broader Impacts.}
 
 
