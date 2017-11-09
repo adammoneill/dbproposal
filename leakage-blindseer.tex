@@ -1,2 +1,23 @@
-\subsection{Component C-III: Enhancing security of simplified BlindSeer}
-.
+\subsection{Component C-III: Enhancing security of BlindSeer}
+
+In Blindseer, the search query is executed by the client traversing the BF
+search tree. In particular, in each node of the tree, the client and the server
+execute the following:
+
+\begin{enumerate}
+\item For each keyword $\alpha$ in the query, the client computes the hash
+function $H(\alpha)$ to identify the BF indices $(h_1, h_2, ..., h_\eta)$ where
+$\eta$ is a system parameter. The client sends $(h_1, h_2, \ldots, h_\eta)$ to
+the server. 
+
+\item The client and the server execute a protocol so that the client may know
+whether the BF bits for the indices $(h_1, h_2, \ldots, h_\eta)$ are set, based
+on which the client decides whether to proceed based on the result.
+\end{enumerate}
+
+Note this leakage $(h_1, \ldots, h_\eta)$ is per keyword in the query. Based on
+this leakage, the server can infer whether two queries contain the same keyword
+with decent probability. 
+
+
+to do: ORAM to hide this leakage
