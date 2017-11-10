@@ -1,23 +1,53 @@
+\def\HHH{{\cal H}}
 \subsection{Component C-III: Enhancing security of BlindSeer}
 
+\paragraph{Leakage of BF indices.}
 In Blindseer, the search query is executed by the client traversing the BF
 search tree. In particular, in each node of the tree, the client and the server
 execute the following:
 
 \begin{enumerate}
-\item For each keyword $\alpha$ in the query, the client computes the hash
-function $H(\alpha)$ to identify the BF indices $(h_1, h_2, ..., h_\eta)$ where
-$\eta$ is a system parameter. The client sends $(h_1, h_2, \ldots, h_\eta)$ to
-the server. 
+\item For each keyword $\alpha$ in the query, the client computes a hash on
+$\alpha$, based on which BF indices $H(\alpha) =  (h_1, h_2, ..., h_\eta)$
+are identified. Here, $\eta$ is a system parameter. 
 
-\item The client and the server execute a protocol so that the client may know
-whether the BF bits for the indices $(h_1, h_2, \ldots, h_\eta)$ are set, based
-on which the client decides whether to proceed based on the result.
+\item Let $\alpha_1, \ldots, \alpha_q$ be the keywords used in the query.  The
+  client sends $\HHH = \{H(\alpha_1), \ldots, H(\alpha_q)\}$ to the server. 
+
+\item The client and the server execute a protocol using $\HHH$ and the
+encrypted BF as input, so that the client knows whether the given query is
+satisfied. 
 \end{enumerate}
 
-Note this leakage $(h_1, \ldots, h_\eta)$ is per keyword in the query. Based on
-this leakage, the server can infer whether two queries contain the same keyword
-with decent probability. 
+Note that the message $\HHH$ from the client to the server leaks $H(\alpha)$ to
+a significantly degree, since $q$ is a small number most of the time. Moreover,
+$H(\alpha)$ is deterministically dependent on $\alpha$. This implies that
+although the server can infer with a reasonable probablity whether two queries
+contain the same keyword, although it doesn't know what the keyword is.  If the
+server is given the auxiliary information about the query statistics, the
+server may guess what the queries are. 
+
+\paragraph{Removing the leakage of BF indices.}
+
+We note that it is difficult to reduce the leakag in the original
+BlindSeer system. In particular, the above step 3 (i.e., the protocol execution
+to check whether the given query is satisfied) is performed using secure
+two-party computation based on Yao's garbled circuit. Thefore, it is critical
+for the logic to be as simple as possible, in order to obtain efficiency. To
+reduce the leakage, more sophisticaed cryptographic mechanisms need to be used,
+but then the step 3 of secure computation will be significantly slower. 
+
+However, recall that in the simplified construction suggested in
+Section~\ref{sec:ext-blindseer} doesn't need to use secure computation due to
+the simplication of the threat model. In this case, we can actually remove the
+leakage by completely hiding $\HHH$. As one promising direction, we can achive
+this goal by storing the encrypted BF with an ORAM technique. Note that the
+$\HHH$ can be regarded as the metadata (i.e., ``addresses") for the encrypted
+data (i.e., BF contents), which fits perfectly into the scneario that ORAM
+tries to make secure. 
+%
+Even using the ORAM, we expect that the resulting system will be faster than
+the system using two-party secure computation, which is known to be
+significantly slower than ORAM. 
 
 
-to do: ORAM to hide this leakage
