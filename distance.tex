@@ -1,6 +1,7 @@
 %!TEX root = dbproposal.tex
 
-\section{Component A:  Property-Preserving Encryption for Proximity}
+\section{Property-Preserving Encryption for Proximity}
+\label{sec:ppe}
 
 In spatial databases, nearest neighbor queries (\emph{e.g.}, finding the closest soldier in the field) and clustering queries are pervasive.  %Algorithms for executing these query types need to understand distance relationships between tuples o perform the fundamental operation of \emph{distance comparison} between points in the database, \emph{i.e.}, determining which of two candidates points are closer to a target point.  
 In large scale biometric databases, the fundamental operation is comparison of the distance between a target point and all stored points. Often, biometric databases return the nearest match if the distance is less than some threshold.  For example, the Aadhaar system in India links biometrics with a unique 12 digit number with over 1 billion numbers issued~\cite{daugman2014600}.  Lastly, many machine learning algorithms depend on computing distance between points. Linear regression finds the line that minimizes the sum of distances between the line and each data point.  Similarly, the first principal component minimizes the sum of distances between the selected line and the dataset~\cite{wold1987principal}.  The remaining principal components are defined similarly subject to being orthogonal to previously defined principal components.
