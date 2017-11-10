@@ -16,7 +16,7 @@
 Project Summary 
 \end{center}
 
-\vspace{-1em}
+\vspace{-1.5em}
 \noindent \hrulefill
 
 
@@ -34,10 +34,10 @@ Project Summary
 %a client's queries without revealing information to the server.  
 %
 The growth of data volume is outpacing organizations' ability to manage and
-organize this data, and organizations are turning to external cloud providers
+organize this data. Organizations are turning to external cloud providers
 to manage their data needs.  
 %
-This migration presents a challenge of maintaining confidentiality of their
+This migration should maintain confidentiality of their
 valuable data asset, so the data is often outsourced in an encrypted from. 
 %
 However, employing encryption comes at the cost of disabling the cloud server
@@ -69,30 +69,22 @@ We note that so far, both approaches offer only the {\em limited functionality
 of SQL and NoSQL}. 
 
 \paragraph{Proposed work.}
-Emerging databases include large scale graph databases, analytic databases, and
+The wide deployment of property-preserving encryption highlights the need for cryptographic solutions to be maximally backward compatible.  At the same time, solutions should provide meaningful security.
+
+Emerging databases include graph, analytic, and
 biometric databases. These databases share a fundamental operation: {\em
 computing distance/proximity of tuples of points}. The proposed research will
-consider proximity queries as a case study and give constructions supporting
-these queries. 
+consider proximity queries as a case study for the following question: \emph{can secure databases be designed that achieve security while maintaining backwards compatibility?}  As an example, one can override a comparison operator to use an interactive protocol.
 
-To show the promise of this approach, we will first show that for many metric
-spaces, the ideal object for distance-preserving encryption has a weaker
-security requirement than that for order-preserving encryption, thereby opening
-the door to more customized, efficient constructions. Then, we will give
-customized schemes of property-preserving encryption for distance/proximity. 
+To show the promise of this approach, we will consider which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will give
+customized schemes of property-preserving encryption for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
 
-In addition, we will also attempt a third approach to encrypted search for
-proximity which lies between property-preserving encryption and multi-party
-computation (MPC) based approaches. The resulting constructions will have
-better security than the property-preserving encryption schemes and better
-efficiency than MPC-based schemes. In particular, the proposed approach will
-use standard database indexing mechanisms but (interactively) involve the
+The resulting constructions will have
+better security than property-preserving encryption schemes and better compatibility and 
+efficiency than MPC-based schemes. Our approach uses standard database indexing mechanisms but (interactively) involves the
 client to help with sensitive operations. This approach has been used in the
 context of order-preserving encryption, and we will extend these techniques to
 {\em handle distance queries and dynamic data}.
-
-Lastly, the proposed research will improve existing constructions to have
-better security by reducing the leakage and providing forward security.  
 
 %To show the promise of this approach, the proposed research will first give
 %constructions for the proximity functionality of the two standard approaches.
@@ -105,14 +97,12 @@ better security by reducing the leakage and providing forward security.
 %expect unacceptable overhead in networks with realistic latency.  
 
 \paragraph{Intellectual merits.}  
-Encrypted databases and searchable encryption has a rich history rooted in the
-design of oblivious random access machines.  The current landscape is littered
-with approaches with uncertain security or inadequate functionality.  Recent
-leakage inference attacks have taught us the impact of leakage and forward
-security.  At the same time, the rapid deployment of property-preserving
+Encrypted databases and searchable encryption has a rich history starting with  oblivious random access machines.  Current approaches provide uncertain security or inadequate functionality.  Recent
+leakage inference attacks have shown the importance of leakage and the need for forward
+security.  Simultaneously, the rapid deployment of property-preserving
 techniques has reinforced the importance of simplicity, efficiency and backward
 compatibility.  These two developments inform the core of our approach: using
-interactivity to strengthen property-preserving encryption.
+interactivity while maximally maintaining compatibility.
 
 \paragraph{Broader impacts.}
 The confidentiality of data is a core societal tenant.  Deployed encrypted
@@ -120,10 +110,10 @@ databases provide little security and may even hurt by providing a false sense
 of security.  There is a tremendous need for research in this area to
 understand the tradeoffs between security, functionality, and efficiency.
 
-The PIs are committed to broad dissemination of research material.  The PIs
+The PIs are committed to dissemination of research material and code artifacts.  The PIs
 have participated in large scale evaluation of searchable encryption, working
-on both constructions and attacks.  Furthermore, the PIs have open-sourced
-previous work including work on searchable encryption.  Lastly, all PIs are
+on both constructions and attacks.  The PIs have open-sourced
+previous work on secure databases.  Lastly, all PIs are
 dedicated to engaging with undergraduates, with two co-PIs being at an
 undergraduate only institution, the US Naval Academy.  
 \end{document}
