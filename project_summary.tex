@@ -33,12 +33,12 @@ Project Summary
 %sophisticated cryptography to create databases capable of efficiently answering
 %a client's queries without revealing information to the server.  
 %
-The growth of data volume is outpacing organizations' ability to manage and
+The growth of data is outpacing organizations' ability to manage and
 organize this data. Organizations are turning to external cloud providers
 to manage their data needs.  
 %
 This migration should maintain confidentiality of their
-valuable data asset, so the data is often outsourced in an encrypted from. 
+valuable data, so the data is often outsourced in an encrypted from. 
 %
 However, employing encryption comes at the cost of disabling the cloud server
 from {\em quickly processing the data in the plaintext form and answering
@@ -63,7 +63,7 @@ which can answer range queries. Academic teams, start-up companies, and Fortune
 The second thread starts from generic secure multi-party computation and
 optimizes solutions for common database tasks. This approach requires redesign
 of database indexing mechanisms and results in better security at the cost of
-decreased efficiency. 
+decreased efficiency and compatibility. 
 %
 We note that so far, both approaches offer only the {\em limited functionality
 of SQL and NoSQL}. 
@@ -76,12 +76,12 @@ biometric databases. These databases share a fundamental operation: {\em
 computing distance/proximity of tuples of points}. The proposed research will
 consider proximity queries as a case study for the following question: \emph{can secure databases be designed that achieve security while maintaining backwards compatibility?}  As an example, one can override a comparison operator to use an interactive protocol.
 
-To show the promise of this approach, we will consider which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will give
-customized schemes of property-preserving encryption for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
+To show the promise of this approach, we will consider which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will design
+customized schemes for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
 
 The resulting constructions will have
 better security than property-preserving encryption schemes and better compatibility and 
-efficiency than MPC-based schemes. Our approach uses standard database indexing mechanisms but (interactively) involves the
+efficiency than MPC-based schemes. Our approach will use standard database indexing mechanisms but (interactively) involves the
 client to help with sensitive operations. This approach has been used in the
 context of order-preserving encryption, and we will extend these techniques to
 {\em handle distance queries and dynamic data}.

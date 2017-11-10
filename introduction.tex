@@ -68,7 +68,9 @@ The proposed research will
 consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
 
 
-\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87ob,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve the efficiency of these building blocks.  Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with hardware approaches to future work.
+\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve the efficiency of these building blocks.  In addition, the PIs are aware (and have contributed) of the leakage inference attacks on secure databases (for example~\cite{CCS:KKNO16}).  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
+
+Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with hardware approaches to future work.
 
 
 \subsection{Proposed work.}
@@ -76,6 +78,7 @@ The goal of this proposal is to create secure outsourced databases that will be 
 \begin{quote}Cryptographic operations are restricted to only database operators (used to create index structures).  These cryptographic operators can call interactive protocols but should not require a complete rewrite of the underlying database.. 
 \end{quote}
 
+\noindent
 The proposed research will
 consider proximity queries as a case study and give constructions supporting
 these queries.  This work will be split into three components:
