@@ -1,0 +1,104 @@
+%\documentclass{llncs}
+
+%\documentclass[11pt]{article}
+
+\documentclass[11pt]{article}
+\pagestyle{plain}
+%\pagenumbering{arabic}
+\pagestyle{empty}
+
+\usepackage{url}
+
+\setlength\pdfpageheight{\paperheight}
+\setlength\pdfpagewidth{\paperwidth}
+
+\parindent=0cm
+\setlength{\textwidth}{6.8in}
+\setlength{\textheight}{9.2in}
+\setlength{\oddsidemargin}{-.1in}
+\setlength{\evensidemargin}{-0.1in}
+\setlength{\topmargin}{-.5in}
+
+\begin{document}
+
+\newcommand{\etalchar}[1]{$^{#1}$}
+
+$\mbox{ }$
+
+
+\begin{center}
+{\Large \bf Data Management Plan}
+\end{center}
+
+%\vspace{0.2in}
+
+%\parbox[t]{4in}{
+%MIT Computer Science and Artificial Intelligence Laboratory \\
+%32 Vassar Street \\
+%Cambridge, MA 02139 \\
+%Tel: (617) 715-4617 \\
+%Email: okhan@csail.mit.edu\\
+%}
+%\parbox[t]{2.2in}{
+% ~
+%}
+
+\noindent
+\section*{(a) Survey of existing data}
+This project will use existing public data sets for databases.  We primarily expect to draw from the database and query generation tool produced by MIT Lincoln Laboratory \url{https://github.com/mit-ll/SPARTA}.  In addition, for biometric datasets the project may employ the ND-IRIS dataset and the CASIA iris dataset.
+\noindent
+\section*{(b) Data to be created}
+
+The database and query generation tool was designed for relational data and may prove inadequate for our needs.  As such we expect to extend the SPARTA tool to generate graph data and appropriate queries.  These extensions will be fed back into the open-source SPARTA tool.
+
+\noindent
+\section*{(c) Data owners \& stakeholders}
+Data will be created by graduate students.  Faculty will supervise and verify the generation of this data.  In addition, the tools used to create data will be open-sourced.  The PIs will publicize these tools at conference and solicit feedback on the tools and process.
+
+\noindent
+\section*{(d) File formats}
+
+The data will be generated through various stages of processing. Database outputs will be in database dump format and queries will be in text files.
+
+\noindent
+\section*{(e) Metadata}
+
+We will utilize the data storage facilities provided by the University of Connecticut HPC cluster \url{https://hpc.uconn.edu/}.  All data will be temporary as it can be regenerated from tools and thus we only plan to keep data for the duration of an experiment.
+
+\noindent
+\section*{(f) Access \& security} 
+
+The tools, source data and metadata will be shared by students and faculty in our universities. The tools will be open-sourced and made available to the public.
+\noindent
+\section*{(g) Data organization}
+
+All tools will be placed under revision control and generated data will be associated with pseudorandom numbers used to generate the data ensuring reproducibility.
+
+\noindent
+\section*{(i) Storage}
+
+Our data will be stored in UConn's HPC. This HPC is accessible by VPN by personnel from all institutions.
+In addition personnel may store copies of the data in external hard drives or their personal computers.
+
+%\noindent
+%\section*{(j) Bibliography management}
+%
+%In order to make best effort not to mix source data with our own data, we will keep
+%them separate and cite sources appropriately wherever they may be used.
+
+\noindent
+\section*{(k) Data sharing, publishing and archiving}
+
+Data will be disseminated through scholarly publications. In addition, data generation tools will be open-sourced and made available to the community.
+
+\noindent
+\section*{(l) Disposal}
+
+Synthetic data will be generated on demand and purged after the end of experiments.
+\noindent
+\section*{(m) Budget}
+
+We have not allocated separate budget for data management excluding what has been included for
+technician/IT support.
+
+\end{document}
