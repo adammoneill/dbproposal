@@ -8,7 +8,7 @@ This data is stored in database systems.  Databases have a rich history in both 
 organize this data.  Organizations are turning to external cloud providers
 to manage their data needs.  
 
-This outsourced storage represents a natural attack target.  Attacks occur against both government~\cite{CyberAttacksOPM} and commercial~\cite{CyberAttacks,gressin2017equifax} datasets.
+This outsourced storage represents a natural attack target.  Attacks occur against both government \cite{CyberAttacksOPM} and commercial~\cite{CyberAttacks,gressin2017equifax} datasets.
 The natural response to this risk is to encrypt data before outsourcing. 
 %
 However, employing encryption comes at the cost of disabling the cloud server
@@ -22,7 +22,7 @@ information to the cloud server}.
 
 Secure outsourced databases use advanced cryptography to achieve this goal.  This field encompasses a variety of cryptographic techniques, including property-preserving encryption or PPE~\cite{EC:PanRou12}, searchable symmetric encryption or SSE~\cite{CCS:CGKO06}, private information retrieval by keyword~\cite{EPRINT:ChoGilNao98}, and public-key encryption with keyword search~\cite{EC:BDOP04}.  
 
-This research has largely split into two research threads: PPE which emphasizes background compatibility and use of legacy database management systems and searchable encryption which emphases security.  PPE creates symmetric encryption techniques
+This research has largely split into two research threads: PPE which emphasizes background compatibility and use of legacy database management systems and SSE which emphases security.  PPE creates symmetric encryption techniques
 compatible with an unprotected database. Examples include deterministic
 encryption~\cite{C:BelBolONe07} which can answer equality queries and order-preserving encryption~\cite{C:BolCheONe11,EC:BCLO09}
 which can answer range queries. Academic teams, start-up companies (including Bitglass, Ciphercloud, Crypteron, PreVeil, Skyhigh, ZeroDB) and Fortune
@@ -31,9 +31,8 @@ which can answer range queries. Academic teams, start-up companies (including Bi
 %encryption can't be secure for many applications.
 %
 SSE schemes can be viewed as starting from secure multi-party computation and
-optimizes solutions for common database tasks. This approach requires redesign
-of database indexing mechanisms and results in better security at the cost of
-decreased efficiency. 
+optimizes solutions for common database tasks (both \cite{SP:FVKKKM15} and \cite{RSA:IKLO16} explicitly use multi-party computation for sensitive subcomputations). This approach requires redesign
+of database indexing mechanisms and achieves better security at the cost of decreased efficiency and backward compatibility. 
 
 These systems have been implemented at moderate scale.  Both property-preserving solutions~\cite{CACM:PRZB12,EPRINT:PodBoePop16} and searchable encryption~\cite{SP:PKVKMC14,SP:FVKKKM15,C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15,RSA:IKLO16} solutions have been tested on datasets with billions of records.
 
@@ -45,9 +44,9 @@ These systems have been implemented at moderate scale.  Both property-preserving
 Emerging databases include large scale graph databases, analytic databases, and
 biometric databases. 
 \begin{enumerate}
-\item Many data sets are naturally interpreted as large sparse graphs.  Examples include social networks including online networks such as Facebook and Twitter and more traditional communities such as academic co-authorship and the co-stardom network.  This type of network is used to perform Internet scale analysis.  Common graph algorithms include computing triangles (sets of nodes $\{a,b,c\}$ where all pairs are close according to a metric), shortest path algorithms, network diameter, and degree distribution.
-\item  Increasingly, databases are not asked to return subsets of data but rather derive statistics and analytics about the stored data.  Machine-learning-as-a-service has emerged as a business model for large and small companies~\cite{mlservice}.  Many machine learning algorithms depend on computing distance between points. Linear regression finds the line that minimizes the sum of distances between the line and data points.  Similarly, the first principal component minimizes the sum of distances between the selected line and the dataset~\cite{wold1987principal}.  The remaining principal components are defined similarly subject to being orthogonal to previously defined principal components.
-\item The FBI has long held a fingerprint database with hundreds of millions of records~\cite{brislawn1996fbi} for identifying criminals.  Increasingly, countries are using biometrics as an identifier for citizens, linking biometrics with unique identifiers.  The Aadhaar system in India links biometrics with a unique 12 digit number with over 1 billion numbers issued~\cite{daugman2014600}.  Increasingly, passports are biometric enabled~\cite{stanton2008icao}.  As these databases move from indexing criminals to everyone, privacy concerns abound.  The fundamental operation is these databases is comparing the distance between a target point $a$ all stored points. Biometric databases return the nearest match $b^*$ if the distance $d(a,b^*)$ is less than some defined threshold.  
+\item Many data sets are naturally interpreted as large sparse graphs.  Examples include social networks such as Facebook and Twitter and communities such as organizational communication, academic co-authorship, and the co-stardom network.  This type of network is also used to perform Internet scale analysis.  Common graph algorithms include computing triangles (sets of nodes $\{a,b,c\}$ where all pairs are close according to a metric), shortest path algorithms, network diameter, and degree distribution.
+\item  Increasingly, databases are not asked to return subsets of data but rather derive statistics and analytics about the stored data.  Machine-learning-as-a-service has emerged as a business model for large and small companies~\cite{mlservice}.  Many machine learning algorithms depend on computing distance between points. Linear regression finds the line that minimizes the sum of distances between the line and data points.  Similarly, the first principal component minimizes the sum of distances between the selected line and the dataset~\cite{wold1987principal}.  The remaining principal components are defined similarly (they must also be orthogonal to previously defined components).
+\item The FBI has long held a fingerprint database with hundreds of millions of records~\cite{brislawn1996fbi} for identifying criminals.  Increasingly, countries are using biometrics as an identifier for citizens, linking biometrics with unique identifiers.  The Aadhaar system in India links biometrics with a unique 12 digit number with over 1 billion numbers issued~\cite{daugman2014600}.  Increasingly, passports are biometric enabled~\cite{stanton2008icao}.  As these databases move to indexing all citizens, privacy concerns abound.  These databases compare the distance betweeen a target point $a$ and the set of stored points $b_i$. They return $b^*$ such that $b^* = \min_i d(a,b_i)$ if the distance $d(a,b^*)$ is less than some defined threshold.  
 \end{enumerate}
 
 \noindent
@@ -56,41 +55,40 @@ computing distance/proximity of tuples of points}.
 
 \subsection{Inadequacy of Prior Work}
 
-In 2000, Song, Wagner, and Perrig provided the first scheme with communication proportional to the description of the query and the server performing (roughly) a linear scan of the encrypted database~\cite{SP:SonWagPer00}.  Since that time there has been tremendous work and both PPE and SSE approaches can handle much of SQL and NoSQL queries for billions of records.  However, neither approach is capable of handling inherently geometric data that is prominent in many current applications. (There is some work on computing shortest path in networks~\cite{CCS:MKNK15})  Furthermore, each approach also has a second weakness:
+In 2000, Song, Wagner, and Perrig provided the first scheme with communication proportional to the description of the query and the server performing (roughly) a linear scan of the encrypted database~\cite{SP:SonWagPer00}.  There has been tremendous work since 2000: both PPE and SSE approaches handle much of SQL and NoSQL queries and scale to datasets of billions of records.  However, neither approach is capable of handling geometric data that is prominent in the applications discussed above. (There is some work on computing shortest path in networks~\cite{CCS:MKNK15}.)  Furthermore, each approach also has a second weakness:
 \begin{enumerate}
-\item PPE has been subject to a number of leakage-abuse attacks that show that order-preserving encryption (and sometimes deterministic encryption) cannot be safely used in most cases~\cite{CCS:NavKamWri15,CCS:CGPR15,CCS:KKNO16,CCS:PouWri16,CCS:GMNRS16,EPRINT:GSBNR16,EPRINT:ZhaKatPap16}.
-\item SSE offers more limited functionality and efficiency than PPE based solutions.  The fastest SSE based solutions report overhead of roughly 300\%~\cite{C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15} while PPE based solutions report overhead of around 30\%~\cite{CACM:PRZB12}.  We are only aware of a single SSE solution that can handle JOIN statements~\cite{EPRINT:KamMoa16}.  As of this writing, the information  leaked by this scheme is not clear.  Recall that these solutions usually replace the entire database software stack with a custom cryptographic approach.  We posit that the lack of backward compatibility and difficulty of managing these systems also hurts industry adoption.  Industry adoption has been dominated by PPE solutions.
+\item PPE has been subject to a number of leakage-abuse attacks that show that order-preserving encryption (and sometimes deterministic encryption) is not safe in most cases~\cite{CCS:NavKamWri15,CCS:CGPR15,CCS:KKNO16,CCS:PouWri16,CCS:GMNRS16,EPRINT:GSBNR16,EPRINT:ZhaKatPap16}.  Industry has primarily adopted this approach.
+\item SSE offers more limited functionality and efficiency than PPE based solutions.  The fastest SSE based solutions report overhead of 300\%~\cite{C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15} while PPE based solutions report overhead of 30\%~\cite{CACM:PRZB12}.  We are only aware of a single SSE solution that can handle JOIN statements~\cite{EPRINT:KamMoa16}.  As of this writing, the information  leaked by this scheme is not clear.  These solutions replace the entire database software stack with a custom ``cryptographic'' database.  We posit that the lack of backward compatibility and administrative drawbacks hurt industry adoption.  
 \end{enumerate}
 
-The quick emergence of PPE systems in industry indicates that the approach has multiple benefits beyond efficiency.  It is imperative to ask if it is possible to design an approach which retains the benefits of PPE including backward compatibility, use of legacy software, improved visibility of data processing.  
-
+The emergence of PPE systems indicates the approach has benefits beyond efficiency.  These benefits include backward compatibility, use of legacy software, and improved transparency.
 The proposed research will
-consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
+consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using a traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
 
 
-\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve the efficiency of these building blocks.  In addition, the PIs are aware (and have contributed) of the leakage inference attacks on secure databases (for example~\cite{CCS:KKNO16}).  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
+\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases .  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
 
-Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with hardware approaches to future work.
+Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with secure hardware to future work.
 
 
-\subsection{Proposed work.}
-The goal of this proposal is to create secure outsourced databases that will be adopted and used by industry.  Towards achieving this goal we recognize two lessons from the past 1) PPE must be carefully analyzed to understanding security and 2) there are tremendous benefits of keeping backwards compatibility with prior database systems.  Together, these lessons tell us that some modification of database systems may be necessary but these modifications should be judicious.  This will be our guiding principle thorough this work.  The end point for our work is a  third approach to achieving secure outsourced databases: 
-\begin{quote}Cryptographic operations are restricted to only database operators (used to create index structures).  These cryptographic operators can call interactive protocols but should not require a complete rewrite of the underlying database.. 
+\subsection{Proposed work}
+The goal of this proposal is to create secure outsourced databases that will be adopted and used by industry.  Towards achieving this goal we recognize two lessons from the past 1) PPE must be carefully analyzed to understanding security and 2) there are tremendous benefits of keeping backwards compatibility with prior database systems.  Together, these lessons tell us that some modification of database systems may be necessary but these modifications should be judicious.  This will be our guiding principle thorough this principle.  Our goal is to create a third approach to secure outsourced databases: 
+\begin{quote}Cryptographic operations are restricted to only database operators (used to create index structures).  These cryptographic operators can call interactive protocols but do not require replacing the unprotected database. 
 \end{quote}
 
 \noindent
 The proposed research will
 consider proximity queries as a case study and give constructions supporting
-these queries.  This work will be split into three components:
+these queries.  The research will be split into three components:
 \begin{description}
-\item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to compute distance.  We expect that the strength of the ideal object will greatly depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? This component will consist of the following tasks:
+\item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? This component will consist of the following tasks:
 \begin{enumerate}
 \item Analysis of security provided by distance-preserving encryption for common metrics
 \item Design of distance-revealing encryption
 \item Design of approximate distance-revealing encryption and equivalence with distance-comparison revealing encryption.
 \end{enumerate}
 
-\item[Section \ref{sec:interactive}] When the definition of distance-revealing encryption appears inadequate for an application, we will change the model to allow overloaded operators to use interaction.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
+\item[Section \ref{sec:interactive}] When distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
 \begin{enumerate}
 \item Proximity using Partial Distance-Preserving Encryption
 \item Substring Search using Partial Suffix Tree Encryption
@@ -105,14 +103,12 @@ these queries.  This work will be split into three components:
 \item Merge of Ostrovsky and POPE
 \end{enumerate}
 \end{description}
-The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.
+The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.  We will use the UConn HPC Cluster to evaluate our implementation \url{https://hpc.uconn.edu}.  We expect this evaluation to use and extend the database and query generator created as part of the SPAR project~\cite{varia2015automated}.
 
 \paragraph{Intellectual merits.}  
 Encrypted databases and searchable encryption has a rich history rooted in the
-design of oblivious random access machines.  The current landscape is littered
-with approaches with uncertain security or inadequate functionality.  Recent
-leakage inference attacks have taught us the impact of leakage and forward
-security.  At the same time, the rapid deployment of property-preserving
+design of oblivious random access machines.  The field has been the focus of multiple large scale projects including IARPA's APP and SPAR~\cite{spar_baa}.  The field is quite diverse bringing together cryptographers, system researchers, and database experts.  Furthermore, there is clear demand in industry for solutions.  Data breaches are becoming nearly daily events.  However, recent
+leakage inference attacks have taught us that just because something is called encrypted does not make it secure.  This problem requires careful design that balances functionality, efficiency, and security needs.  The rapid deployment of property-preserving
 techniques has reinforced the importance of simplicity, efficiency and backward
 compatibility.  These two developments inform the core of our approach: using
 interactivity to strengthen property-preserving encryption.
@@ -126,9 +122,11 @@ understand the tradeoffs between security, functionality, and efficiency.
 The PIs are committed to broad dissemination of research material.  The PIs
 have participated in large scale evaluation of searchable encryption, working
 on both constructions and attacks.  Furthermore, the PIs have open-sourced
-previous work including work on searchable encryption.  Lastly, all PIs are
-dedicated to engaging with undergraduates, with two co-PIs being at an
-undergraduate only institution, the US Naval Academy.  
+previous work including work on searchable encryption.  The PIs plan to open-source outputs of these proposal.  
+
+Lastly, all PIs are
+dedicated to engaging with undergraduates. Two co-PIs being at an
+undergraduate only institution, the US Naval Academy.  Dr. Fuller supervises the cyber-security club at the University of Connecticut supports their efforts to understand and research computer security.
 
 
 
