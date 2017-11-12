@@ -83,30 +83,32 @@ these queries.  The research will be split into three components:
 \begin{description}
 \item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? This component will consist of the following tasks:
 \begin{enumerate}
+\setlength\itemsep{0em}
 \item Analysis of security provided by distance-preserving encryption for common metrics
 \item Design of distance-revealing encryption
-\item Design of approximate distance-revealing encryption and equivalence with distance-comparison revealing encryption.
+\item Design of approximate distance-revealing encryption
 \end{enumerate}
 
 \item[Section \ref{sec:interactive}] When distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
 \begin{enumerate}
-\item Proximity using Partial Distance-Preserving Encryption
-\item Substring Search using Partial Suffix Tree Encryption
+\setlength\itemsep{0em}
+\item Euclidean Proximity using Partial Distance-Preserving Encryption
+\item Edit Distance using Partial Suffix Tree Encryption
 \item Improved efficiency of MPC approaches in 2 party setting
 \item Improved dynamism for interactive approaches
 \end{enumerate}
 
 \item[Section \ref{sec:improving security}] Lastly, we will strengthen security of this approach while working towards a goal of maximum backwards compatibility.  This component includes considering forward security and eliminating leakage from protocols. This component will consist of the following tasks:
-\begin{enumerate}
+\begin{enumerate}\setlength\itemsep{0em}
 \item Modular partial order-preserving encryption
 \item Forward security for POPE
-\item Merge of Ostrovsky and POPE
+\item Combining ORAM and interactive approaches to reduce leakage
 \end{enumerate}
 \end{description}
-The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.  We will use the UConn HPC Cluster to evaluate our implementation \url{https://hpc.uconn.edu}.  We expect this evaluation to use and extend the database and query generator created as part of the SPAR project~\cite{varia2015automated}.
+The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.  We will use the UConn HPC Cluster to evaluate our implementation \url{https://hpc.uconn.edu}.  We expect this evaluation to use and extend the database and query generator created as part of the IARPA SPAR project~\cite{varia2015automated}.
 
 \paragraph{Intellectual merits.}  
-Encrypted databases and searchable encryption has a rich history rooted in the
+Encrypted databases and searchable encryption have rich histories rooted in the
 design of oblivious random access machines.  The field has been the focus of multiple large scale projects including IARPA's APP and SPAR~\cite{spar_baa}.  The field is quite diverse bringing together cryptographers, system researchers, and database experts.  Furthermore, there is clear demand in industry for solutions.  Data breaches are becoming nearly daily events.  However, recent
 leakage inference attacks have taught us that just because something is called encrypted does not make it secure.  This problem requires careful design that balances functionality, efficiency, and security needs.  The rapid deployment of property-preserving
 techniques has reinforced the importance of simplicity, efficiency and backward

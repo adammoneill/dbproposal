@@ -74,14 +74,14 @@ The wide deployment of property-preserving encryption highlights the need for cr
 Emerging databases include graph, analytic, and
 biometric databases. These databases share a fundamental operation: {\em
 computing distance/proximity of tuples of points}. The proposed research will
-consider proximity queries as a case study for the following question: \emph{can secure databases be designed that achieve security while maintaining backwards compatibility?}  As an example, one can override a comparison operator to use an interactive protocol.
+consider proximity queries as a case study for the following question: \emph{can secure databases achieve security while maintaining backwards compatibility?}  As an example, one can override a comparison operator to use an interactive protocol without rewriting the database software.
 
 To show the promise of this approach, we will consider which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will design
-customized schemes for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
+customized, interactive schemes for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
 
 The resulting constructions will have
 better security than property-preserving encryption schemes and better compatibility and 
-efficiency than MPC-based schemes. Our approach will use standard database indexing mechanisms but (interactively) involves the
+efficiency than MPC-based schemes. Our approach will use standard database indexing mechanisms but (interactively) involve the
 client to help with sensitive operations. This approach has been used in the
 context of order-preserving encryption, and we will extend these techniques to
 {\em handle distance queries and dynamic data}.

@@ -8,118 +8,116 @@ In large scale biometric databases, the fundamental operation is comparison of t
 
 Despite the varied use of proximity functionality in databases, we find two core operations.     The first core operation is computing the distance between two points $a$ and $b$ or $d(a,b)$ according to some metric $d$.  This distance can be granular, for example $d(a, b) =15$ or coarse, $d(a,b)\in\{0,1,2\}$ corresponding to $\{equal, close, far\}$.  Even with this small set of outputs, users expect the function $d$ to behave as a metric so we restrict our attention to metric functions.  We call property-preserving encryption where $d(\enc(a), \enc(b)) = d(a,b)$ \emph{distance preserving encryption} or DPE.  Using the same language as for order-revealing and order-preserving encryption, we define a variant called \emph{distance-revealing encryption} or DRE where distance is computable  via some metric on the output space.
 
-The second core operation takes a triple of points $a,b$ and $c$ and outputs the bit whether $d(a,c)<d(b,c)$.  This type of computation is frequently used in clustering, nearest neighbor, and learning algorithms.   We call a property-preserving encryption that achieves this functionality \emph{distance-comparison revealing encryption} or DCRE, and similarly to above the case that distance-comparison  on the ciphertexts is done using the \emph{same} metric as on the plaintext we call \emph{distance-comparison preserving encryption} or DCPE..  The idea is that this technique should \emph{not} allow computation of $d(a,b)$.
+The second core operation takes a triple of points $a,b$ and $c$ and outputs the bit whether $d(a,c)<d(b,c)$.  This type of computation is frequently used in clustering, nearest neighbor, and learning algorithms.   We call a property-preserving encryption that achieves this functionality \emph{distance-comparison revealing encryption} or DCRE. When the distance comparison on ciphertexts uses the \emph{same} metric as on the plaintext we call \emph{distance-comparison preserving encryption} or DCPE.  The goal for this technique is to \emph{not} allow computation of $d(a,b)$.
 
  A related notion is \emph{approximate} distance-preserving encryption, where  $\delta_1 \cdot d(a,b) \leq d(\enc(a), \enc(b)) \leq \delta_2  \cdot d(a,b)$ for some functions $\delta_1, \delta_2$.  This can be used much like distance-preserving encryption in algorithms to give approximate guarantees.
 
-Similarly to order-preserving encryption, the security achievable by DPE and DCPE is unclear.  (For higher-level protocols, it is unclear what security is possible even for ideal DRE and DCRE, but for DPE and DCPE even the basic ``leakage profile'' is unclear.)
-Our research on encryption for proximity thus consists of three tasks: 1) understanding security of DPE, and constructing DPE and DRE, 2) understanding security of DCPE, and constructing DCPE and DCRE,  and 3) approximate distance-revealing encryption: connecting   distance-preserving and distance-comparison preserving encryption, constructing approximate DPE.
+The security achievable by DPE and DCPE is unclear even for the ideal objects.
+Our research on encryption for proximity  consists of three tasks: 1) understanding security of DPE, and constructing DPE and DRE, we expect the ideal security to vary widely based on the underlying metric properties 2) understanding security of DCPE, and constructing DCPE and DCRE,  and 3) the connection to approximate distance-revealing encryption, we believe that approximate distance-revealing encryption is equivalent to distance-comparison preserving encryption.
 
 \subsection{DPE and DRE}
 
-\subsubsection{Prior Work}
-The notion of distance-revealing encryption has been implicitly studied in prior work.  The most relevant prior work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}.  Boldyreva and Chenette defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  This work generalizes the work of Li et al.~\cite{li2010fuzzy,wang2013efficient} who construct a tagging function for particular string functions.  
+\paragraph{Prior Work}
+The most relevant prior work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}.  Boldyreva and Chenette defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  This work generalizes the work of Li et al.~\cite{li2010fuzzy,wang2013efficient} who construct a tagging function for particular string functions.  
 
-These works create a tag for every possible neighbor and thus do not scale to practical metrics where an exponential number of values are considered close. Boldyreva and Chenette also present a negative result: there is a closeness function where any tagging function requires storage proportional to the number of close neighbors~\cite[Theorem 5.2]{boldyreva2014efficient}.  Fortunately, this result is not known to hold if the closeness function is a (well-known) metric.  
+These works create a tag for every possible neighbor and thus do not scale to metrics where an exponential number of values are considered close. Boldyreva and Chenette also present a negative result: there is a closeness function where any tagging function requires storage proportional to the number of close neighbors~\cite[Theorem 5.2]{boldyreva2014efficient}.  This result is not known to hold if the closeness function is a (well-known) metric.  
 The approach can be summarized as follows:
-\begin{enumerate}
-\item In addition to encrypting the plaintext $a$ the client appends a deterministic encryption of all $b$ such that $d(a,b) \le 1$.
+\begin{enumerate}\setlength\itemsep{0em}
+\item The clients appends to $\enc(a)$ a deterministic encryption of all $b$ such that $d(a,b) \le 1$.
 \item To search, the client deterministically encrypts their search term $b$.
 \item The server returns all ciphertexts where some encryption matches.\footnote{Some  modifications are necessary to meet ideal security such as hiding the number of neighbors.  See the prior work of Boldyreva and Chenette~\cite{boldyreva2014efficient}.}  
 \end{enumerate}
 
-Alternatively, the plaintext $a$ can just be encrypted using deterministic encryption and the client can search for all neighbors of $b$ (rather than just $b$).  Woodage et al.~apply this approach in the context of password authentication with typos~\cite{C:WCDJR17}.  Both of these approaches require time linear in the number of neighbors and thus are not viable for high dimensional data where the number of neighbors is exponential in the dimension of the metric space.
+Alternatively, the plaintext $a$ can be encrypted (without tags) and the client can search for the disjunction of all neighbors of $b$ (rather than just $b$).  Woodage et al.~apply this approach in the context of password authentication with typos~\cite{C:WCDJR17}.  Both of these approaches require time linear in the number of neighbors and are not viable for high dimensional data.
 
-Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoentropic isometric which is variant of distance-preserving encryption.  The definition of pseudoentropic isometries allows that $d(\enc(a), \enc(b)) <d(a,b)$ while this is not allowed for distance-revealing or preserving encryption.  However, it is possible to modify the construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) = d(a,b)$ but this construction only works for the set-difference metric and requires strong cryptographic assumptions.
+Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoentropic isometric which is variant of distance-preserving encryption.  The definition of pseudoentropic isometries allows that $d(\enc(a), \enc(b)) <d(a,b)$.  However, it is possible to modify the construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) = d(a,b)$ but this construction only works for the set-difference metric and requires strong cryptographic assumptions.
 
-\subsubsection{Proposed Work}
+\paragraph{Proposed Work}
 There is a scattering of work on variants of distance-revealing encryption but there is not a solid theoretic foundation for the object.  Previous work defines noisy searchable encryption schemes but never explicitly define distance-revealing encryption.   Given the history of order-preserving encryption it is crucial to understand the security guarantees of distance-preserving and distance-revealing encryption. % In particular, we believe that distance-preserving encryption does not offer meaningful security.
 
 %Ongoing work by the PIs indicates the viability of distance-preserving encryptionthis structure is highly metric dependent.  
- \paragraph{Hamming metric} Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.  Ongoing work by the PIs indicates that there is no secure distance-preserving encryption for this metric unless $|\mathcal{M}|$ is super polynomial.  Define the following: 
-\begin{itemize}
+Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.  Ongoing work by the PIs indicates that there is no secure distance-preserving encryption for this metric unless $|\mathcal{M}|$ is super polynomial.  Define the following: 
+\begin{itemize}\setlength\itemsep{0em}
 \item Let $f: \mathcal{M}^\ell \rightarrow \mathcal{M}^\ell$ permute its input coordinates, 
 \item Let $g_i: \mathcal{M}\rightarrow \mathcal{M}$ be a permutation.
 %\item Let $x\in\mathcal{M}^\ell$ be a plaintext points.  
 \end{itemize}
-Then, all distance-preserving encryption schemes $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$ must be of the form $\enc(x) = f(g_1(x_1),..., g_\ell(x_\ell))$.  Intuitively the permutation $f$ rotates the dimensions and $g_i$ shuffles individual dimensions.  These are the only operations that preserve distance across the entire metric space.
+All distance-preserving encryption schemes $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$ are of the form $\enc(x) = f(g_1(x_1),..., g_\ell(x_\ell))$.  The permutation $f$ rotates the dimensions and $g_i$ shuffles individual dimensions.  These are the only operations that preserve distance across the entire metric space.
 
-Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary strings).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which our ongoing work shows is necessary.  However, the PIs also plan to investigate security of distance-preserving encryption for the Hamming metric when the adversary does not know any plaintext-ciphertext pairs (i.e., a so-called ciphertext-only attack) or has only a very small number of them, as was previously done for order preserving encryption~\cite{C:BolCheOne11}.
+Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary strings).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which our ongoing work shows is necessary.  However, the PIs also plan to investigate security of distance-preserving encryption for the Hamming metric when the adversary does not know any plaintext-ciphertext pairs (i.e., a so-called ciphertext-only attack) or a very small number of them, as was previously done for order preserving encryption~\cite{C:BolCheONe11}.
  
- \paragraph{Extensions} The PIs propose to extend this work to other metrics as well, in particular Euclidean, cosine-similarity, and Jaccard distance.    The PIs also plan to address the case of \emph{course grained} distance, e.g., where distance is in the set $\{far, equal, close\}$.  This problem is connected to property-preserving encryption for \emph{graph data}.  A course metric can be represented by a graph where neighboring vertices are near according to the metric.  Intuitively, our goal is to encrypt a graph as another graph with a subgraph of the same structure. The PIs believe this could lead to interesting questions in graph theory.
+ \paragraph{Extensions} The PIs propose to study other metrics, in particular Euclidean, cosine-similarity, and Jaccard distance.    The PIs also plan to address the case of \emph{course grained} distance, e.g., where distance is in the set $\{far, equal, close\}$.  This problem is connected to property-preserving encryption for \emph{graph data}.  A course metric can be represented by a graph where neighboring vertices are near according to the metric.  Intuitively, our goal is to encrypt a graph as another graph with a subgraph of the same structure. The PIs believe this could lead to interesting questions in graph theory.
 
 \paragraph{Understanding ideal distance-revealing encryption}
-In the case of \emph{ideal} distance-revealing encryption, a foundational question is, as in the case of order-revealing encryption, whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but still leak less information than distance preserving encryption. 
+In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption. 
 
 \paragraph{Distance-revealing encryption based on fuzzy extractors}
-We will construct distance-revealing encryption based on fuzzy extractors which are a well known primitive for deriving a stable key from a noisy source~\cite{EC:DodReySmi04}.  They consist of a pair of algorithms $\gen(a)$ which produces a stable key $key$ and a public value $p$, the algorithm $\rep(b, p)$ outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are constructing noisy searchable encryption from fuzzy extractors and distance-preserving encryption..  Let $\{a_i | 1\le i \le n\}$ be the set of plaintexts to be stored in the database.  Let $\enc$ be a distance-preserving encryption, let $\gen, \rep$ be a fuzzy extractor on the output space of $\enc$, and let $H$ be a hash function.  Rather than directly storing $\enc(a_i)$ the client does the following:
+We will construct distance-revealing encryption based on fuzzy extractors which are a well known primitive for deriving a stable key from a noisy source~\cite{EC:DodReySmi04}.  They consist of a pair of algorithms $\gen(a)$ which produces a stable key $key$ and a public value $p$, the algorithm $\rep(b, p)$ outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are constructing noisy searchable encryption from fuzzy extractors and distance-preserving encryption.  Let $\{a_i | 1\le i \le n\}$ be the set of plaintexts to be stored in the database.  Let $\enc$ be a distance-preserving encryption and let $H$ be a hash function.  Rather than directly storing $\enc(a_i)$ the client does the following:
 
-\begin{enumerate}
+\begin{enumerate}\setlength\itemsep{0em}
 \item Generates $c_i \leftarrow \enc(a_i)$.
 \item Runs $k_i, p_i \leftarrow \gen(c_i)$.
-\item Outputs $p_i, H(k_i)$
+\item Sends $p_i, H(k_i)$ to server.
 \end{enumerate}
 
-This is transmitted to the server.  If the client wants to search for points close to $b$, the client encrypts $\enc(b)$ and presents this to the server which can rerun the fuzzy extractor for all stored terms.  The server can then return these terms to the client.  Note this approach has considerably less leakage than distance-preserving encryption as the server can only ``compare'' ciphertexts that are used in search.  The stored ciphertexts are not useful.  We will extend this concept to allow for comparison between any pair of ciphertexts, transforming the construction to be distance-revealing encryption.
-
-We expect the output of this component to be 1) strong theoretical evidence on the limitations of DPE to implement noisy search and 2) constructions and analysis of DRE including constructions that use DPE.  
+To search for points close to $b$, the client encrypts $\enc(b)$ and presents this to the server which can rerun the fuzzy extractor for all stored terms.  The server can then return these terms to the client.  This approach has considerably less leakage than distance-preserving encryption as the server can only ``compare'' ciphertexts that are used in search.  The stored ciphertexts are not ``useful.''  We will extend this concept to remove the asymmetry between query and stored ciphertexts, transforming the construction into distance-revealing encryption.
+We expect the output of this component to be 1) evidence on which metrics are suitable for DPE  and 2) constructions and analysis of DRE including constructions that use DPE.  
 
 \subsection{Distance Comparison Revealing Encryption}
-We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  As described above, many learning algorithms do not require direct computation of $d(a,b)$.  Rather it suffices to indicate which of two points is closer to a target point.  That is, it is sufficient to compute $d(a,c)\overset{?}<d(b,c)$.  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  The hope is that the weaker functionality of DCRE and DCPE can be secure in more applications than distance-revealing and distance-preserving encryption respectively.
+We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  As described above, many learning algorithms do not require direct computation of $d(a,b)$.  Rather it suffices to indicate which of two points is closer to a target point.  That is, it is sufficient to compute $d(a,c)\overset{?}<d(b,c)$.  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  The hope is that the weaker functionality of DCRE and DCPE can be secure for more metrics than distance-revealing and distance-preserving encryption respectively.
 This leads to the following questions:
 
 \begin{question}
 Can we design efficient DCPE?  What security can be achieved by such schemes?
 \end{question}
-
 \begin{question}
 Can we design efficient DCRE with better security?
 \end{question}
 
 To answer the first question, in on-going work we have found that distance comparison preserving functions do not seem to have a nice ``recursive'' property as in the case of order-preserving functions, which was crucially exploited by~\cite{EC:BCLO09}.  However, based on computer experiments, we conjecture that \emph{distance-comparison preserving functions are approximately distance-preserving}.    So far, we have proven this conjecture in one dimension.  The intuition is that as the number of points in the metric spaces the number of degrees of freedom decreases.  The intuition is as follows:
-\begin{enumerate}
+\begin{enumerate}\setlength\itemsep{0em}
 \item Suppose that $d(b,c) = k$ is known by the attacker, 
 \item Learning that $d(a,c) < d(b,c)$ tells the attacker that $d(a,c)<k$.  
 \item Suppose the attacker also knows that $d(f, c) = k/2$ and that $d(a,c) > d(f,c)$.  
 \item The attacker can determine that $k/2< d(a,c) <k$.  
 \item As more of these constraints are added, $d(a,c)$ is limited to smaller ranges.
 \end{enumerate}
-That is, the encryption mechanism is forced to allow more accurate on the distance between $d(a,c)$.
+That is, the encryption mechanism reveal more accurate estimations on  the distance between $d(a,c)$.
 If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme. 
 
 \subsection{Approximate Distance Revealing Encryption}
 \paragraph{Prior Work}
-Several previous works construct a version of noisy searchable encryption based on the ability approximate distance between pairs of points.  
-The recent GRECS work is designed to allow minimum distance between any pair of points~\cite{meng2015grecs}.  Rather than trying to store or compute distance between pairs of points $a,b$ the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
+The recent GRECS work allows minimum distance between any pair of points~\cite{meng2015grecs}.  Rather than store or compute distance between pairs of points $a,b$ the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
 
 A second line of work uses locality-sensitive hashes which are designed to allow more efficient computation of nearest neighbor in high dimensional spaces~\cite{datar2004locality,slaney2008locality}.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.  \begin{definition}
 Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$, for $r_1< r_2$ and $p_1 >p_2$, locality sensitive hash if for any $x, y$ the following hold:
-\begin{itemize}
+\begin{itemize}\setlength\itemsep{0em}
 \item If $d(x, y) \le r_1$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \ge p_1$, and 
 \item If $d(x, y) \ge r_2$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \le p_2$.
 \end{itemize}
 \end{definition}
  
-Kuzu, Islam and Kantarcioglu~\cite{kuzu2012efficient} use locality sensitive hashing to create an approximate distance-preserving data structure.  At index creation time the client for a plaintext value $a$ samples multiple locality sensitive hashes $h_1(a), h_2(a),...,$ and associates each output as a keyword with $a$ using deterministic encryption.
+Kuzu, Islam and Kantarcioglu~\cite{kuzu2012efficient} use locality sensitive hashing to create an approximate distance-preserving data structure.  To create the index, for plaintext $a$ the client samples multiple locality sensitive hashes $h_1(a), h_2(a),...,h_k(a)$ and associates each output as a keyword with $a$ using deterministic encryption.
 
-Then to query for $b$ the client queries computes $h_1(b), h_2(b),...,$ and query for all results that match each locality sensitive hash (this requires the ability to perform disjunctive queries).\footnote{More precisely, they build an inverted index for each locality sensitive hash that allows them to retrieve the document identifiers.}  The client locally retrieves results and then restricts to those documents that have a high number of hash matches.  With good probability, these will correspond to those records that were close to the original query.  Bringer et al.~\cite{bringer2011identification,bringer2009error} use similar techniques but insert the output of the locality sensitive hash into a Bloom filter.  Both of these works provide relatively weak security and make no attempt to hide records that match a small number of hash function outputs.  
+Then to query for $b$ the client queries computes $h_1(b), h_2(b),...,h_k(b)$. They then ask the server for all results that match a single hash (this requires the ability to perform disjunctive queries).\footnote{More precisely, they build an inverted index for each locality sensitive hash that allows them to retrieve the document identifiers.}  The client locally retrieves results and then restricts to those documents that have a high number of hash matches.  With good probability, these will correspond to those records that were close to the original query.  Bringer et al.~\cite{bringer2011identification,bringer2009error} use similar techniques but insert the output of the locality sensitive hash into a Bloom filter.  Both of these works provide relatively weak security and make no attempt to hide records that match a small number of hash function outputs.  
 
-\subsubsection{Proposed Work}
-\paragraph{Direct Constructions} Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
+\paragraph{Proposed Work}
+Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
 We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheONe11} to answer the question of what privacy such a scheme provides.  
 
-\paragraph{Using locality-sensitive hashing}
-The work of Kuzu, Islam, and Kantarcioglu~\cite{kuzu2012efficient} can be viewed as a construction of approximate distance-revealing encryption.  Unfortunately, their scheme does not approach ideal security as the server learns when subfeatures match.  In ongoing work, we are combining locality-sensitive hashing with the recent \emph{sample-then-hash} fuzzy extractor construction of the co-PI~\cite{EC:CFPRS16}.  The idea is as follows:
+The scheme of Kuzu et al.~\cite{kuzu2012efficient}  does not approach ideal security as the server learns which records match each subfeature.  In ongoing work, we are combining locality-sensitive hashing with the recent \emph{sample-then-hash} fuzzy extractor construction of the co-PI~\cite{EC:CFPRS16}.  The idea is as follows:
 
-\begin{enumerate}
+\begin{enumerate}\setlength\itemsep{0em}
 \item For input $a$, compute $a_1 = h_1(a), a_2 = h_2(a),..., a_k = h_k(a)$.
 \item For $i=1,...., \ell$:
-\subitem Sample $i_1,..., i_\eta\overset{\$}\leftarrow [k]$.
-\subitem Compute $\alpha_i = H(a_{i_1} || ... || a_{i_k})$.
-\subitem Append $\alpha_i$ as keyword to $a$ (using deterministic encryption).
+\begin{enumerate}\setlength\itemsep{0em}
+\item Sample $i_1,..., i_\eta\overset{\$}\leftarrow [k]$.
+\item Compute $\alpha_i = H(a_{i_1} || ... || a_{i_k})$.
+\item Append $\alpha_i$ as keyword to $a$ (using deterministic encryption).
 \end{enumerate}
-
-The goal of this approach is to append multiple locality sensitive hashes that individually have a very small probability of hashing but overall there is a high probability of a single match).  The probability of finding any matches between $a,b$ that are not close is very small.  See Canetti et al.'s analysis for more information~\cite{EC:CFPRS16}.
+\end{enumerate}
+\noindent
+This approach appends multiple locality sensitive hashes that individually have a small probability of matching but overall there is a high probability of a single match.  The probability of finding any matches between $a,b$ that are not close is small (see Canetti et al.~\cite{EC:CFPRS16}).
 %\textbf{Open problems discussion:} 
 %\begin{itemize}
 %\item Understand the set of LSH and how they can be used for practical noisy sources.
