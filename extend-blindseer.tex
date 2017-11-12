@@ -43,11 +43,11 @@ efficiency and a richer set of functionalities. In particular,
 In this new simpler setting, the client can be regarded as playing as both $\sf
  S$ and $\sf C$ in the original BlindSeer architecture. Therefore, in order
  that he may decrypt all the records, the client can just hold one symmetric
- key in constrast to the original BlindSeer system where a slow public-key
+ key in contrast to the original BlindSeer system where a slow public-key
  encryption scheme and a random shuffling must be introduced in the setup
  stage, none of which we need in our new setting. 
 
-\item {\em MPC is not necessary.} In the original Blindseer system, in order to
+\item {\em MPC is not necessary.} In the original BlindSeer system, in order to
 hide from $\sf C$ the BF indices stored in each node of the indexing tree, $\sf
 C$ and $\sf IS$ have to execute costly MPC computation. In our setting, the
 client can simply ask for the necessary encrypted BF indices and decrypt
@@ -64,7 +64,7 @@ Furthermore, in the original BlindSeer, BF indices are encrypted with a very
     efficient. Dynamic addtion of BF indices will lead to a more complicated
     encryption structure, and the MPC computation will be much more costly.
 
-In our setting, however, we don't need any key setup, nor MPC comutation.
+In our setting, however, we don't need any key setup, nor MPC computation.
 Therefore, we can add BF indices directly to the indexing tree with much more
 efficiency.  
 \end{itemize}
@@ -74,21 +74,21 @@ settings. For use cases where this new setting is appropriate, our simplified
 construction will provide a solution running {\em at least x10 faster than the
 original system}.  
 
-\paragraph{Proximity of high-dimentional data.}
+\paragraph{Proximity of high-dimensional data.}
 BlindSeer already provides conjunctions and range queries, based on which we
-can support the funcitonality of proximity in a Euclidean space. 
+can support the functionality of proximity in a Euclidean space. 
 In particular, a query that searches for the points $(x, y)$ in DB that belongs
 to a 2D rectangle defined by the top-left point $(x_1, y_1)$ and the
 bottom-right point $(y_1, y_2)$ can be described with range queries and
 conjunctions as follows: $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2.
-$$ This techinque can be easily extended to data with multiple dimensions. 
+$$ This technique can be easily extended to data with multiple dimensions. 
 
 \paragraph{A graph structure and computing the shortest path.}
 Using Bloom filters we can encode a graph structure as follows:
 \begin{itemize}
 \item For each arc $(a, b)$ from vertex $a$ to vertex $b$, we insert an
   encryption $c = \Enc((a,b) \| w(a,b) )$, where $w(a,b)$ is the weight of the arc
-    $(a,b)$. Moreover, have the ciphrtext $c$ indexed by a BF keyword `$\sf arc$:a*'. 
+    $(a,b)$. Moreover, have the ciphertext $c$ indexed by a BF keyword `$\sf arc$:a*'. 
 \end{itemize}
 
 Given the above graph encryption, we can find all the neighbors of vertex $v_1$

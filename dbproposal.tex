@@ -2,6 +2,7 @@
 
 \usepackage{fullpage,varwidth,url}
 \usepackage{amssymb}
+\usepackage[table]{xcolor}
 \usepackage{amsmath,amsthm}
 \usepackage{relsize}
 \usepackage{color}
@@ -306,7 +307,31 @@ and various encryption schemes~\cite{TCC:CDMW08,AC:CDMW09,AC:LCLPY13}.
 Prior NSF support: ``RUI: Achieving Practical Privacy for the Cloud.'' (co-PI) Award number 1618269, 2016-2019, \$380K. 
 
 \section{Schedule and Management Plan}
+The work described in this proposal will be performed by a combination of the PIs, graduate students at Georgetown University and University of Connecticut, and undergraduate students at all three institutions.  A collaboration plan is attached as supplementary material.  In this section, we provide a brief overview of the timeline of the proposed research.  For each task, we have identified the lead PI for that task but we expect all tasks to involve collaboration between all PIs.  The work is summarized in Table~\ref{tab:work}.
 
+\begin{table}
+\begin{tabular}{l | c | c | c | c | c | c | c | c | c | c | c | c}
+Thrust & \multicolumn{4}{c}{Year 1} & \multicolumn{4}{c}{Year 2} & \multicolumn{4}{c}{Year 3} \\
+& Q1 & Q2 & Q3 & Q4 & Q1 & Q2 & Q3 & Q4 & Q1 & Q2 & Q3 & Q4\\\hline
+Distance-Preserving Encryption\\
+\,\,\,\,Security of Ideal DPE (Fuller) & \multicolumn{4}{c}{\cellcolor{blue!25}}\\
+\,\,\,\,DRE (Fuller) & \multicolumn{4}{c}{} &\multicolumn{5}{c}{\cellcolor{blue!25}} \\
+\,\,\,\,Approximate DRE (O'Neill) &\multicolumn{6}{c}{\cellcolor{blue!25}} \\
+Allowing Interaction \\
+\,\,\,\,Euclidean Dist. (Choi) &\multicolumn{4}{c}{\cellcolor{blue!25}} \\
+\,\,\,\,Edit Dist. (Roche) & & \multicolumn{6}{c}{\cellcolor{blue!25}} \\
+\,\,\,\,Simplify Blind Seer (Choi) & \multicolumn{4}{c}{} & \multicolumn{4}{c}{\cellcolor{blue!25}} \\
+\,\,\,\,Blind Seer for Graphs (O'Neill) & \multicolumn{7}{c}{} & \multicolumn{5}{c}{\cellcolor{blue!25}}\\
+Improving Security\\
+\,\,\,\,Modular POPE (Roche) & \multicolumn{3}{c}{}& \multicolumn{4}{c}{\cellcolor{blue!25}}\\
+\,\,\,\,Randomized POPE (Choi) & \multicolumn{7}{c}{} & \multicolumn{3}{c}{\cellcolor{blue!25}}\\
+\,\,\,\,Forward Security (O'Neill) & \multicolumn{7}{c}{} & \multicolumn{5}{c}{\cellcolor{blue!25}}\\
+\,\,\,\,ORAM \& Blind Seer (Choi) & \multicolumn{6}{c}{}& \multicolumn{6}{c}{\cellcolor{blue!25}}\\
+Impl./Eval. (Fuller) & \multicolumn{4}{c}{} &  \multicolumn{8}{c}{\cellcolor{blue!25}}\\
+\end{tabular}
+\caption{Work schedule}
+\label{tab:work}
+\end{table}
 \bibliographystyle{alpha}
 \bibliography{cryptobib/abbrev3,cryptobib/crypto,Bencrypto,new}
 

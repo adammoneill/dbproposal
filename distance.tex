@@ -15,7 +15,7 @@ The second core operation takes a triple of points $a,b$ and $c$ and outputs the
 Similarly to order-preserving encryption, the security achievable by DPE and DCPE is unclear.  (For higher-level protocols, it is unclear what security is possible even for ideal DRE and DCRE, but for DPE and DCPE even the basic ``leakage profile'' is unclear.)
 Our research on encryption for proximity thus consists of three tasks: 1) understanding security of DPE, and constructing DPE and DRE, 2) understanding security of DCPE, and constructing DCPE and DCRE,  and 3) approximate distance-revealing encryption: connecting   distance-preserving and distance-comparison preserving encryption, constructing approximate DPE.
 
-\subsection{Component A-I: DPE and DRE}
+\subsection{DPE and DRE}
 
 \subsubsection{Prior Work}
 The notion of distance-revealing encryption has been implicitly studied in prior work.  The most relevant prior work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}.  Boldyreva and Chenette defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  This work generalizes the work of Li et al.~\cite{li2010fuzzy,wang2013efficient} who construct a tagging function for particular string functions.  
@@ -64,7 +64,7 @@ This is transmitted to the server.  If the client wants to search for points clo
 
 We expect the output of this component to be 1) strong theoretical evidence on the limitations of DPE to implement noisy search and 2) constructions and analysis of DRE including constructions that use DPE.  
 
-\subsection{Component A-II: Distance Comparison Revealing Encryption}
+\subsection{Distance Comparison Revealing Encryption}
 We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  As described above, many learning algorithms do not require direct computation of $d(a,b)$.  Rather it suffices to indicate which of two points is closer to a target point.  That is, it is sufficient to compute $d(a,c)\overset{?}<d(b,c)$.  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  The hope is that the weaker functionality of DCRE and DCPE can be secure in more applications than distance-revealing and distance-preserving encryption respectively.
 This leads to the following questions:
 
@@ -87,7 +87,7 @@ To answer the first question, in on-going work we have found that distance compa
 That is, the encryption mechanism is forced to allow more accurate on the distance between $d(a,c)$.
 If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme. 
 
-\subsection{Component A-III: Approximate Distance Revealing Encryption}
+\subsection{Approximate Distance Revealing Encryption}
 \paragraph{Prior Work}
 Several previous works construct a version of noisy searchable encryption based on the ability approximate distance between pairs of points.  
 The recent GRECS work is designed to allow minimum distance between any pair of points~\cite{meng2015grecs}.  Rather than trying to store or compute distance between pairs of points $a,b$ the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
@@ -106,7 +106,7 @@ Then to query for $b$ the client queries computes $h_1(b), h_2(b),...,$ and quer
 
 \subsubsection{Proposed Work}
 \paragraph{Direct Constructions} Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
-We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheOne11} to answer the question of what privacy such a scheme provides.  
+We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheONe11} to answer the question of what privacy such a scheme provides.  
 
 \paragraph{Using locality-sensitive hashing}
 The work of Kuzu, Islam, and Kantarcioglu~\cite{kuzu2012efficient} can be viewed as a construction of approximate distance-revealing encryption.  Unfortunately, their scheme does not approach ideal security as the server learns when subfeatures match.  In ongoing work, we are combining locality-sensitive hashing with the recent \emph{sample-then-hash} fuzzy extractor construction of the co-PI~\cite{EC:CFPRS16}.  The idea is as follows:
