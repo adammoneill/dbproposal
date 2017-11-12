@@ -66,7 +66,7 @@ The proposed research will
 consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using a traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
 
 
-\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases .  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
+\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases.  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
 
 Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with secure hardware to future work.
 
@@ -81,15 +81,15 @@ The proposed research will
 consider proximity queries as a case study and give constructions supporting
 these queries.  The research will be split into three components:
 \begin{description}
-\item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? This component will consist of the following tasks:
+\item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? Building on the research of the PI on order-preserving encryption~\cite{EC:BCLO09,C:BolCheONe11}, this component will consist of the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
-\item Analysis of security provided by distance-preserving encryption for common metrics
+\item Analysis of security provided by distance-preserving and distance-comparison preserving encryption for common metrics
 \item Design of distance-revealing encryption
 \item Design of approximate distance-revealing encryption
 \end{enumerate}
 
-\item[Section \ref{sec:interactive}] When distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
+\item[Section \ref{sec:interactive}] When the security provided by distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
 \item Euclidean Proximity using Partial Distance-Preserving Encryption
@@ -124,11 +124,11 @@ understand the tradeoffs between security, functionality, and efficiency.
 The PIs are committed to broad dissemination of research material.  The PIs
 have participated in large scale evaluation of searchable encryption, working
 on both constructions and attacks.  Furthermore, the PIs have open-sourced
-previous work including work on searchable encryption.  The PIs plan to open-source outputs of these proposal.  
+previous work including work on searchable encryption.  The PIs plan to open-source outputs of the proposal.  
 
 Lastly, all PIs are
 dedicated to engaging with undergraduates. Two co-PIs being at an
-undergraduate only institution, the US Naval Academy.  Dr. Fuller supervises the cyber-security club at the University of Connecticut supports their efforts to understand and research computer security.  This club allows students with varying educational preparation to engage outside of the classroom and learn the impact of computer science and security.
+undergraduate only institution, the US Naval Academy.  Dr. Fuller supervises the cyber-security club at the University of Connecticut supports their efforts to understand and research computer security.  This club allows students with varying educational preparation to engage outside of the classroom and learn the impact of computer science and security.  Dr.~O'Neill has previously been awarded an REU and used it to  work with a female undergraduate student.
 
 
 
