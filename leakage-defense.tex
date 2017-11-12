@@ -1,16 +1,16 @@
+%!TEX root = dbproposal.tex
 
-
-\subsection{Enhancing security of M-POPE}
-One mitigation of the attacks we propose to look at is \emph{modularity} in the
-sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheOne11}.  The
+\subsection{Creating a modular POPE}
+In this section, we propose novel security improvements to the interactive approaches proposed in the previous section.  Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
+sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheONe11}.  The
 idea of M-OPE is to apply a secret random offset modulo the largest possible
 message to a message before encrypting it (the secret random offset is chosen
 once and fixed in the secret key), so that everything gets ``shifted.''
-Although similar attacks seem to apply to M-OPE, we propose to investigate more
+Since attacks still seem to apply to M-OPE, we propose to investigate more
 fine-grained modularity as a defense. 
 
 \paragraph{Random offset for each digit.}
-In particular, we propose \emph{digit-modular} OPE (DM-OPE) where there is a
+We propose \emph{digit-modular} OPE (DM-OPE) where there is a
 secret modular offset applied to each digit.  The base in which the data is
 written could even itself be secret.  It becomes more complicated to make range
 queries with DM-OPE, as it requires an exponential number of queries in the
@@ -18,17 +18,15 @@ number of ``wrap around'' digits in the query.  However, we propose to
 investigate approximating the queries efficiently (with some false positives
 that the client can filter out).
 
-
 \subsection{Enhancing security of POPE}
+Leakage attacks are particularly problematic when the adversary is able to correlated leakage from multiple queries.  Forward security searchable encryption can decouple the adversary's leakage and force them to execute their attack with less information.  
 
-More attractively, POPE also has forward security (i.e., updating an element
-don't leak information about the other elements), although the paper didn't
-consider this notion. This is because the scheme doesn't maintain any other
+POPE natively has forward security (i.e., updating an element
+don't leak information about the other elements), although it was not considered in the publication~\cite{CCS:RACY16}.  This is because the scheme doesn't maintain any other
 index structure except the POPE tree. So, to update an element, one can simply
 delete the element from the node it belongs and insert an updated element to
 the unsorted buffer of the root. 
 
-\paragraph{Less leakage.}
 In this proposal, we plan to investigate whether we can further reduce the
 leakage of the POPE scheme. 
 
@@ -36,14 +34,13 @@ leakage of the POPE scheme.
 Can we reduce the leakage for the POPE scheme?
 \end{question}
 
-We observe that in POPE, each search query leaks the ordering information
-mainly for the following reasons: 
+In POPE, each search query leaks the ordering  for the following reasons: 
 
 \begin{itemize}
-\item The tree is essentially a search tree. For example, the elements on the
-  left sub-tree is is smaller than those on the right.
+\item The tree is a search tree. For example, all elements in the
+  left sub-tree are smaller than every element in the right subtree.
  
-\item Once a ciphertext comes in a POPE tree, it never changes. This {\em
+\item Once a ciphertext is inserting into a POPE tree, it never changes. This {\em
   deterministic} nature allows the attacker to trace when the ciphertext came
   in the tree, and how it was brought down to some leaf node.  
 \end{itemize}
@@ -52,10 +49,10 @@ We plan to address these issues as follows. To address the first issue, for
 each POPE node, the order of the links to its children may be shuffled. Since
 POPE is an interactive protocol, when a tree node is created, we can slightly
 modify the original protocol so that the client additionally change the order
-of the links with a randomly selected permutation. 
+of the links with a randomly selected permutation.\footnote{Similar ideas were used in the protocol of Ishai et al.~\cite{RSA:IKLO16} who use MPC and private information retrieval to hide tree traversal.}
 %
-We note that the search can still be performed correctly even with this
-modification, since the interactive guidance of the client can have the server
+Search can still be performed correctly even with this
+modification, since the interactive guidance of the client can help the server
 traverse the tree nodes correctly. 
     
 To address the second issue, we observe that when the ciphertexts in an
@@ -97,9 +94,7 @@ containing a large amount of data, we hope that ORAMs can be used effectively
 for achieving stronger privacy for the sensitive sub-part of the system (e.g.,
 the bottom parts of the POPE tree).  In fact, ORAMs have been used to minimize
 the leakage for SSE (symmetric searchable encryption) schemes which support
-keyword search over encrypted data~\cite{NDSS:StePapShi14,C:GarMohPap16}. We
-plan investigate whether some part POPE trees can be modified and incorporated
-with ORAMs so that the resulting system enjoys stronger privacy while only
+keyword search over encrypted data~\cite{NDSS:StePapShi14,C:GarMohPap16,RSA:IKLO16}. We will investigate how to incorporate ORAM into POPE trees so that the resulting system enjoys stronger privacy while only
 having marginal performance degradation.  
 
 

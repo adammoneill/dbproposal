@@ -1,3 +1,5 @@
+%!TEX root = dbproposal.tex
+
 \subsection{Extending BlindSeer}
 \label{sec:ext-blindseer}
 
@@ -5,20 +7,20 @@
 BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}, which is a database management system
 that provides privacy.
 
-Roughly speaking, BlindSeer has three main players. The {\em server} $\sf S$,
+BlindSeer has three main players. The {\em server} $\sf S$,
 who holds the DB and outsources an encrypted copy of the DB to a third party,
 called the {\em index server} $\sf IS$. The server $\sf S$  also builds an
 encrypted Bloom filter (BF) tree index to the DB and sends it to $\sf IS$. The
 {\em client} $\sf C$ sends search queries to $\sf IS$ and obtained encrypted
 results, to each of which $\sf C$ obtains the decryption key secret-shared
 between $\sf C$ and $\sf IS$. The decryptions keys are arranged in the offline
-setup stage, using the techniques of shuffling and homomorphic public-key
+setup stage, using shuffling and homomorphic public-key
 encryption.
 %
 BlindSeer provides the following privacy guarantees:
 \begin{itemize}
-\item Query privacy: Since $\sf S$ is not involved with the search protocol at
-  all, the client's queries are hidden from $\sf S$. Moreover, $\sf IS$ holds
+\item Query privacy: $\sf S$ is not involved with the search protocol at
+  all, so the client's queries are hidden from $\sf S$. Moreover, $\sf IS$ holds
     the {\em shuffled, encrypted} database, so the client's queries remain
     private to a great degree against $\sf IS$. 
 
@@ -28,21 +30,18 @@ that satisfy the client query, and therefore, $\sf C$ cannot arbitrarily access
 all the records in the database.  
 \end{itemize}
 
-\subsubsection{Proposed Work}
-
-\paragraph{Better efficiency and funciontionality in a simpler cloud
-setting.} When a database is outsourced, the database owner is often the client
+\paragraph{Proposed Work}
+When a database is outsourced, the database owner is often the client
 itself, in which case we don't need to worry about whether the plaintext data
 would be leaked to the client.  In this proposal, we will consider this setting
 of the client as the data owner and significantly simplify the architecture of
 the Blindseer system. This will bring us a construction that has better
-efficiency and a richer set of functionalities. In particular,
+efficiency and a richer set of functionalities. In particular:
 
-\begin{itemize}
+\begin{itemize}\setlength\itemsep{0em}
 \item {\em Much simpler, efficient setup.}
 In this new simpler setting, the client can be regarded as playing as both $\sf
- S$ and $\sf C$ in the original BlindSeer architecture. Therefore, in order
- that he may decrypt all the records, the client can just hold one symmetric
+ S$ and $\sf C$ in the original BlindSeer architecture. Therefore, the client can just hold one symmetric
  key in contrast to the original BlindSeer system where a slow public-key
  encryption scheme and a random shuffling must be introduced in the setup
  stage, none of which we need in our new setting. 
@@ -63,43 +62,39 @@ Furthermore, in the original BlindSeer, BF indices are encrypted with a very
     simple mechanism of one-time pad so that MPC computation may be reasonably
     efficient. Dynamic addtion of BF indices will lead to a more complicated
     encryption structure, and the MPC computation will be much more costly.
-
 In our setting, however, we don't need any key setup, nor MPC computation.
 Therefore, we can add BF indices directly to the indexing tree with much more
 efficiency.  
 \end{itemize}
 
-We believe that it is important to provide an efficient solution for various
-settings. For use cases where this new setting is appropriate, our simplified
-construction will provide a solution running {\em at least x10 faster than the
-original system}.  
+\noindent We believe that it is important to provide an efficient solution for various
+settings. For use cases where this new setting is appropriate, we believe this simplified
+construction will be an order of magnitude faster than the current Blind Seer system.
 
 \paragraph{Proximity of high-dimensional data.}
-BlindSeer already provides conjunctions and range queries, based on which we
-can support the functionality of proximity in a Euclidean space. 
-In particular, a query that searches for the points $(x, y)$ in DB that belongs
-to a 2D rectangle defined by the top-left point $(x_1, y_1)$ and the
+BlindSeer already provides conjunctions and range queries.  These queries can be combined to answer proximity queries on a Euclidean space.
+In particular, a query that searches for the points close to $(x, y)$ can be defined as a 2D rectangle defined by the top-left point $(x_1, y_1)$ and the
 bottom-right point $(y_1, y_2)$ can be described with range queries and
 conjunctions as follows: $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2.
 $$ This technique can be easily extended to data with multiple dimensions. 
 
-\paragraph{A graph structure and computing the shortest path.}
+\paragraph{Graph structure and the shortest path.}
 Using Bloom filters we can encode a graph structure as follows:
 \begin{itemize}
-\item For each arc $(a, b)$ from vertex $a$ to vertex $b$, we insert an
-  encryption $c = \Enc((a,b) \| w(a,b) )$, where $w(a,b)$ is the weight of the arc
-    $(a,b)$. Moreover, have the ciphertext $c$ indexed by a BF keyword `$\sf arc$:a*'. 
+\item For each edge $(a, b)$ from vertex $a$ to vertex $b$, we insert an
+  encryption $c = \Enc((a,b) \| w(a,b) )$, where $w(a,b)$ is the weight of the edge
+    $(a,b)$. Moreover, have the ciphertext $c$ indexed by a BF keyword `$\sf edge$:a*'. 
 \end{itemize}
 
-Given the above graph encryption, we can find all the neighbors of vertex $v_1$
-along with the weight of the associated arc. Therefore, we can run variants of
+\noindent
+We can find all the neighbors of vertex $v_1$
+along with the weight of the associated edge. Therefore, we can run variants of
 Dijkstra's algorithm and compute compute the shortest path, given two vertices
-$v_1$ and $v_2$ and a limit on the maximum number of arcs. 
+$v_1$ and $v_2$ and a limit on the maximum number of arcs. The key to this approach is the ``native'' ability of Bloom filters to handle conjunction queries.
 
 \paragraph{Both of the above functionalities.}
-Since BlindSeer is based on the Bloom filters, one can create a database that
-encrypts both proxmity information and a graph structure, only by adding
+Since BlindSeer is based on the Bloom filters, one can add proximity and graph structure by adding
 relevant keyword index appropriately.
 %
 Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
-client would enjoy a much richer set of functionalities.  
+client can enjoy a much richer set of functionalities.  
