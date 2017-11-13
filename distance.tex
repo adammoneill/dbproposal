@@ -16,8 +16,8 @@ Our research on encryption for proximity  consists of three tasks: 1) understand
 
 \subsection{DPE and DRE}
 
-\paragraph{Prior Work}
-The most relevant prior work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}.  Boldyreva and Chenette defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  This work generalizes the work of Li et al.~\cite{li2010fuzzy,wang2013efficient} who construct a tagging function for particular string functions.  
+\paragraph{Prior work.}
+The most relevant prior work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}.  They defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect, this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  This work generalizes the work of Li et al.~\cite{li2010fuzzy,wang2013efficient} who construct a tagging function for particular string functions.  
 
 These works create a tag for every possible neighbor and thus do not scale to metrics where an exponential number of values are considered close. Boldyreva and Chenette also present a negative result: there is a closeness function where any tagging function requires storage proportional to the number of close neighbors~\cite[Theorem 5.2]{boldyreva2014efficient}.  This result is not known to hold if the closeness function is a (well-known) metric.  
 The approach can be summarized as follows:
@@ -29,10 +29,10 @@ The approach can be summarized as follows:
 
 Alternatively, the plaintext $a$ can be encrypted (without tags) and the client can search for the disjunction of all neighbors of $b$ (rather than just $b$).  Woodage et al.~apply this approach in the context of password authentication with typos~\cite{C:WCDJR17}.  Both of these approaches require time linear in the number of neighbors and are not viable for high dimensional data.
 
-Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoentropic isometric which is variant of distance-preserving encryption.  The definition of pseudoentropic isometries allows that $d(\enc(a), \enc(b)) <d(a,b)$.  However, it is possible to modify the construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) = d(a,b)$ but this construction only works for the set-difference metric and requires strong cryptographic assumptions.
+Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoentropic isometric which is variant of distance-preserving encryption.  The definition of pseudoentropic isometries allows that $d(\enc(a), \enc(b)) <d(a,b)$.  However, it is possible to modify the construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) = d(a,b)$, but this construction only works for the set-difference metric and requires strong cryptographic assumptions.
 
-\paragraph{Proposed Work}
-There is a scattering of work on variants of distance-revealing encryption but there is not a solid theoretic foundation for the object.  Previous work defines noisy searchable encryption schemes but never explicitly define distance-revealing encryption.   Given the history of order-preserving encryption it is crucial to understand the security guarantees of distance-preserving and distance-revealing encryption. % In particular, we believe that distance-preserving encryption does not offer meaningful security.
+\paragraph{Proposed work.}
+There is a scattering of work on variants of distance-revealing encryption, but there is not a solid theoretic foundation for the object.  Previous work defines noisy searchable encryption schemes but never explicitly define distance-revealing encryption.   Given the history of order-preserving encryption it is crucial to understand the security guarantees of distance-preserving and distance-revealing encryption. % In particular, we believe that distance-preserving encryption does not offer meaningful security.
 
 %Ongoing work by the PIs indicates the viability of distance-preserving encryptionthis structure is highly metric dependent.  
 Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.  Ongoing work by the PIs indicates that there is no secure distance-preserving encryption for this metric unless $|\mathcal{M}|$ is super polynomial.  Define the following: 
@@ -47,10 +47,10 @@ Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary 
  
  The PIs propose to study other metrics, in particular Euclidean, cosine-similarity, and Jaccard distance.    The PIs also plan to address the case of \emph{course grained} distance, e.g., where distance is in the set $\{far, equal, close\}$.  This problem is connected to property-preserving encryption for \emph{graph data}.  A course metric can be represented by a graph where neighboring vertices are near according to the metric.  Intuitively, our goal is to encrypt a graph as another graph with a subgraph of the same structure. The PIs believe this could lead to interesting questions in graph theory.
 
-\paragraph{Understanding ideal distance-revealing encryption}
+\paragraph{Understanding ideal distance-revealing encryption.}
 In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption.   This direction has recently been pursued fruitfully by the PI in the case of order-revealing encryption~\cite{EPRINT:CLOZ16}.
 
-\paragraph{Distance-revealing encryption based on fuzzy extractors}
+\paragraph{Distance-revealing encryption based on fuzzy extractors.}
 We will construct distance-revealing encryption based on fuzzy extractors which are a well known primitive for deriving a stable key from a noisy source~\cite{EC:DodReySmi04}.  They consist of a pair of algorithms $\gen(a)$ which produces a stable key $key$ and a public value $p$, the algorithm $\rep(b, p)$ outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are constructing noisy searchable encryption from fuzzy extractors and distance-preserving encryption.  Let $\{a_i | 1\le i \le n\}$ be the set of plaintexts to be stored in the database.  Let $\enc$ be a distance-preserving encryption and let $H$ be a hash function.  Rather than directly storing $\enc(a_i)$ the client does the following:
 
 \begin{enumerate}\setlength\itemsep{0em}
@@ -85,11 +85,11 @@ That is, the encryption mechanism reveal more accurate estimations on  the dista
 If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme explored next.  That is, we expect a major outcome of this component to be 1) an understanding of the relationship between distance-comparison preserving encryption and approximate distance-preserving encryption (which we believe are equivalent), and 2) distance-comparison \emph{revealing} schemes (at least based on bilinear maps, hopefully even PRFs) achieving stronger security.
 
 \subsection{Approximate Distance Revealing Encryption}
-\paragraph{Prior Work}
-The recent GRECS work allows minimum distance between any pair of points~\cite{CCS:MKNK15}.  Rather than store or compute distance between pairs of points $a,b$ the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
+\paragraph{Prior work.}
+The recent GRECS work allows minimum distance between any pair of points~\cite{CCS:MKNK15}.  Rather than storing or computing distance between pairs of points $a,b$, the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
 
 A second line of work uses locality-sensitive hashes which are designed to allow more efficient computation of nearest neighbor in high dimensional spaces~\cite{datar2004locality,slaney2008locality}.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.  \begin{definition}
-Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$, for $r_1< r_2$ and $p_1 >p_2$, locality sensitive hash if for any $x, y$ the following hold:
+  Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$ locality sensitive hash (where $r_1< r_2$ and $p_1 >p_2$) if for any $x, y$ the following hold:
 \begin{itemize}\setlength\itemsep{0em}
 \item If $d(x, y) \le r_1$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \ge p_1$, and 
 \item If $d(x, y) \ge r_2$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \le p_2$.
@@ -100,7 +100,7 @@ Kuzu, Islam and Kantarcioglu~\cite{kuzu2012efficient} use locality sensitive has
 
 Then to query for $b$ the client queries computes $h_1(b), h_2(b),...,h_k(b)$. They then ask the server for all results that match a single hash (this requires the ability to perform disjunctive queries).\footnote{More precisely, they build an inverted index for each locality sensitive hash that allows them to retrieve the document identifiers.}  The client locally retrieves results and then restricts to those documents that have a high number of hash matches.  With good probability, these will correspond to those records that were close to the original query.  Bringer et al.~\cite{bringer2011identification,bringer2009error} use similar techniques but insert the output of the locality sensitive hash into a Bloom filter.  Both of these works provide relatively weak security and make no attempt to hide records that match a small number of hash function outputs.  
 
-\paragraph{Proposed Work}
+\paragraph{Proposed work.}
 Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
 We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheONe11} to answer the question of what privacy such a scheme provides.  
 
@@ -112,7 +112,7 @@ The scheme of Kuzu et al.~\cite{kuzu2012efficient}  does not approach ideal secu
 \item For $i=1,...., \ell$:
 \begin{enumerate}\setlength\itemsep{0em}
 \item Sample $i_1,..., i_\eta\overset{\$}\leftarrow [k]$.
-\item Compute $\alpha_i = H(a_{i_1} || ... || a_{i_k})$.
+\item Compute $\alpha_i = H(a_{i_1} || ... || a_{i_\eta})$.
 \item Append $\alpha_i$ as keyword to $a$ (using deterministic encryption).
 \end{enumerate}
 \end{enumerate}
