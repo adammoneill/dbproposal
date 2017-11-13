@@ -6,11 +6,11 @@
 \paragraph{Prior work.} A co-PI was a member of the team that developed
 BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}, which is a database management system
 that provides privacy.
-
+%
 BlindSeer has three main players. The {\em server} $\sf S$,
 who holds the DB and outsources an encrypted copy of the DB to a third party,
 called the {\em index server} $\sf IS$. The server $\sf S$  also builds an
-encrypted Bloom filter (BF) tree index to the DB and sends it to $\sf IS$. The
+encrypted Bloom filter (BF) search tree to the DB and sends it to $\sf IS$. The
 {\em client} $\sf C$ sends search queries to $\sf IS$ and obtained encrypted
 results, to each of which $\sf C$ obtains the decryption key secret-shared
 between $\sf C$ and $\sf IS$. The decryptions keys are arranged in the offline
@@ -30,46 +30,47 @@ that satisfy the client query, and therefore, $\sf C$ cannot arbitrarily access
 all the records in the database.  
 \end{itemize}
 
-\paragraph{Proposed Work}
+\subsubsection{Proposed Work}
 When a database is outsourced, the database owner is often the client
 itself, in which case we don't need to worry about whether the plaintext data
 would be leaked to the client.  In this proposal, we will consider this setting
 of the client as the data owner and significantly simplify the architecture of
-the Blindseer system. This will bring us a construction that has better
+the BlindSeer system. This will bring us a construction that has better
 efficiency and a richer set of functionalities. In particular:
 
 \begin{itemize}\setlength\itemsep{0em}
 \item {\em Much simpler, efficient setup.}
-In this new simpler setting, the client can be regarded as playing as both $\sf
- S$ and $\sf C$ in the original BlindSeer architecture. Therefore, the client can just hold one symmetric
- key in contrast to the original BlindSeer system where a slow public-key
- encryption scheme and a random shuffling must be introduced in the setup
- stage, none of which we need in our new setting. 
+In this new simpler threat model, the client can be regarded as playing as both
+$\sf S$ and $\sf C$ in the original BlindSeer architecture. Therefore, the
+client can just hold one symmetric key in contrast to the original BlindSeer
+system where a slow public-key encryption scheme and a random shuffling
+must be introduced in the setup stage, none of which we need in our new
+setting. This also give us {\em better backward compatibility}.
 
 \item {\em MPC is not necessary.} In the original BlindSeer system, in order to
-hide from $\sf C$ the BF indices stored in each node of the indexing tree, $\sf
+hide from $\sf C$ the BF data stored in each node of the search tree, $\sf
 C$ and $\sf IS$ have to execute costly MPC computation. In our setting, the
-client can simply ask for the necessary encrypted BF indices and decrypt
-them, since we don't need to hide anything from the client.  
+    client can simply ask for the necessary encrypted BF data and decrypt them,
+    since we don't need to hide anything from the client.  
 
 
 \item {\em Dynamic record insertion.} In the original BlindSeer, one cannot
-insert new encrypted BF indices to the indexing tree dynamically.  It is mainly
+insert new encrypted BF data to the search tree dynamically.  It is mainly
 because the decryption key for each record must be arranged in the setup
 stage.
 %
-Furthermore, in the original BlindSeer, BF indices are encrypted with a very
-    simple mechanism of one-time pad so that MPC computation may be reasonably
-    efficient. Dynamic addtion of BF indices will lead to a more complicated
-    encryption structure, and the MPC computation will be much more costly.
+Furthermore, in the original BlindSeer, BF data are encrypted with a very
+simple mechanism of one-time pad so that MPC computation may be reasonably
+efficient. Dynamic addition of BF data will lead to a more complicated
+encryption structure, and the MPC computation will be much more costly.
 In our setting, however, we don't need any key setup, nor MPC computation.
-Therefore, we can add BF indices directly to the indexing tree with much more
+Therefore, we can add BF data directly to the search tree with much more
 efficiency.  
 \end{itemize}
 
 \noindent We believe that it is important to provide an efficient solution for various
 settings. For use cases where this new setting is appropriate, we believe this simplified
-construction will be an order of magnitude faster than the current Blind Seer system.
+construction will be an order of magnitude faster than the current BlindSeer system.
 
 \paragraph{Proximity of high-dimensional data.}
 BlindSeer already provides conjunctions and range queries.  These queries can be combined to answer proximity queries on a Euclidean space.
@@ -87,11 +88,12 @@ Using Bloom filters we can encode a graph structure as follows:
 \end{itemize}
 
 \noindent
-We can find all the neighbors of vertex $v_1$
-along with the weight of the associated edge. Therefore, we can run variants of
-Dijkstra's algorithm and compute compute the shortest path, given two vertices
-$v_1$ and $v_2$ and a limit on the maximum number of arcs. The key to this approach is the ``native'' ability of Bloom filters to handle conjunction queries.
-BlindSeer is based on the Bloom filters so it can support proximity and graph structure by adding
+We can find all the neighbors of vertex $a$ along with the weight of the
+associated edge. Therefore, we can run variants of Dijkstra's algorithm and
+compute compute the shortest path, given two vertices $a$ and $b$ and a limit
+on the maximum number of arcs. The key to this approach is the ``native''
+ability of Bloom filters to handle conjunction queries.  BlindSeer is based on
+the Bloom filters so it can support proximity and graph structure by adding
 relevant keyword index appropriately.
 %
 %Moreover, considering that BlindSeer allows disjunctions and conjunctions, the

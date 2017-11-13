@@ -1,7 +1,10 @@
 %!TEX root = dbproposal.tex
 
 \subsection{Enhancing security of POPE}
-In this section, we propose novel security improvements to the interactive approaches proposed in the previous section.  Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
+In this section, we propose novel security improvements to the interactive approaches proposed in the previous section. 
+
+\iffalse
+Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
 sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheONe11}.  The
 idea of M-OPE is to apply a secret random offset modulo the largest possible
 message to a message before encrypting it (the secret random offset is chosen
@@ -17,15 +20,20 @@ queries with DM-OPE, as it requires an exponential number of queries in the
 number of ``wrap around'' digits in the query.  However, we propose to
 investigate approximating the queries efficiently (with some false positives
 that the client can filter out).
+\fi
 
 %\subsection{Enhancing security of POPE}
-\paragraph{Forward Security} Leakage attacks are particularly problematic when the adversary is able to correlated leakage from multiple queries.  Forward security searchable encryption can decouple the adversary's leakage and force them to execute their attack with less information.  
+\paragraph{Forward security.} Leakage attacks are particularly problematic when
+the adversary is able to correlated leakage from multiple queries.  Forward
+security of searchable encryption can decouple the adversary's leakage and force
+them to execute their attack with less information.  
 
-POPE natively has forward security (i.e., updating an element
-don't leak information about the other elements), although it was not considered in the publication~\cite{CCS:RACY16}.  This is because the scheme doesn't maintain any other
-index structure except the POPE tree. So, to update an element, one can simply
-delete the element from the node it belongs and insert an updated element to
-the unsorted buffer of the root. 
+POPE natively has forward security (i.e., updating an element don't leak
+information about the other elements), although it was not considered in the
+publication~\cite{CCS:RACY16}.  This is because the scheme doesn't maintain any
+other index structure except the POPE tree. So, to update an element, one can
+simply delete the element from the node it belongs and insert an updated
+element to the unsorted buffer of the root. 
 
 In this proposal, we plan to investigate whether we can further reduce the
 leakage of the POPE scheme. 
@@ -65,26 +73,28 @@ hide information about the location of lower-level buffers to which ciphertexts
 have been streamed down. 
 
 %\paragraph{Leakage over time.}
-While POPE allows each search query to {\it gradually} leak the ordering
-information of the underlying plaintexts, {\em most} of the ordering
-information will be leaked over many queries. This begs the following question: 
+%While POPE allows each search query to {\it gradually} leak the ordering
+%information of the underlying plaintexts, {\em most} of the ordering
+%information will be leaked over many queries. 
 
-\begin{question}
-Can we still maintain a sufficient number of incomparable pairs of elements, even after
-  many range queries have been performed?  
-\end{question}
+%This begs the following question: 
 
-One approach is to leave more ciphertexts in an unsorted buffer without
-affecting the performance too much. For example, a ciphertext in an unsorted
-buffer of the root node is incomparable with all the other ciphertexts in the
-entire tree.  Moreover, in the POPE construction, when an unsorted leaf buffer
-is full (i.e.,  containing more than $L$ ciphertexts), where $L$ is a threshold
-parameter, new $L$ leaf nodes are created, and the ciphertexts are partitioned
-into $L$ newly created buffers. This procedure greatly reduces the number of
-ciphertexts in unsorted buffers and affects the security; in the worst case,
-some unsorted buffer will have only a single ciphertext. With more careful
-partitioning, we can maintain the number of incomparable pairs to be reasonably
-high even over many queries. 
+%\begin{question}
+%Can we still maintain a sufficient number of incomparable pairs of elements, even after
+%  many range queries have been performed?  
+%\end{question}
+
+Another approach to reduce the leakage is leaving more ciphertexts in an
+unsorted buffer (without affecting the performance significantly). For example,
+a ciphertext in an unsorted buffer of the root node is incomparable with all
+the other ciphertexts in the entire tree.  Moreover, in the POPE construction,
+when an unsorted leaf buffer is full (i.e.,  containing more than $L$
+ciphertexts), where $L$ is a threshold parameter, new $L$ leaf nodes are
+created, and the ciphertexts are partitioned into $L$ newly created buffers.
+This procedure greatly reduces the number of ciphertexts in unsorted buffers
+and affects the security; in the worst case, some unsorted buffer will have
+only a single ciphertext. With more careful partitioning, we can maintain the
+number of incomparable pairs to be reasonably high even over many queries. 
 
 
 Another possible direction is taking advantage of ORAM (Oblivious Random Acess
@@ -93,8 +103,10 @@ containing a large amount of data, we hope that ORAMs can be used effectively
 for achieving stronger privacy for the sensitive sub-part of the system (e.g.,
 the bottom parts of the POPE tree).  In fact, ORAMs have been used to minimize
 the leakage for SSE (symmetric searchable encryption) schemes which support
-keyword search over encrypted data~\cite{NDSS:StePapShi14,C:GarMohPap16,RSA:IKLO16}. We will investigate how to incorporate ORAM into POPE trees so that the resulting system enjoys stronger privacy while only
-having marginal performance degradation.  
+keyword search over encrypted
+data~\cite{NDSS:StePapShi14,C:GarMohPap16,RSA:IKLO16}. We will investigate how
+to incorporate ORAM into POPE trees so that the resulting system enjoys
+stronger privacy while only having marginal performance degradation.  
 
 
 \input{leakage-blindseer}
