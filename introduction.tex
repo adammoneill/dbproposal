@@ -66,7 +66,7 @@ The proposed research will
 consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using a traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
 
 
-\paragraph{Out of scope} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases.  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
+\paragraph{Out of scope.} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases.  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
 
 Lastly, Intel SGX is a promising hardware approach that is being used to isolate programs and provide security~\cite{EPRINT:CosDev16}.  SGX can be used to simulate cryptographic primitives~\cite{EPRINT:SasGorFle17,EPRINT:FVBG16}.  We believe that SGX can be used to upgrade the security of secure databases from honest-but-curious to malicious.  However, we leave combining our techniques with secure hardware to future work.
 
@@ -81,7 +81,7 @@ The proposed research will
 consider proximity queries as a case study and give constructions supporting
 these queries.  The research will be split into three components:
 \begin{description}
-\item[Section \ref{sec:ppe}] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? Building on the research of the PI on order-preserving encryption~\cite{EC:BCLO09,C:BolCheONe11}, this component will consist of the following tasks:
+\item[Section \ref{sec:ppe}.] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? Building on the research of the PI on order-preserving encryption~\cite{EC:BCLO09,C:BolCheONe11}, this component will consist of the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
 \item Analysis of security provided by distance-preserving and distance-comparison preserving encryption for common metrics
@@ -89,7 +89,7 @@ these queries.  The research will be split into three components:
 \item Design of approximate distance-revealing encryption
 \end{enumerate}
 
-\item[Section \ref{sec:interactive}] When the security provided by distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
+\item[Section \ref{sec:interactive}.] When the security provided by distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
 \item Euclidean Proximity using Partial Distance-Preserving Encryption
@@ -98,7 +98,7 @@ these queries.  The research will be split into three components:
 \item Improved dynamism for interactive approaches
 \end{enumerate}
 
-\item[Section \ref{sec:improving security}] Lastly, we will strengthen security of this approach while working towards a goal of maximum backwards compatibility.  This component includes considering forward security and eliminating leakage from protocols. This component will consist of the following tasks:
+\item[Section \ref{sec:improving security}.] Lastly, we will strengthen security of this approach while working towards a goal of maximum backwards compatibility.  This component includes considering forward security and eliminating leakage from protocols. This component will consist of the following tasks:
 \begin{enumerate}\setlength\itemsep{0em}
 \item Modular partial order-preserving encryption
 \item Forward security for POPE
@@ -107,6 +107,7 @@ these queries.  The research will be split into three components:
 \end{description}
 The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.  We will use the UConn HPC Cluster to evaluate our implementation \url{https://hpc.uconn.edu}.  We expect this evaluation to use and extend the database and query generator created as part of the IARPA SPAR project~\cite{varia2015automated}.
 
+\subsection{Intellectual Merits and Broader Impacts}
 \paragraph{Intellectual merits.}  
 Encrypted databases and searchable encryption have rich histories rooted in the
 design of oblivious random access machines.  The field has been the focus of multiple large scale projects including IARPA's APP and SPAR~\cite{spar_baa}.  The field is quite diverse bringing together cryptographers, system researchers, and database experts.  Furthermore, there is clear demand in industry for solutions.  Data breaches are becoming nearly daily events.  However, recent
