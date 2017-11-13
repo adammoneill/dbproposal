@@ -7,7 +7,7 @@ In BlindSeer, the search query is executed by the client traversing the Bloom fi
 search tree. In particular, in each node of the tree, the client and the server
 execute the following:
 
-\begin{enumerate}
+\begin{enumerate}\setlength\itemsep{0em}
 \item For each keyword $\alpha$ in the query, the client computes a hash on
 $\alpha$, based on which BF indices $H(\alpha) =  (h_1, h_2, ..., h_\eta)$
 are identified. Here, $\eta$ is a system parameter. 
@@ -28,7 +28,7 @@ contain the same keyword, although it doesn't know what the keyword is.  If the
 server is given  auxiliary information about query statistics, the
 server may be able to infer queries. 
 
-\paragraph{Removing the leakage of BF indices.}
+%\paragraph{Removing the leakage of BF indices.}
 
 It is difficult to reduce the leakage in the original
 BlindSeer system. In particular, the above step 3 (i.e., the protocol execution

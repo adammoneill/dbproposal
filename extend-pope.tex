@@ -30,8 +30,7 @@ Our main approach is developing PPE that operates using just in time using advic
 \item The server initially stores a unsorted buffer of the entire dataset.
 \item The client initiates a search for items that are similar to $a$.
 \item The servers asks the client to split the tree.
-\item The client generates a random hyperplane $x$.  
-\item The server asks the client to indicate $\sign(<x^T,b>)$ for each stored element $b$. In addition, the client indicates $\sign(<x^T,a>)$.
+\item The client generates a random hyperplane $x$ and indicates $\sign(<x^T,b>)$ for each stored element $b$ and $\sign(<x^T,a>)$.
 \item The client and server repeat the process with the relevant subtree.
 \end{enumerate} 
 

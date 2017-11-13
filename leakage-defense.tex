@@ -1,6 +1,6 @@
 %!TEX root = dbproposal.tex
 
-\subsection{Creating a modular POPE}
+\subsection{Enhancing security of POPE}
 In this section, we propose novel security improvements to the interactive approaches proposed in the previous section.  Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
 sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheONe11}.  The
 idea of M-OPE is to apply a secret random offset modulo the largest possible
@@ -18,8 +18,8 @@ number of ``wrap around'' digits in the query.  However, we propose to
 investigate approximating the queries efficiently (with some false positives
 that the client can filter out).
 
-\subsection{Enhancing security of POPE}
-Leakage attacks are particularly problematic when the adversary is able to correlated leakage from multiple queries.  Forward security searchable encryption can decouple the adversary's leakage and force them to execute their attack with less information.  
+%\subsection{Enhancing security of POPE}
+\paragraph{Forward Security} Leakage attacks are particularly problematic when the adversary is able to correlated leakage from multiple queries.  Forward security searchable encryption can decouple the adversary's leakage and force them to execute their attack with less information.  
 
 POPE natively has forward security (i.e., updating an element
 don't leak information about the other elements), although it was not considered in the publication~\cite{CCS:RACY16}.  This is because the scheme doesn't maintain any other
@@ -29,14 +29,13 @@ the unsorted buffer of the root.
 
 In this proposal, we plan to investigate whether we can further reduce the
 leakage of the POPE scheme. 
-
-\begin{question}
-Can we reduce the leakage for the POPE scheme?
-\end{question}
-
+%
+%\begin{question}
+%Can we reduce the leakage for the POPE scheme?
+%\end{question}
 In POPE, each search query leaks the ordering  for the following reasons: 
 
-\begin{itemize}
+\begin{itemize}\setlength\itemsep{0em}
 \item The tree is a search tree. For example, all elements in the
   left sub-tree are smaller than every element in the right subtree.
  
@@ -65,7 +64,7 @@ buffers. This way, along with the shuffling idea above, we can significantly
 hide information about the location of lower-level buffers to which ciphertexts
 have been streamed down. 
 
-\paragraph{Leakage over time.}
+%\paragraph{Leakage over time.}
 While POPE allows each search query to {\it gradually} leak the ordering
 information of the underlying plaintexts, {\em most} of the ordering
 information will be leaked over many queries. This begs the following question: 

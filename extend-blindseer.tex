@@ -18,7 +18,7 @@ setup stage, using shuffling and homomorphic public-key
 encryption.
 %
 BlindSeer provides the following privacy guarantees:
-\begin{itemize}
+\begin{itemize}\setlength\itemsep{0em}
 \item Query privacy: $\sf S$ is not involved with the search protocol at
   all, so the client's queries are hidden from $\sf S$. Moreover, $\sf IS$ holds
     the {\em shuffled, encrypted} database, so the client's queries remain
@@ -91,10 +91,8 @@ We can find all the neighbors of vertex $v_1$
 along with the weight of the associated edge. Therefore, we can run variants of
 Dijkstra's algorithm and compute compute the shortest path, given two vertices
 $v_1$ and $v_2$ and a limit on the maximum number of arcs. The key to this approach is the ``native'' ability of Bloom filters to handle conjunction queries.
-
-\paragraph{Both of the above functionalities.}
-Since BlindSeer is based on the Bloom filters, one can add proximity and graph structure by adding
+BlindSeer is based on the Bloom filters so it can support proximity and graph structure by adding
 relevant keyword index appropriately.
 %
-Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
-client can enjoy a much richer set of functionalities.  
+%Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
+%client can enjoy a much richer set of functionalities.  
