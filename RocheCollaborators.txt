@@ -1,0 +1,28 @@
+Collaborators and Co-Editors:
+
+Daniel Apon, University of California Berkeley
+Andrew Arnold, Google Inc.
+Adam J. Aviv, U.S. Naval Academy
+Jean-Guillaume Dumas, Universite Grenoble Alpes
+Mark Giesbrecht, University of Waterloo
+A. Whitman Groves, U.S. Navy
+Jon Hauenstein, University of Notre Dame
+Pierre Karpman, University Grenoble Alpes
+Jonathan Katz, University of Maryland
+Mohamed Khochtali, University of Waterloo
+Travis Mayberry, U.S. Naval Academy
+Clement Pernet, Universite Grenoble Alpes
+Radu Sion, Stony Brook University
+Xisen Tian, U.S. Navy
+Arkady Yerukhimovich, MIT Lincoln Laboratory
+
+
+Graduate Advisors and Postdoctoral Sponsors:
+
+Mark Giesbrecht, University of Waterloo
+Arne Storjohann, University of Waterloo
+
+
+Thesis Advisor and Postgraduate-Scholar Sponsor:
+
+(none)
