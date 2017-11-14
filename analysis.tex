@@ -3,8 +3,8 @@
 In this section of the proposal, we outline our efforts to analyze,
 implement, and compare the most promising schemes from the previous two
 sections. These efforts will be \emph{concurrent} and \emph{ongoing}
-with the theoretical developments, as we continually seek to understand
-the pratical benefits and drawbacks of different approaches.
+with the theoretical developments. A main goal of our approach is to create cryptographic search systems that will be deployable in the future.  Thus, it is critical to understand
+the practical implications of different approaches.
 
 The main goals of this thrust of our work is to put our schemes in
 context of existing approaches and provide clear comparisons for
@@ -18,20 +18,19 @@ undergraduate students at our respective institutions.
 All of the schemes we have proposed make some compromise of leakage for
 performance. Unfortunately, many prior works either focus primarily on security
 proofs and (sometimes novel) security definitions, or make heuristic
-arguments for security. This means it is not
+arguments for security. It is rarely clear how to compare the leaked information.  This means it is not
 straightforward, for example, to decide what is ``more secure'' between
-different approaches.
+different approaches.  This difficulty in comparing is not only a semantic gap. Sometimes leaked information is damaging for a particular use case and innocuous for another.  This ambiguity suggests the need for standard and comprehensive benchmarks.
 
-Significant progress towards fair comparisons was made recently in the
-Systemization of Knowledge paper by one of the co-PIs and others
-\cite{SP:FVYSHG17}. We will continue in this vein and use existing
+One of PIs made progress towards fair comparisons in a recent
+Systemization of Knowledge~\cite{SP:FVYSHG17}. We will continue in this vein and use existing
 metrics whenever possible to place our work in a fair context within the
-state of the art.
+state of the art.  Two main components of this fair comparison are 1) the use of  consistent naming for leakage and 2) maintaining a partially-ordering of schemes' leakage.
 
-An important component of this analysis is cognizance of
+For this analysis to be meaningful, cryptographic designers must be cognizant of
 recent attacks on PPE and related schemes such as
 \cite{CCS:CGPR15,CCS:KKNO16}. These attacks often depend crucially on
-the datasets used, and we will use the same (or equivalent) attacks
+the datasets used and the assumed prior knowledge, and we will use the same (or equivalent) attacks
 against our schemes to provide a meaningful comparison.
 
 Much of the work of this proposal is in extending existing
@@ -52,8 +51,8 @@ Indeed, we plan to include
 experimental components in many of our published artifacts, with
 links to the open source implementations developed.
 
-As compatibility with existing database software is a key priority of
-our approach, we will seek to incorporate our schemes within existing
+Compatibility with existing database software is a key priority of
+our approach.  We will seek to incorporate our schemes within existing
 open-source projects such as the SSE library Clusion
 (\url{https://github.com/encryptedsystems/Clusion}) and
 the cloud-based graph database software
@@ -63,7 +62,7 @@ In order to evaluate the real-world performance of our schemes, we will
 be careful to use realistic and relevant datasets and queries. Tools
 such as the automatic test-suite generator developed in the IARPA SPAR
 project \cite{HH14,varia2015automated} will be used to generate
-repeatable and realistic experiments.
+repeatable and realistic experiments.  As necessary, we will extend these tools to support proximity databases.  We expect to extend both data and query generation.  As possible, these changes will be fed back into the existing open-source projects.
 
 Our experimental evaluations will also cover the \emph{security} of our
 schemes. Frequently the development of applied cryptographic tools
@@ -74,4 +73,4 @@ We will use empirical tools to highlight the practical
 implications of this limited leakage, including leakage under known
 attacks. For example, in \cite{CCS:RACY16}, two of the co-PIs not only
 evaluated the number of incomparable ciphertext pairs in theory, but
-also tested this leakage on a publicly-available salary database.
+also tested this leakage on a publicly-available salary database.  Working with the community, we will identify a small set of datasets that highlight the different leakage profiles in the literature.  We expect these datasets can be used to effectively communicate the tradeoffs between different schemes.
