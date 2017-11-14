@@ -40,7 +40,7 @@ to manage their data needs.
 The migration should maintain confidentiality of their
 valuable data, thus the data is often outsourced in an encrypted from. 
 %
-However, employing encryption comes at the cost of preventing the cloud server
+However, employing encryption prevents the cloud server
 from {\em quickly processing the data in plaintext form and answering
 complex queries from the client}. 
 %
@@ -48,46 +48,48 @@ Ideally, we could use more sophisticated cryptography to {\em create databases
 capable of efficiently answering a client's queries without revealing
 information to the cloud server}.  
 
-\paragraph{Previous works.}
+%\paragraph{Previous works.}
 Two research threads have focused on closing this gap.
 %(collectively known as
 %searchable encryption).  
-Property-preserving encryption techniques create ciphertexts having weaker
-security but better functionality so that a certain operation can be seemlessly
+Property-preserving encryption creates ciphertexts with weaker
+security but better functionality so that certain operations can be seamlessly
 performed within an unprotected database.
 %
-Examples include deterministic encryption which can answer equality queries and
-order-preserving encryption which can answer range queries. Academic teams,
+For example,
+order-preserving encryption can answer range queries. 
+Academic teams,
 start-up companies, and Fortune 500 companies all offer variants of
 property-preserving encryption.
 %Recent attacks against these schemes indicate even ideal property-preserving
 %encryption can't be secure for many applications.
 %
-The second thread starts from generic secure multi-party computation (MPC) and
-optimizes solutions for common database tasks. This approach requires redesign
+The second thread starts from generic secure multi-party computation and
+optimizes for database tasks. This approach requires redesign
 of database indexing mechanisms and results in better security at the cost of
 decreased efficiency and compatibility. 
 %
-We note that so far, both approaches offer only the {\em limited functionality
+So far, both approaches offer only the {\em limited functionality
 of SQL and NoSQL}. 
 
 \paragraph{Proposed work.}
-The wide deployment of property-preserving encryption highlights the need for cryptographic solutions to be maximally backward compatible.  At the same time, solutions should provide meaningful security.
+The wide deployment of property-preserving encryption highlights the need for \emph{encrypted search} solutions to be maximally backward compatible.  At the same time, solutions should provide meaningful security.
 
 Emerging databases include graph, analytic, and
 biometric databases. These databases share a fundamental operation: {\em
 computing distance/proximity of tuples of points}. The proposed research will
-consider proximity queries as a case study for the following question: \emph{can secure databases achieve security while maintaining backwards compatibility?}  As an example, one can override a comparison operator to use an interactive protocol without rewriting the database software.
+consider proximity queries as a case study for the following question: \emph{can encrypted search solutions achieve security while maintaining backwards compatibility?}  
 
-To show the promise of this approach, we will consider which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will design
-customized, interactive schemes for distance/proximity. Lastly, we will extend the security of these schemes, creating forward secure versions and removing information leakage.
-
-The resulting constructions will have
-better security than property-preserving encryption schemes and better compatibility and 
-efficiency than MPC-based schemes. Our approach will use standard database indexing mechanisms but (interactively) involve the
-client to help with sensitive operations. This approach has been used in the
-context of order-preserving encryption, and we will extend these techniques to
+Our approach uses standard database mechanisms but involves the
+client to help with sensitive operations. This approach was previously used to make order-preserving encryption more secure. Very roughly, this scheme overrides the comparison operation with an interactive protocol.  We will extend these techniques to
 {\em handle distance queries and dynamic data}.
+%As an example, one can override a comparison operator to use an interactive protocol.
+%The resulting constructions will have
+%better security than property-preserving encryption schemes and better compatibility and 
+%efficiency than MPC-based schemes. 
+
+To validate this approach, we will determine which metrics and definitions allow for a secure instantiation of distance-preserving encryption. For settings where distance-preserving encryption is inadequate, we will design
+customized, interactive schemes for distance/proximity. Given the variety of claims in the literature, it critical to evaluate security, functionality, and efficiency.  We will develop security and efficiency benchmarks for proximity databases. We will implement and evaluate the most promising developed schemes.
 
 %To show the promise of this approach, the proposed research will first give
 %constructions for the proximity functionality of the two standard approaches.
@@ -100,23 +102,19 @@ context of order-preserving encryption, and we will extend these techniques to
 %expect unacceptable overhead in networks with realistic latency.  
 
 \paragraph{Intellectual merit.}  
-Encrypted databases and searchable encryption have rich histories starting with  oblivious random access machines.  Current approaches provide uncertain security or inadequate functionality.  Recent
-leakage inference attacks have shown the importance of leakage and the need for forward
-security.  Simultaneously, the rapid deployment of property-preserving
-techniques has reinforced the importance of simplicity, efficiency and backward
-compatibility.  These two developments inform the core of our approach: using
-interactivity while maximally maintaining compatibility.
+Encrypted search has a rich history starting with oblivious random access machines.  Current approaches provide uncertain security or inadequate functionality.  Recent
+leakage inference attacks have shown the importance of understanding security guarantees.  Simultaneously, the deployment of property-preserving
+techniques has highlighted the benefits of simplicity, efficiency, and backward
+compatibility.  These two developments inform the core of our approach: designing interactive schemes while maximally maintaining compatibility.  Our schemes will be thoroughly evaluated with respect to security and efficiency.
 
 \paragraph{Broader impacts.}
-The confidentiality of data is a core societal tenant.  Deployed encrypted
-databases provide little security and may even hurt by providing a false sense
-of security.  There is a tremendous need for research in this area to
+The confidentiality of data is a core societal tenant.  Deployed encrypted search solutions provide little security and may even hurt by providing a false sense
+of security.  There is a tremendous need to
 understand the tradeoffs between security, functionality, and efficiency.
 
-The PIs are committed to dissemination of research material and code artifacts.  The PIs
-have participated in large scale evaluation of searchable encryption, working
-on both constructions and attacks.  The PIs have open-sourced
-previous work on secure databases.  Lastly, all PIs are
+The PIs are committed to dissemination of research artifacts.  In addition to constructions, the PIs
+have evaluated the efficiency and security of encrypted databases at scale.  The PIs have open-sourced
+previous work on secure databases.  A major component of this proposal is contributing benchmarks to the community. Lastly, all PIs are
 dedicated to engaging with undergraduates, with two co-PIs being at an
 undergraduate only institution, the U.S.\ Naval Academy.  
 \end{document}
