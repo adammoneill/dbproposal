@@ -1,0 +1,45 @@
+%!TEX root = dbproposal.tex
+
+\subsection{Hybrid approache to improve accuracy in approximate DRE}
+
+Even after our improvements above, the fully-interactive POPE and
+BlindSeer schemes may still not be sufficiently scalable for the largest
+databases and composable with existing softare. We not propose a novel,
+\emph{hybrid approach} that uses interaction alongside the Approximate
+Distance Revealing Encryption schemes we discussed in \Cref{sec:adre}.
+
+The basic idea is as follows:
+\begin{itemize}\setlength{\itemsep}{0em}
+  \item User encrypts keys using a noisy Approximate DRE scheme and
+  stores them on the server
+  \item User queries for all points within distance $d$ of $a$ by
+    sending an (approximate distance-revealing) encryption $a'$ of $a$ to the
+    server, along with a scaling $d'$ of $d$ according to the scaling of
+    the encryption scheme.
+  \item The server finds a set $S$ of all ciphertexts within $d'$ of $a'$
+    non-interactively
+  \item The server enters into an interactive protocol with the user to
+    discover and return
+    the true set $S' \subseteq S$ of results within the true
+    distance $d$ of the true query point $a$.
+\end{itemize}
+
+By using the approach of our enhanced POPE protocol within smaller
+``bins'' of ciphertexts on the server side, this can effectively
+improve on the performance and scalability of POPE by limiting the
+interactive portion of the protocol to a subset $S$ of the entire
+database. At the same time, it improves on the communication complexity
+of Approximate DRE by limiting the final results to only those within
+the \emph{actual} desired ball.
+
+The privacy provided by this proposed approach is no worse than that
+provided by POPE or by Approximate DRE separately, but the performance
+is better than using either of those approaches alone. Alternatively,
+the hybrid approach could allow a \emph{more noisy} approximate DRE
+scheme to be used, as the results will always be trimmed down using an
+efficient interactive protocol.
+
+This idea is still preliminary and depends crucially on the success of
+prior portions of the proposal, so we will be flexible to alter this
+approach as necessary depending on the lessons learned in working on the
+building blocks of the hybrid scheme.
