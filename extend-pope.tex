@@ -1,18 +1,35 @@
 %!TEX root = dbproposal.tex
 
 \subsection{Extensions to Property-Preserving Encryption}
-The direct use of property-preserving encryption has a mixed history with leakage attacks showing that deterministic and order-preserving encryption reveal the entire stored dataset for many applications (see work of the co-PI for an overview of leakage attacks~\cite{SP:FVYSHG17}).  However, PPE has many benefits that should not be overlooked by the research community.  PPE is easier to configure, use, deploy, does not require replacement of the entire software stack, and gives admins flexibility on the underlying database technology.  Given the momentum of PPE in the commercial sector, researchers should understand if a PPE solution can be used safely while retaining the benefits of the approach.  Our approach keeps the intact the design principal of PPE: the only place that the database should have to change is the comparison operator (equality, comparison, or distance).  The database should still be able use standard indexing mechanisms.  We note it is possible to override this operator to be interactive and require help from a client without altering the overall indexing structure.  Before describing our approach, we briefly describe prior work in the area.
+The direct use of property-preserving encryption has a mixed history
+with leakage attacks showing that deterministic and order-preserving
+encryption reveal the entire stored dataset for many applications (see
+work of the co-PI for an overview of leakage
+attacks~\cite{SP:FVYSHG17}).
+
+Despite these attacks, the ease and speed of configuring and using PPE
+without replacing the entire software stack has encouraged its momentum
+in the commercial sector. A natural question is, \emph{can we maintain
+the benefits of PPE while avoiding these attacks?}
+
+In this section, we investigate solutions that keep intact
+the design principal of PPE: the only place that the database should
+have to change is the comparison operator (equality, comparison, or
+distance).  The database should still be able use standard indexing
+mechanisms.  We note it is possible to override this operator to be
+interactive and require help from a client without altering the overall
+indexing structure.
 
 \paragraph{Prior work.}
 We are aware of two main works that follow the approach of PPE with added interactivity.  Two of the co-PIs recently introduced a new cryptographic approach, called POPE, to
-supporting range queries over encrypted data, providing stronger security than
+support range queries over encrypted data, providing stronger security than
 previous order-preserving encryptions~\cite{CCS:RACY16}.  In contrast to
 existing OPE schemes, the server builds a novel indexing structure called a
 POPE tree, in which each node has a {\it unsorted buffer} and a sorted list of
 elements.  Thanks to this, the scheme can perform {\it lazy indexing, by
 sorting values only when necessary}. In particular, on each range query, the
-scheme sorts the part of the tree that is accessed during the search, leaving
-much of the data untouched.
+scheme sorts the part of the tree that forms the boundary of the search,
+leaving much of the data untouched.
 
 The other work is Arx due to Poddar, Boelter, and Popa~\cite{EPRINT:PodBoePop16}.  The
 Arx protocol builds an index for answering
@@ -24,31 +41,41 @@ server traverses the index without learning the values it is
 comparing or the result of the comparison at each stage.  Each garbled circuit can only be used once for a single comparison.  The client and server work together to create new garbled circuits (and OT pairs).
 
 \paragraph{POPE for similarity of high-dimensional data.}
-Our main approach is developing PPE that operates using just in time using
+Our main approach is developing PPE that operates using just-in-time
 advice from the client.  In POPE, this took the form of asking the client to
 sort a small number of nodes to build out a tree and comparing ciphertexts only
-with those nodes.  This limited leakage to comparison between the dataset and
-these nodes.  Intuitive leakage is reduced from a quadratic number of
-comparisons to a linear number.  Our first task will be extending the POPE
-paradigm to high dimensional data.  The approach uses random hyperplanes which
-have previously been used in the concept of random project trees and
+with those nodes.  This limited leakage to comparisons between the dataset and
+these nodes, reducing the leakage from a quadratic number of
+comparisons to only linear.
+
+Our first task will be extending the POPE
+paradigm to high dimensional data.  The approach uses random hyperplanes
+to form a partially-sorted search tree over multidimensional keys.
+Random hyperplanes
+have previously been used in the concept of random projection trees and
 locality-sensitive hashing~\cite{STOC:DasFre08,charikar2002similarity}.  The
 idea is as follows:
 
 \begin{enumerate}\setlength\itemsep{0em}
-\item The server initially stores a unsorted buffer of the entire dataset.
+\item The server initially stores an unsorted buffer of the entire dataset.
 \item The client initiates a search for items that are similar to $a$.
-\item The servers asks the client to split the tree.
+\item The server asks the client to split the root node.
 \item The client generates a random hyperplane $x$ and splits 
-  the stored elements $b_i$ based on whether $b_i$ is above $x$ or not. In the Euclidean
-    space, this can be determined by checking if the inner product
-    $\langle x^T,b_i \rangle$ is positive. 
-\item The client and server repeat the process with the relevant subtree.
-\end{enumerate} 
-%
-This basic protocol above is not ready for deployment. This is mainly because
-random hyperplanes have a substantial error probability.  To deal with this
-problem, the client can select a collection of hyperplanes $x_1,..., x_k$ and
+  the stored elements $b_i$ based on whether $b_i$ is above $x$ or not.
+  (In the Euclidean
+    space, this means checking whether
+    $\langle x^T,b_i \rangle$ is positive.)
+\item The client and server repeat the process with the relevant subtree
+  until reaching an upper bound on the size of an unsorted leaf node.
+\item The leaf node containing $a$ is returned to the client.
+\end{enumerate}
+
+The problem with this preliminary approach is a substantial chance that
+nearby items will end up in different subtrees and therefore be
+missed in the returned set.
+To deal with this
+problem, we propose to have the client can select a \emph{collection}
+of hyperplanes $x_1,..., x_k$ and
 split the tree based on $\sum_{i=1}^k \sign( \langle x_i^T, b \rangle )$.  This
 technique allows us to control the probability that $a$ and $b$ will be denoted
 as far (lying in different subtrees) when they are close (using tail bounds for
@@ -63,8 +90,12 @@ Shen~\cite{chase2015substring} used an an encrypted suffix tree to answer
 substring queries.
 
 Our idea is to apply the online algorithm of a suffix-tree construction by
-Ukkonen~\cite{Ukkonen95} and to build the suffix tree just in time using
-ideas from the POPE protocol.  The client will build a single level of the
+Ukkonen~\cite{Ukkonen95} and to build the suffix tree just-in-time as in
+the POPE protocol. Again, the advantage will be that leakage is limited
+to a ``need-to-know'' basis relative to the queries performed, rather
+than leaking information about the entire dataset up-front.
+
+The client will build a single level of the
 suffix tree.  When the client searches for strings that are close $a$ they will
 traverse the partially constructed suffix tree with the client/server
 interactively building out the tree as necessary.  This approach will require
