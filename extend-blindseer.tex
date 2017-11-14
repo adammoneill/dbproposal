@@ -7,16 +7,17 @@
 BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}, which is a database management system
 that provides privacy.
 %
-BlindSeer has three main players. The {\em server} $\sf S$,
-who holds the DB and outsources an encrypted copy of the DB to a third party,
-called the {\em index server} $\sf IS$. The server $\sf S$  also builds an
-encrypted Bloom filter (BF) search tree to the DB and sends it to $\sf IS$. The
-{\em client} $\sf C$ sends search queries to $\sf IS$ and obtained encrypted
-results, to each of which $\sf C$ obtains the decryption key secret-shared
-between $\sf C$ and $\sf IS$. The decryptions keys are arranged in the offline
+BlindSeer has three main players: the \emph[server} $\mathsf{S}$,
+{\em index server} $\sf IS$, and {\em client} $\sf C$. The server $\sf S$,
+holds the DB and outsources an encrypted copy of the DB to a third party,
+the index server $\sf IS$. The server $\sf S$  also builds an
+encrypted Bloom filter (BF) search tree over the DB and sends it to $\sf IS$. The
+client $\sf C$ sends search queries to $\sf IS$ and obtains encrypted
+results, the decryption key for which is secret-shared
+between $\sf C$ and $\sf IS$. These decryptions key are arranged in an offline
 setup stage, using shuffling and homomorphic public-key
 encryption.
-%
+
 BlindSeer provides the following privacy guarantees:
 \begin{itemize}\setlength\itemsep{0em}
 \item Query privacy: $\sf S$ is not involved with the search protocol at
