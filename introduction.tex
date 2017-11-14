@@ -122,35 +122,41 @@ co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}.  This component will consist of
 the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
-\item Euclidean Proximity using Partial Distance-Preserving Encryption
-\item Edit Distance using Partial Suffix Tree Encryption
-\item Improved efficiency of MPC approaches in the two-party setting
-\item Improved dynamism for interactive approaches
-%TODO Dan: I don't know what dynamism means in this context...
+\item Developing Partial \emph{Distance}-Preserving Encryption and
+  applying it to Euclidean proximity and Edit distance queries
+\item Improving the security of POPE with forward security via
+  re-insertions and random shuffling.
+\item Enabling multidimensional queries in BlindSeer and removing
+  the need for homomorphic encryption in the cloud setting
+\item Combining ORAM and interactive approaches to reduce leakage
+\item Developing a new hybrid approach with approximate
+  distance-revealing encryption and partial interaction.
 \end{enumerate}
 
-\item[\Cref{sec:analysis}.] Lastly, we will strengthen
-security of the interactive approach of \Cref{sec:interactive}
-while working towards a goal of maximum
-backwards compatibility as achieved by the techniques of \Cref{sec:ppe}.
-This component includes considering forward
-security and eliminating leakage from protocols, and will
-consist of the following tasks:
-\begin{enumerate}\setlength\itemsep{0em}
-\item Modular partial order-preserving encryption
-\item Forward security for POPE
-\item Combining ORAM and interactive approaches to reduce leakage
-\end{enumerate}
-\end{description}
-The most promising of these approaches will be implemented.
-We will seek out and utilize benchmarks, data sets, and query loads from
-the state of the art in database development and academic research in
-testing our schemes.
+\item[\Cref{sec:analysis}.] Throughout the project, we will implement
+and analyze our most promising schemes and place them in a fair context
+with prior and ongoing work by others. The goal will be to give
+practitioners as well as researchers a clear and \emph{consistent}
+picture of the tradeoffs between security, performance, and backwards
+compatibility.
 We will use the UConn HPC Cluster to evaluate our
-implementation on realistic-size databases (\url{https://hpc.uconn.edu}).
+implementations on realistic-size databases (\url{https://hpc.uconn.edu}).
 We expect this evaluation
 to use and extend the database and query generator created as part of
-the IARPA SPAR project~\cite{varia2015automated}.
+the IARPA SPAR project~\cite{varia2015automated}. Specifically, our
+tasks are:
+\begin{enumerate}
+\setlength\itemsep{0em}
+\item Analyzing and developing metrics for the \emph{leakage} of
+information or access patterns inherent in our new PPE and interactive
+schemes
+\item Developing and providing open-source access to the new tools that
+we develop
+\item Examining the performance of our approaches on realistic and
+repeatable experiments, using industrially-relevant datasets and query
+benchmarks.
+\end{enumerate}
+\end{description}
 
 \subsection{Intellectual Merits and Broader Impacts}
 \paragraph{Intellectual merits.}  
