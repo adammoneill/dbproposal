@@ -9,29 +9,34 @@ organize this data.  Organizations are turning to external cloud providers
 to manage their data needs.  
 
 This outsourced storage represents a natural attack target.  Attacks occur against both government \cite{CyberAttacksOPM} and commercial~\cite{CyberAttacks,gressin2017equifax} datasets.
-The natural response to this risk is to encrypt data before outsourcing. 
+One natural response to this risk is to encrypt data before outsourcing. 
 %
 However, employing encryption comes at the cost of disabling the cloud server
 from {\em quickly processing the data and answering
 complex queries from the client}. 
 %
-Ideally, we could use more sophisticated cryptography to {\em create databases
+Ideally, we could use more sophisticated cryptographic techniques to {\em create databases
 capable of efficiently answering a client's queries without revealing
 information to the cloud server}.  
 
 
 Secure outsourced databases use advanced cryptography to achieve this goal.  This field encompasses a variety of cryptographic techniques, including property-preserving encryption or PPE~\cite{EC:PanRou12}, searchable symmetric encryption or SSE~\cite{CCS:CGKO06}, private information retrieval by keyword~\cite{EPRINT:ChoGilNao98}, and public-key encryption with keyword search~\cite{EC:BDOP04}.  
 
-This research has largely split into two research threads: PPE which emphasizes background compatibility and use of legacy database management systems and SSE which emphases security.  PPE creates symmetric encryption techniques
+This research has largely split into two research threads: PPE which
+emphasizes background compatibility and use of legacy database
+management systems, and SSE which emphases security.  PPE creates
+symmetric encryption techniques
 compatible with an unprotected database. Examples include deterministic
-encryption~\cite{C:BelBolONe07} which can answer equality queries and order-preserving encryption~\cite{C:BolCheONe11,EC:BCLO09}
+encryption~\cite{C:BelBolONe07}, which can answer equality queries, and
+order-preserving encryption~\cite{C:BolCheONe11,EC:BCLO09},
 which can answer range queries. Academic teams, start-up companies (including Bitglass, Ciphercloud, Crypteron, PreVeil, Skyhigh, ZeroDB) and Fortune
 500 companies (including Microsoft's SQL Server 2016 and Azure and Google's Encrypted BigQuery)  offer variants of property-preserving encryption.
 %Recent attacks against these schemes indicate even ideal property-preserving
 %encryption can't be secure for many applications.
 %
-SSE schemes can be viewed as starting from secure multi-party computation and
-optimizes solutions for common database tasks (both \cite{SP:FVKKKM15} and \cite{RSA:IKLO16} explicitly use multi-party computation for sensitive subcomputations). This approach requires redesign
+SSE schemes can be viewed as starting from secure multi-party
+computation and
+optimizing solutions for common database tasks (both \cite{SP:FVKKKM15} and \cite{RSA:IKLO16} explicitly use multi-party computation for sensitive subcomputations). This approach requires redesign
 of database indexing mechanisms and achieves better security at the cost of decreased efficiency and backward compatibility. 
 
 These systems have been implemented at moderate scale.  Both property-preserving solutions~\cite{CACM:PRZB12,EPRINT:PodBoePop16} and searchable encryption~\cite{SP:PKVKMC14,SP:FVKKKM15,C:CJJKRS13,CCS:JJKRS13,NDSS:CJJJKR14,ESORICS:FJKNRS15,RSA:IKLO16} solutions have been tested on datasets with billions of records.
@@ -63,7 +68,11 @@ In 2000, Song, Wagner, and Perrig provided the first scheme with communication p
 
 The emergence of PPE systems indicates the approach has benefits beyond efficiency.  These benefits include backward compatibility, use of legacy software, and improved transparency.
 The proposed research will
-consider proximity queries as a case study to understand the following question.  \begin{quote}\emph{Is it possible to securely outsource modern databases while using a traditional database software stack?  What is the minimum amount that an unprotected database must be modified for security?}\end{quote}
+consider proximity queries as a case study to understand the following
+question.  \begin{quote}\emph{Is it possible to securely outsource
+modern databases while using a traditional database software stack?
+What is the minimum amount that an unprotected database must be modified
+to achieve security?}\end{quote}
 
 
 \paragraph{Out of scope.} We do not address approaches based on fully-homomorphic encryption~\cite{STOC:Gentry09} or functional encryption~\cite{FOCS:GGHRSW13}.  These solutions are too slow to be used for the scale of current data sets.  In addition, we do not consider improvements to private information retrieval~\cite{FOCS:CGKS95} or oblivious RAM~\cite{STOC:Goldreich87,goldreich1996software} to be in scope for this proposal.  Our proposed work will make use of these objects but will not try to improve their efficiency.  The PIs are aware of (and have contributed to) the leakage inference attacks on secure databases.  These attacks will inform the approach in this proposal but developing new attacks is not a component in the proposed research.  This choice is being made to keep scope feasible.
@@ -72,7 +81,14 @@ Lastly, Intel SGX is a promising hardware approach that is being used to isolate
 
 
 \subsection{Proposed work}
-The goal of this proposal is to create secure outsourced databases that will be adopted and used by industry.  Towards achieving this goal we recognize two lessons from the past 1) PPE must be carefully analyzed to understanding security and 2) there are tremendous benefits of keeping backwards compatibility with prior database systems.  Together, these lessons tell us that some modification of database systems may be necessary but these modifications should be judicious.  This will be our guiding principle thorough this principle.  Our goal is to create a third approach to secure outsourced databases: 
+The goal of this proposal is to create secure outsourced databases that
+will be adopted and used by industry.  Towards achieving this goal we
+recognize two lessons from the past: (1) PPE must be carefully analyzed
+to understanding security and (2) there are tremendous benefits of
+maintaining backwards compatibility with existing database systems.
+Together, these lessons tell us that some modification of database
+systems may be necessary but these modifications should be judicious.
+This will be our guiding principle thorough this project.  Our goal is to create a third approach to secure outsourced databases: 
 \begin{quote}Cryptographic operations are restricted to only database operators (used to create index structures).  These cryptographic operators can call interactive protocols but do not require replacing the unprotected database. 
 \end{quote}
 
@@ -81,7 +97,15 @@ The proposed research will
 consider proximity queries as a case study and give constructions supporting
 these queries.  The research will be split into three components:
 \begin{description}
-\item[Section \ref{sec:ppe}.] To show the promise of this approach, we will first consider whether property-preserving encryption can be used to answer proximity queries.  We expect that the strength of \emph{distance-preserving encryption} to depend on the definition of security including whether 1) should distance be precisely preserved? 2) is distance-revealing encryption sufficient? and 3) what is the distance metric? Building on the research of the PI on order-preserving encryption~\cite{EC:BCLO09,C:BolCheONe11}, this component will consist of the following tasks:
+\item[Section \ref{sec:ppe}.] To show the promise of this approach, we
+will first consider whether property-preserving encryption can be used
+to answer proximity queries.  We expect that the strength and utility of
+\emph{distance-preserving encryption} will depend on the definition of
+security, in particular questions such as: (1) should distance be precisely preserved? 
+(2) is distance-revealing encryption sufficient? and (3) what is the distance
+metric? Building on the research of the PI on order-preserving
+encryption~\cite{EC:BCLO09,C:BolCheONe11}, this component will consist
+of the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
 \item Analysis of security provided by distance-preserving and distance-comparison preserving encryption for common metrics
@@ -89,23 +113,43 @@ these queries.  The research will be split into three components:
 \item Design of approximate distance-revealing encryption
 \end{enumerate}
 
-\item[Section \ref{sec:interactive}.] When the security provided by distance-revealing encryption appears inadequate for an application, we will change the model to allow operators to call interactive protocols.  We will show what functionality can be built using ``interactive operators'' (drawing on recent work of the co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}).  This component will consist of the following tasks:
+\item[Section \ref{sec:interactive}.] When the security provided by
+distance-revealing encryption appears inadequate for an application, we
+will change the model to allow operators to call interactive protocols.
+We will show what functionality can be built using \emph{interactive
+operators}, drawing on recent work of the
+co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}.  This component will consist of
+the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
 \item Euclidean Proximity using Partial Distance-Preserving Encryption
 \item Edit Distance using Partial Suffix Tree Encryption
 \item Improved efficiency of MPC approaches in the two-party setting
 \item Improved dynamism for interactive approaches
+%TODO Dan: I don't know what dynamism means in this context...
 \end{enumerate}
 
-\item[Section \ref{sec:improving security}.] Lastly, we will strengthen security of this approach while working towards a goal of maximum backwards compatibility.  This component includes considering forward security and eliminating leakage from protocols. This component will consist of the following tasks:
+\item[Section \ref{sec:improving security}.] Lastly, we will strengthen
+security of the interactive approach of \Cref{sec:interactive}
+while working towards a goal of maximum
+backwards compatibility as achieved by the techniques of \Cref{sec:ppe}.
+This component includes considering forward
+security and eliminating leakage from protocols, and will
+consist of the following tasks:
 \begin{enumerate}\setlength\itemsep{0em}
 \item Modular partial order-preserving encryption
 \item Forward security for POPE
 \item Combining ORAM and interactive approaches to reduce leakage
 \end{enumerate}
 \end{description}
-The most promising of these approaches will be implemented.  Furthermore, for promising approaches we will engage with industry to understand common query loads and data sets to evaluate performance of the schemes.  We will use the UConn HPC Cluster to evaluate our implementation \url{https://hpc.uconn.edu}.  We expect this evaluation to use and extend the database and query generator created as part of the IARPA SPAR project~\cite{varia2015automated}.
+The most promising of these approaches will be implemented.
+Furthermore, for promising approaches we will engage with industry to
+understand common query loads and data sets to evaluate performance of
+the schemes.  We will use the UConn HPC Cluster to evaluate our
+implementation on realistic-size databases (\url{https://hpc.uconn.edu}).
+We expect this evaluation
+to use and extend the database and query generator created as part of
+the IARPA SPAR project~\cite{varia2015automated}.
 
 \subsection{Intellectual Merits and Broader Impacts}
 \paragraph{Intellectual merits.}  
@@ -124,12 +168,24 @@ understand the tradeoffs between security, functionality, and efficiency.
 
 The PIs are committed to broad dissemination of research material.  The PIs
 have participated in large scale evaluation of searchable encryption, working
-on both constructions and attacks.  Furthermore, the PIs have open-sourced
-previous work including work on searchable encryption.  The PIs plan to open-source outputs of the proposal.  
+on both constructions and attacks. The PIs have a track record of
+releasing the source code implementations of their work (including
+previous work on searchable encryption) and contributing
+to open-source projects.
+The protocols and other products of this proposal will be released
+publicly as open-source implementations.
 
 Lastly, all PIs are
 dedicated to engaging with undergraduates. Two co-PIs being at an
-undergraduate only institution, the US Naval Academy.  Dr. Fuller supervises the cyber-security club at the University of Connecticut supports their efforts to understand and research computer security.  This club allows students with varying educational preparation to engage outside of the classroom and learn the impact of computer science and security.  Dr.~O'Neill has previously been awarded an REU and used it to  work with a female undergraduate student.
+undergraduate only institution, the US Naval Academy, where co-PI Roche
+was recently recognized with the institution-wide Apgar Award for
+Teaching.  PI Fuller supervises the cyber-security club at the
+University of Connecticut and supports their efforts to understand and
+research computer security.  This club allows students with varying
+educational preparation to engage outside of the classroom and learn the
+impact of computer science and security.  Co-PI O'Neill has previously
+been awarded an REU and used it to  work with a female undergraduate
+student.
 
 
 
