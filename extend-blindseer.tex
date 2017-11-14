@@ -99,3 +99,55 @@ relevant keyword index appropriately.
 %
 %Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
 %client can enjoy a much richer set of functionalities.  
+
+
+\def\HHH{{\cal H}}
+\subsection{Enhancing security of BlindSeer}
+
+In BlindSeer, the search query is executed by the client traversing the Bloom filter
+search tree. In particular, in each node of the tree, the client and the server
+execute the following:
+\begin{enumerate}\setlength\itemsep{0em}
+\item For each keyword $\alpha$ in the query, the client computes a hash on
+$\alpha$, based on which the look-up positions $H(\alpha) =  (h_1, h_2, ...,
+h_\eta)$ for the BF data are identified. Here, $\eta$ is a system
+parameter. 
+
+\item The client sends $\HHH = \{H(\alpha_1), \ldots, H(\alpha_q)\}$,
+  where $\alpha_1,\ldots,\alpha_q$ are the keywords used in the query.
+
+\item The client and the server execute a protocol using $\HHH$ and the
+encrypted BF as input, so that the client knows whether the given query is
+satisfied. 
+\end{enumerate}
+
+The message $\HHH$ (i.e., the look-up positions) from the client to the server
+leaks $H(\alpha)$ to a significantly degree, since $q$ is a small number most
+of the time. Moreover, $H(\alpha)$ is a deterministic function on $\alpha$.
+This implies that the server can infer with a reasonable probability whether
+two queries contain the same keyword, although it doesn't know what the keyword
+is.  If the server is given  auxiliary information about query statistics, the
+server may be able to infer queries. 
+
+%\paragraph{Removing the leakage of BF indices.}
+
+It is difficult to reduce the leakage in the original
+BlindSeer system. In particular, the above step 3 (i.e., the protocol execution
+to check whether the given query is satisfied) is performed using secure
+two-party computation based on Yao's garbled circuit. It is critical
+for the logic to be as simple as possible, in order to obtain the desired
+efficiency. To reduce the leakage, it is natural to use more sophisticated
+cryptographic mechanisms, but then the step 3 of secure computation would be
+significantly slower. 
+
+However, in Section~\ref{sec:ext-blindseer} we noted secure computation is not
+necessary in the two-party setting. In this case, we can actually remove the
+leakage by completely hiding $\HHH$. As one promising direction, we can achive
+this goal by storing the encrypted BF using ORAM techniques. Note that the
+$\HHH$ can be regarded as the metadata (i.e., ``addresses") for the encrypted
+data (i.e., BF contents), which fits perfectly into the scneario that ORAM
+tries to make secure. 
+%
+Even using the ORAM, we expect that the resulting system will be faster than
+the system using two-party secure computation, since two-party computation is
+known to be significantly slower than ORAM. 
