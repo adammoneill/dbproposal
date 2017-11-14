@@ -1,8 +1,6 @@
 %!TEX root = dbproposal.tex
 
 \subsection{Enhancing security of POPE}
-In this section, we propose novel security improvements to the interactive approaches proposed in the previous section. 
-
 \iffalse
 Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
 sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheONe11}.  The
@@ -24,11 +22,11 @@ that the client can filter out).
 
 %\subsection{Enhancing security of POPE}
 \paragraph{Forward security.} Leakage attacks are particularly problematic when
-the adversary is able to correlated leakage from multiple queries.  Forward
+the adversary is able to correlate leakage from multiple queries.  Forward
 security of searchable encryption can decouple the adversary's leakage and force
 them to execute their attack with less information.  
 
-POPE natively has forward security (i.e., updating an element don't leak
+POPE natively has forward security (i.e., updating an element doesn't leak
 information about the other elements), although it was not considered in the
 publication~\cite{CCS:RACY16}.  This is because the scheme doesn't maintain any
 other index structure except the POPE tree. So, to update an element, one can
@@ -42,11 +40,9 @@ leakage of the POPE scheme.
 %Can we reduce the leakage for the POPE scheme?
 %\end{question}
 In POPE, each search query leaks the ordering  for the following reasons: 
-
 \begin{itemize}\setlength\itemsep{0em}
 \item The tree is a search tree. For example, all elements in the
   left sub-tree are smaller than every element in the right subtree.
- 
 \item Once a ciphertext is inserting into a POPE tree, it never changes. This {\em
   deterministic} nature allows the attacker to trace when the ciphertext came
   in the tree, and how it was brought down to some leaf node.  
@@ -110,3 +106,28 @@ stronger privacy while only having marginal performance degradation.
 
 
 \input{leakage-blindseer}
+
+\subsection{Experimental performance and security evaluation}
+
+\emph{Throughout all phases of the project}, the most promising of our
+schemes will be implemented and tested on realistic scenarios.
+Indeed, we plan to include
+experimental components in many of our published artifacts, with
+links to the open source implementations developed.
+
+In order to evaluate the real-world performance of our schemes, we will
+be careful to use realistic and relevant datasets and queries. Tools
+such as the automatic test-suite generator developed in the IARPA SPAR
+project \cite{HH14,varia2015automated} will be used to generate
+repeatable and realistic experiments.
+
+Our experimental evaluations will also cover the \emph{security} of our
+schemes. Frequently the development of applied cryptographic tools
+relies exclusively on security proofs in
+discussing privacy. Our scalable approaches indeed contain security
+proofs, but also usually entail some limited information leakage.
+We will use empirical tools to highlight the practical
+implications of this limited leakage, including leakage under known
+attacks. For example, in \cite{CCS:RACY16}, two of the co-PIs not only
+evaluated the number of incomparable ciphertext pairs in theory, but
+also tested this leakage on a publicly-available salary database.

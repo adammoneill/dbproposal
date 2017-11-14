@@ -6,15 +6,14 @@
 In BlindSeer, the search query is executed by the client traversing the Bloom filter
 search tree. In particular, in each node of the tree, the client and the server
 execute the following:
-
 \begin{enumerate}\setlength\itemsep{0em}
 \item For each keyword $\alpha$ in the query, the client computes a hash on
 $\alpha$, based on which the look-up positions $H(\alpha) =  (h_1, h_2, ...,
 h_\eta)$ for the BF data are identified. Here, $\eta$ is a system
 parameter. 
 
-\item Let $\alpha_1, \ldots, \alpha_q$ be the keywords used in the query.  The
-  client sends $\HHH = \{H(\alpha_1), \ldots, H(\alpha_q)\}$ to the server. 
+\item The client sends $\HHH = \{H(\alpha_1), \ldots, H(\alpha_q)\}$,
+  where $\alpha_1,\ldots,\alpha_q$ are the keywords used in the query.
 
 \item The client and the server execute a protocol using $\HHH$ and the
 encrypted BF as input, so that the client knows whether the given query is
