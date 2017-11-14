@@ -1,6 +1,5 @@
 %!TEX root = dbproposal.tex
 
-\subsection{Extensions to Property-Preserving Encryption}
 The direct use of property-preserving encryption has a mixed history
 with leakage attacks showing that deterministic and order-preserving
 encryption reveal the entire stored dataset for many applications (see
@@ -21,26 +20,55 @@ interactive and require help from a client without altering the overall
 indexing structure.
 
 \paragraph{Prior work.}
-We are aware of two main works that follow the approach of PPE with added interactivity.  Two of the co-PIs recently introduced a new cryptographic approach, called POPE, to
-support range queries over encrypted data, providing stronger security than
-previous order-preserving encryptions~\cite{CCS:RACY16}.  In contrast to
-existing OPE schemes, the server builds a novel indexing structure called a
-POPE tree, in which each node has a {\it unsorted buffer} and a sorted list of
-elements.  Thanks to this, the scheme can perform {\it lazy indexing, by
-sorting values only when necessary}. In particular, on each range query, the
-scheme sorts the part of the tree that forms the boundary of the search,
-leaving much of the data untouched.
+We are aware of two main works that follow the approach of PPE with added
+interactivity.  Two of the co-PIs recently introduced a new cryptographic
+approach, called POPE, to support range queries over encrypted data, providing
+stronger security than previous order-preserving encryptions~\cite{CCS:RACY16}.
+In contrast to existing OPE schemes, the server builds a novel indexing
+structure called a POPE tree, in which each node has a {\it unsorted buffer}
+and a sorted list of elements.  Thanks to this, the scheme can perform {\it
+lazy indexing, by sorting values only when necessary}. 
+%In particular, on each range query, the scheme sorts the part of the tree that
+%forms the boundary of the search, leaving much of the data untouched.
+%
+The other work is Arx due to Poddar, Boelter, and
+Popa~\cite{EPRINT:PodBoePop16}.  The Arx protocol builds an index for answering
+range queries without revealing all order relationships to the server. The
+index stores all encrypted values in a binary tree so range queries can be
+answered by traversing this tree for the end points. Using Yao's garbled
+circuits, the server traverses the index without learning the values it is
+comparing or the result of the comparison at each stage.  
+%Each garbled circuit
+%can only be used once for a single comparison.  The client and server work
+%together to create new garbled circuits (and OT pairs).
 
-The other work is Arx due to Poddar, Boelter, and Popa~\cite{EPRINT:PodBoePop16}.  The
-Arx protocol builds an index for answering
-range queries without revealing all order relationships to the
-server. The index stores all encrypted values in a binary
-tree so range queries can be answered by traversing this
-tree for the end points. Using Yao's garbled circuits, the
-server traverses the index without learning the values it is
-comparing or the result of the comparison at each stage.  Each garbled circuit can only be used once for a single comparison.  The client and server work together to create new garbled circuits (and OT pairs).
+Another line of work that achieves a private DB solution with interaction is
+BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}. However, BlindSeer has a slightly
+differnt threat model. In particular, the system has three main players: the
+\emph{server} $\mathsf{S}$, {\em index server} $\sf IS$, and {\em client} $\sf
+C$. The server $\sf S$, holds the DB and outsources an encrypted copy of the DB
+to a third party, the index server $\sf IS$. The server $\sf S$  also builds an
+encrypted Bloom filter (BF) search tree over the DB and sends it to $\sf IS$.
+The client $\sf C$ sends search queries to $\sf IS$ and obtains encrypted
+results, the decryption key for which is secret-shared between $\sf C$ and $\sf
+IS$. These secret shares are arranged in an offline setup stage by the server
+$\sf S$, using shuffling and homomorphic public-key encryption. 
 
-\paragraph{POPE for similarity of high-dimensional data.}
+%In BlindSeer provides the following privacy guarantees:
+%\begin{itemize}\setlength\itemsep{0em}
+%\item Query privacy: $\sf S$ is not involved with the search protocol at
+%  all, so the client's queries are hidden from $\sf S$. Moreover, $\sf IS$ holds
+%    the {\em shuffled, encrypted} database, so the client's queries remain
+%    private to a great degree against $\sf IS$. 
+
+%\item Data privacy: $\sf IS$ deals with only the encrypted database, so the
+%records are hidden from $\sf IS$. Moreover, $\sf IS$ returns only the records
+%that satisfy the client query, and therefore, $\sf C$ cannot arbitrarily access
+%all the records in the database.  
+%\end{itemize}
+
+\subsection{Proposed Work}
+\subsubsection{Extending POPE}
 Our main approach is developing PPE that operates using just-in-time
 advice from the client.  In POPE, this took the form of asking the client to
 sort a small number of nodes to build out a tree and comparing ciphertexts only
@@ -48,6 +76,7 @@ with those nodes.  This limited leakage to comparisons between the dataset and
 these nodes, reducing the leakage from a quadratic number of
 comparisons to only linear.
 
+\paragraph{Similarity of high-dimensional data.}
 Our first task will be extending the POPE
 paradigm to high dimensional data.  The approach uses random hyperplanes
 to form a partially-sorted search tree over multidimensional keys.
@@ -61,10 +90,9 @@ idea is as follows:
 \item The client initiates a search for items that are similar to $a$.
 \item The server asks the client to split the root node.
 \item The client generates a random hyperplane $x$ and splits 
-  the stored elements $b_i$ based on whether $b_i$ is above $x$ or not.
-  (In the Euclidean
-    space, this means checking whether
-    $\langle x^T,b_i \rangle$ is positive.)
+  the stored elements $b_i$ based on whether $b_i$ is above $x$ or not.  (In
+    the Euclidean space, this means checking whether $\langle x^T,b_i \rangle$
+    is positive.)
 \item The client and server repeat the process with the relevant subtree
   until reaching an upper bound on the size of an unsorted leaf node.
 \item The leaf node containing $a$ is returned to the client.
@@ -104,27 +132,6 @@ must be stored and queryable to build the tree on demand.  Balancing the speed
 and privacy of querying the original string represents an important tradeoff in
 this approach.
 
-\subsection{Enhancing security of POPE}
-\iffalse
-Many of these defenses are designed to defeat leakage inference attacks.  The first approach is \emph{modularity} in the
-sense of modular order-preserving encryption (M-OPE)~\cite{C:BolCheONe11}.  The
-idea of M-OPE is to apply a secret random offset modulo the largest possible
-message to a message before encrypting it (the secret random offset is chosen
-once and fixed in the secret key), so that everything gets ``shifted.''
-Since attacks still seem to apply to M-OPE, we propose to investigate more
-fine-grained modularity as a defense. 
-
-\paragraph{Random offset for each digit.}
-We propose \emph{digit-modular} OPE (DM-OPE) where there is a
-secret modular offset applied to each digit.  The base in which the data is
-written could even itself be secret.  It becomes more complicated to make range
-queries with DM-OPE, as it requires an exponential number of queries in the
-number of ``wrap around'' digits in the query.  However, we propose to
-investigate approximating the queries efficiently (with some false positives
-that the client can filter out).
-\fi
-
-%\subsection{Enhancing security of POPE}
 \paragraph{Forward security.} Leakage attacks are particularly problematic when
 the adversary is able to correlate leakage from multiple queries.  Forward
 security of searchable encryption can decouple the adversary's leakage and force
@@ -184,21 +191,24 @@ have been streamed down.
 %  many range queries have been performed?  
 %\end{question}
 
+\iffalse
 Another approach to reduce the leakage is leaving more ciphertexts in an
-unsorted buffer (without affecting the performance significantly). For example,
-a ciphertext in an unsorted buffer of the root node is incomparable with all
-the other ciphertexts in the entire tree.  Moreover, in the POPE construction,
-when an unsorted leaf buffer is full (i.e.,  containing more than $L$
-ciphertexts), where $L$ is a threshold parameter, new $L$ leaf nodes are
-created, and the ciphertexts are partitioned into $L$ newly created buffers.
-This procedure greatly reduces the number of ciphertexts in unsorted buffers
-and affects the security; in the worst case, some unsorted buffer will have
-only a single ciphertext. With more careful partitioning, we can maintain the
-number of incomparable pairs to be reasonably high even over many queries. 
+unsorted buffer (without affecting the performance significantly). 
+%For example,
+%a ciphertext in an unsorted buffer of the root node is incomparable with all
+%the other ciphertexts in the entire tree.  
+In the original POPE construction, when an unsorted leaf buffer is full (i.e.,
+containing more than $L$ ciphertexts), where $L$ is a threshold parameter, new
+$L$ leaf nodes are created, and the ciphertexts are partitioned into $L$ newly
+created buffers. This procedure greatly reduces the number of ciphertexts in
+unsorted buffers and affects the security; in the worst case, some unsorted
+buffer will have only a single ciphertext. With more careful split procedure,
+we can maintain the reasonable number of ciphertexts even after the split.
+\fi
 
 
 Another possible direction is taking advantage of ORAM (Oblivious Random Access
-Memory). Although they are too slow to used throughout the entire system
+Memory). Although ORAMs are too slow to used throughout the entire system
 containing a large amount of data, we hope that ORAMs can be used effectively
 for achieving stronger privacy for the sensitive sub-part of the system (e.g.,
 the bottom parts of the POPE tree).  In fact, ORAMs have been used to minimize

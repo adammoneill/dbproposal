@@ -1,43 +1,15 @@
 %!TEX root = dbproposal.tex
 
-\subsection{Extending BlindSeer}
+\subsubsection{BlindSeer in the Cloud Setting}
 \label{sec:ext-blindseer}
-
-\paragraph{Prior work.} A co-PI was a member of the team that developed
-BlindSeer~\cite{SP:PKVKMC14,SP:FVKKKM15}, which is a database management system
-that provides privacy.
-%
-BlindSeer has three main players: the \emph{server} $\mathsf{S}$,
-{\em index server} $\sf IS$, and {\em client} $\sf C$. The server $\sf S$,
-holds the DB and outsources an encrypted copy of the DB to a third party,
-the index server $\sf IS$. The server $\sf S$  also builds an
-encrypted Bloom filter (BF) search tree over the DB and sends it to $\sf IS$. The
-client $\sf C$ sends search queries to $\sf IS$ and obtains encrypted
-results, the decryption key for which is secret-shared
-between $\sf C$ and $\sf IS$. These decryptions key are arranged in an offline
-setup stage, using shuffling and homomorphic public-key
-encryption.
-
-BlindSeer provides the following privacy guarantees:
-\begin{itemize}\setlength\itemsep{0em}
-\item Query privacy: $\sf S$ is not involved with the search protocol at
-  all, so the client's queries are hidden from $\sf S$. Moreover, $\sf IS$ holds
-    the {\em shuffled, encrypted} database, so the client's queries remain
-    private to a great degree against $\sf IS$. 
-
-\item Data privacy: $\sf IS$ deals with only the encrypted database, so the
-records are hidden from $\sf IS$. Moreover, $\sf IS$ returns only the records
-that satisfy the client query, and therefore, $\sf C$ cannot arbitrarily access
-all the records in the database.  
-\end{itemize}
-
-\subsubsection{Proposed Work}
+\paragraph{Simplified threat model.}
 When a database is outsourced, the database owner is often the client
 itself, in which case we don't need to worry about whether the plaintext data
 would be leaked to the client.  In this proposal, we will consider this setting
 of the client as the data owner and significantly simplify the architecture of
-the BlindSeer system. This will bring us a construction that has better
-efficiency and a richer set of functionalities. In particular:
+the BlindSeer system to fit into our threat model. This will bring us a
+construction that has better efficiency, still enjoying a rich set of
+functionalities. In particular:
 
 \begin{itemize}\setlength\itemsep{0em}
 \item {\em Much simpler, more efficient setup.}
@@ -68,10 +40,11 @@ In our setting, however, we don't need any key setup, nor MPC computation.
 Therefore, we can add BF data directly to the search tree with much more
 efficiency.  
 \end{itemize}
-
-\noindent We believe that it is important to provide an efficient solution for various
-settings. For use cases where this new setting is appropriate, we believe this simplified
-construction will be an order of magnitude faster than the current BlindSeer system.
+%
+We believe that it is important to provide an efficient solution for
+various settings. For use cases where this new setting is appropriate, we
+believe this simplified construction will be an {\em order of magnitude faster}
+than the current BlindSeer system.
 
 \paragraph{Proximity of high-dimensional data.}
 BlindSeer already provides conjunctions and range queries.  These queries can be combined to answer proximity queries on a Euclidean space.
@@ -102,28 +75,27 @@ relevant keyword index appropriately.
 
 
 \def\HHH{{\cal H}}
-\subsection{Enhancing security of BlindSeer}
-
+\paragraph{Enhancing security.}
 In BlindSeer, the search query is executed by the client traversing the Bloom filter
 search tree. In particular, in each node of the tree, the client and the server
 execute the following:
 \begin{enumerate}\setlength\itemsep{0em}
 \item For each keyword $\alpha$ in the query, the client computes a hash on
-$\alpha$, based on which the look-up positions $H(\alpha) =  (h_1, h_2, ...,
-h_\eta)$ for the BF data are identified. Here, $\eta$ is a system
-parameter. 
+  $\alpha$, based on which the look-up positions $Pos(\alpha) = (i_1, \ldots,
+    i_\eta)$ for the BF contents are identified. Here, $\eta$ is a system
+    parameter. 
 
-\item The client sends $\HHH = \{H(\alpha_1), \ldots, H(\alpha_q)\}$,
+\item The client sends $\{Pos(\alpha_1), \ldots, Pos(\alpha_q)\}$,
   where $\alpha_1,\ldots,\alpha_q$ are the keywords used in the query.
 
-\item The client and the server execute a protocol using $\HHH$ and the
-encrypted BF as input, so that the client knows whether the given query is
-satisfied. 
+\item The client and the server execute a protocol using the look-up positions
+  and the encrypted BF as input, so that the client knows whether the given
+query is satisfied. 
 \end{enumerate}
 
-The message $\HHH$ (i.e., the look-up positions) from the client to the server
-leaks $H(\alpha)$ to a significantly degree, since $q$ is a small number most
-of the time. Moreover, $H(\alpha)$ is a deterministic function on $\alpha$.
+The the look-up positions that are sent from the client to the server leaks
+$Pos(\alpha)$ to a significantly degree, since $q$ is a small number most of
+the time. Moreover, $Pos(\alpha)$ is a deterministic function on $\alpha$.
 This implies that the server can infer with a reasonable probability whether
 two queries contain the same keyword, although it doesn't know what the keyword
 is.  If the server is given  auxiliary information about query statistics, the
@@ -131,22 +103,20 @@ server may be able to infer queries.
 
 %\paragraph{Removing the leakage of BF indices.}
 
-It is difficult to reduce the leakage in the original
-BlindSeer system. In particular, the above step 3 (i.e., the protocol execution
-to check whether the given query is satisfied) is performed using secure
-two-party computation based on Yao's garbled circuit. It is critical
-for the logic to be as simple as possible, in order to obtain the desired
-efficiency. To reduce the leakage, it is natural to use more sophisticated
-cryptographic mechanisms, but then the step 3 of secure computation would be
-significantly slower. 
+It is costly to reduce the leakage in the original BlindSeer system. In
+particular, the above step 3 (i.e., the protocol execution to check whether the
+given query is satisfied) is performed using secure two-party computation based
+on Yao's garbled circuit. To reduce the leakage, it is natural to use more
+sophisticated cryptographic mechanisms, but then the step 3 of secure
+computation would be significantly slower. 
 
-However, in Section~\ref{sec:ext-blindseer} we noted secure computation is not
-necessary in the two-party setting. In this case, we can actually remove the
-leakage by completely hiding $\HHH$. As one promising direction, we can achive
-this goal by storing the encrypted BF using ORAM techniques. Note that the
-$\HHH$ can be regarded as the metadata (i.e., ``addresses") for the encrypted
-data (i.e., BF contents), which fits perfectly into the scneario that ORAM
-tries to make secure. 
+However, as noted above, we don't need secure computation in our simplified
+system. In this case, we can actually remove the leakage by completely hiding
+the look-up positions. As one promising direction, we can achive this goal by
+storing the encrypted BF using ORAM techniques. Note that the look-up positions
+can be regarded as the metadata (i.e., ``addresses") for the encrypted data
+(i.e., BF contents), which fits perfectly into the scneario that ORAM tries to
+make secure. 
 %
 Even using the ORAM, we expect that the resulting system will be faster than
 the system using two-party secure computation, since two-party computation is
