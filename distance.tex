@@ -38,10 +38,13 @@ Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoent
 \subsubsection{Proposed Work}
 
 \paragraph{Understanding and constructing distance-preserving encryption.}
-There is a scattering of work on variants of distance-revealing encryption, but there is not a {\em solid theoretic foundation} for the object.  Previous work defines noisy searchable encryption schemes but never explicitly define distance-revealing encryption.   Given the history of order-preserving encryption it is crucial to understand the security guarantees of distance-preserving and distance-revealing encryption. % In particular, we believe that distance-preserving encryption does not offer meaningful security.
+There is a scattering of work on variants of distance-revealing
+encryption, but there is not a {\em solid theoretic foundation} for the
+object.  Previous work defines noisy searchable encryption schemes but
+never explicitly defines distance-revealing encryption.   Given the history of order-preserving encryption it is crucial to understand the security guarantees of distance-preserving and distance-revealing encryption. % In particular, we believe that distance-preserving encryption does not offer meaningful security.
 
 %Ongoing work by the PIs indicates the viability of distance-preserving encryptionthis structure is highly metric dependent.  
-The PIs first propose to study the distance-revealing encryption for the Hamming metric space.
+The PIs first propose to study distance-revealing encryption for the Hamming metric space.
 Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.  Ongoing work by the PIs indicates that there is no secure distance-preserving encryption for this metric unless $|\mathcal{M}|$ is super polynomial.  Define the following: 
 \begin{itemize}\setlength\itemsep{0em}
 \item Let $f: \mathcal{M}^\ell \rightarrow \mathcal{M}^\ell$ permute its input coordinates, and let $g_i: \mathcal{M}\rightarrow \mathcal{M}$ be a permutation.
@@ -51,13 +54,24 @@ All distance-preserving encryption schemes $\enc: \mathcal{M}^\ell\rightarrow \m
 
 Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary strings).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which our ongoing work shows is necessary.  However, the PIs also plan to investigate security of distance-preserving encryption for the Hamming metric when the adversary does not know any plaintext-ciphertext pairs (i.e., a so-called ciphertext-only attack) or a very small number of them, as was previously done for order-preserving encryption~\cite{C:BolCheONe11}.
  
- The PIs propose to study other metrics, in particular Euclidean, cosine-similarity, and Jaccard distance.    The PIs also plan to address the case of \emph{course grained} distance, e.g., where distance is in the set $\{far, equal, close\}$.  This problem is connected to property-preserving encryption for \emph{graph data}.  A course metric can be represented by a graph where neighboring vertices are near according to the metric.  Intuitively, our goal is to encrypt a graph as another graph with a subgraph of the same structure. The PIs believe this could lead to interesting questions in graph theory.
+ The PIs propose to study other metrics, in particular Euclidean,
+ cosine-similarity, and Jaccard distance.    The PIs also plan to
+ address the case of \emph{course grained} distance, e.g., where
+ distance is in the set $\{far, equal, close\}$.  This problem is
+ connected to property-preserving encryption for \emph{graph data}.  A
+ course metric can be represented by a graph where neighboring vertices
+ are near according to the metric.  Intuitively, our goal is to encrypt
+ a graph as another graph with a subgraph of the same structure. We believe this could lead to interesting questions in graph theory.
 
 \paragraph{Understanding ideal distance-revealing encryption.}
 In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption.   This direction has recently been pursued fruitfully by the PI in the case of order-revealing encryption~\cite{EPRINT:CLOZ16}.
 
 \paragraph{Distance-revealing encryption based on fuzzy extractors.}
-We will construct distance-revealing encryption based on fuzzy extractors which are a well known primitive for deriving a stable key from a noisy source~\cite{EC:DodReySmi04}.  They consist of a pair of algorithms $\gen(a)$ which produces a stable key $key$ and a public value $p$, the algorithm $\rep(b, p)$ outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are constructing noisy searchable encryption from fuzzy extractors and distance-preserving encryption.  Let $\{a_i | 1\le i \le n\}$ be the set of plaintexts to be stored in the database.  Let $\enc$ be a distance-preserving encryption and let $H$ be a hash function.  Rather than directly storing $\enc(a_i)$ the client does the following:
+We will construct distance-revealing encryption based on fuzzy
+extractors which are a well known primitive for deriving a stable key
+from a noisy source~\cite{EC:DodReySmi04}.  They consist of a pair of
+algorithms: $\gen(a)$, which produces a stable key $key$ and a public
+value $p$, and $\rep(b, p)$, which outputs $key$ if $d(a,b)\in\{equal,close\}$.  In ongoing work, we are constructing noisy searchable encryption from fuzzy extractors and distance-preserving encryption.  Let $\{a_i | 1\le i \le n\}$ be the set of plaintexts to be stored in the database.  Let $\enc$ be a distance-preserving encryption and let $H$ be a hash function.  Rather than directly storing $\enc(a_i)$ the client does the following:
 
 \begin{itemize}\setlength\itemsep{0em}
 \item Compute $c_i \leftarrow \enc(a_i)$ and then $k_i, p_i \leftarrow \gen(c_i)$. Send $p_i, H(k_i)$ to server.
