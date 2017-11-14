@@ -1,0 +1,77 @@
+%!TEX root = dbproposal.tex
+
+In this section of the proposal, we outline our efforts to analyze,
+implement, and compare the most promising schemes from the previous two
+sections. These efforts will be \emph{concurrent} and \emph{ongoing}
+with the theoretical developments, as we continually seek to understand
+the pratical benefits and drawbacks of different approaches.
+
+The main goals of this thrust of our work is to put our schemes in
+context of existing approaches and provide clear comparisons for
+practitioners and researchers alike.
+The work of this section will also feature the most prominent engagement
+with student researchers, particularly
+undergraduate students at our respective institutions.
+
+\subsection{Leakage analysis}
+
+All of the schemes we have proposed make some compromise of leakage for
+performance. Unfortunately, many prior works either focus primarily on security
+proofs and (sometimes novel) security definitions, or make heuristic
+arguments for security. This means it is not
+straightforward, for example, to decide what is ``more secure'' between
+different approaches.
+
+Significant progress towards fair comparisons was made recently in the
+Systemization of Knowledge paper by one of the co-PIs and others
+\cite{SP:FVYSHG17}. We will continue in this vein and use existing
+metrics whenever possible to place our work in a fair context within the
+state of the art.
+
+An important component of this analysis is cognizance of
+recent attacks on PPE and related schemes such as
+\cite{CCS:CGPR15,CCS:KKNO16}. These attacks often depend crucially on
+the datasets used, and we will use the same (or equivalent) attacks
+against our schemes to provide a meaningful comparison.
+
+Much of the work of this proposal is in extending existing
+non-interactive and interactive schemes to the multi-dimensional setting
+via some support of distance queries. Some existing metrics can apply
+directly in this setting, for example the notion of \emph{incomparable
+pairs} introduced in \cite{CCS:RACY16}. Other notions related to
+closeness, i.e., \emph{pairwise distance}, also make sense in a
+Euclidean space. Rather than develop entirely new definitions, when
+possible we will use existing metrics to quantify the security
+improvements our schemes provide.
+
+\subsection{Implementation and experimental analysis}
+
+\emph{Throughout all phases of the project}, the most promising of our
+schemes will be implemented and tested on realistic scenarios.
+Indeed, we plan to include
+experimental components in many of our published artifacts, with
+links to the open source implementations developed.
+
+As compatibility with existing database software is a key priority of
+our approach, we will seek to incorporate our schemes within existing
+open-source projects such as the SSE library Clusion
+(\url{https://github.com/encryptedsystems/Clusion}) and
+the cloud-based graph database software
+Apache Rya (\url{https://rya.apache.org/}).
+
+In order to evaluate the real-world performance of our schemes, we will
+be careful to use realistic and relevant datasets and queries. Tools
+such as the automatic test-suite generator developed in the IARPA SPAR
+project \cite{HH14,varia2015automated} will be used to generate
+repeatable and realistic experiments.
+
+Our experimental evaluations will also cover the \emph{security} of our
+schemes. Frequently the development of applied cryptographic tools
+relies exclusively on security proofs in
+discussing privacy. Our scalable approaches indeed contain security
+proofs, but also usually entail some limited information leakage.
+We will use empirical tools to highlight the practical
+implications of this limited leakage, including leakage under known
+attacks. For example, in \cite{CCS:RACY16}, two of the co-PIs not only
+evaluated the number of incomparable ciphertext pairs in theory, but
+also tested this leakage on a publicly-available salary database.
