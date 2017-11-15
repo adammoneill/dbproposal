@@ -26,7 +26,7 @@ algorithms which support various types of proximity queries.
 Despite the varied use of proximity functionality in databases, we find two core operations.     The first core operation is computing the distance between two points $a$ and $b$ or $d(a,b)$ according to some metric $d$.  This distance can be granular, for example $d(a, b) =15$ or coarse, $d(a,b)\in\{0,1,2\}$ corresponding to $\{equal, close, far\}$.  Even with this small set of outputs, users expect the function $d$ to behave as a metric so we restrict our attention to metric functions.  We call property-preserving encryption where $d(\enc(a), \enc(b)) = d(a,b)$ \emph{distance preserving encryption} or DPE.  Using the same language as for order-revealing and order-preserving encryption, we define a variant called \emph{distance-revealing encryption} or DRE where distance is computable  via some metric on the output space.
 
 The second core operation takes a triple of points $a,b$ and $c$ and outputs the bit whether $d(a,c)<d(b,c)$.  This type of computation is frequently used in clustering, nearest neighbor, and learning algorithms.   We call a property-preserving encryption that achieves this functionality \emph{distance-comparison revealing encryption} or DCRE. When the distance comparison on ciphertexts uses the \emph{same} metric as on the plaintext we call \emph{distance-comparison preserving encryption} or DCPE.  The goal for this technique is to \emph{not} allow computation of $d(a,b)$.
- A related notion is \emph{approximate} distance-preserving encryption, where  $\delta_1 \cdot d(a,b) \leq d(\enc(a), \enc(b)) \leq \delta_2  \cdot d(a,b)$ for some functions $\delta_1, \delta_2$.  This can be used much like distance-preserving encryption in algorithms to give approximate guarantees.
+ A related notion is \emph{approximate} distance-preserving encryption, where  $\delta_1 \cdot d(a,b) \leq d(\enc(a), \enc(b)) \leq \delta_2  \cdot d(a,b)$ for parameters $\delta_1, \delta_2$.  This can be used much like distance-preserving encryption in algorithms to give approximate guarantees.
 
 \paragraph{Goals.}
 The security achievable by DPE and DCPE is unclear even for the ideal objects.
@@ -80,7 +80,7 @@ encryption.  This definition allows that
 $d(\enc(a), \enc(b)) <d(a,b)$. It is possible to modify the
 construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) =
 d(a,b)$, but this construction {\em only works for the set-difference
-metric and requires strong cryptographic assumptions}.
+metric over large alphabets and requires strong cryptographic assumptions}.
 
 \subsubsection{Proposed Work}
 
@@ -113,7 +113,7 @@ input coordinates and each $g_i$ is a permutation of $\mathcal{M}$.
 % The permutation $f$ rotates the dimensions and $g_i$ shuffles individual dimensions.
 These are the only
 operations that preserve distance across the entire metric space, which
-limits the potential security unless $\mathcal{M}^\ell$ is very large.
+limits the potential security unless $\mathcal{M}$ is very large.
 
 Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary strings).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which our ongoing work shows is necessary.  However, the PIs also plan to investigate security of distance-preserving encryption for the Hamming metric when the adversary does not know any plaintext-ciphertext pairs (i.e., a so-called ciphertext-only attack) or a very small number of them, as was previously done for order-preserving encryption~\cite{C:BolCheONe11}.
  
@@ -128,7 +128,7 @@ Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary 
  which could lead to interesting questions in graph theory.
 
 \paragraph{Understanding ideal distance-revealing encryption.}
-In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption.   This direction has recently been pursued fruitfully by the PI in the case of order-revealing encryption~\cite{EPRINT:CLOZ16}.
+In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption.   The PI has recently used this approach to find positive results for order-revealing encryption~\cite{EPRINT:CLOZ16}.
 
 \paragraph{Distance-revealing encryption based on fuzzy extractors.}
 We will construct distance-revealing encryption based on fuzzy
@@ -169,7 +169,7 @@ as the number of points in the metric spaces increases, the number of degrees of
 \item As more of these constraints are added, $d(a,c)$ is limited to smaller ranges.
 \end{enumerate}
 That is, the encryption mechanism reveals more accurate estimations on  the distance between $d(a,c)$.
-If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme explored next.  That is, we expect a major outcome of this component to be 1) an understanding of the relationship between distance-comparison preserving encryption and approximate distance-preserving encryption (which we believe are equivalent), and 2) distance-comparison \emph{revealing} schemes (at least based on bilinear maps, hopefully even PRFs) achieving stronger security.
+If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme explored next.  That is, we expect a major outcome of this component to be 1) an understanding of the relationship between distance-comparison preserving encryption and approximate distance-preserving encryption (which we believe are equivalent), and 2) distance-comparison \emph{revealing} schemes (at least based on bilinear maps, hopefully even PRFs).
 
 \subsection{Approximate Distance Revealing Encryption}
 \label{sec:adre}
@@ -206,7 +206,7 @@ function outputs.
 
 \paragraph{Proposed work.}
 Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
-We can show that independent random such perturbations yields a function that, while not strictly DCP, is \emph{approximately} so, and that encrypting via an approximately DCP function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheONe11} to answer the question of what privacy such a scheme provides.  
+We can show that independent random such perturbations yields a function that, while not strictly DCPE, is \emph{approximately} so, and that encrypting via an approximately DCPE function still guarantees accuracy of nearest neighbor  search within the approximation.  Moreover, as such perturbations can easily be derandomized, this gives an efficient \emph{approximate} DCPE scheme from PRFs.  Finally, we will conduct a separate analysis in the spirit of~\cite{C:BolCheONe11} to answer the question of what privacy such a scheme provides.  
 
  A related question we plan to investigate is the privacy achievable using locality-sensitive hashing to perform nearest neighbor algorithms.  To our knowledge, prior work has not explicitly defined privacy properties for locality-sensitive hashing.  Moreover, the scheme of Kuzu et al.~\cite{kuzu2012efficient}  does not approach ideal security as the server learns which records match each subfeature.  In ongoing work, we are combining locality-sensitive hashing with the recent \emph{sample-then-hash} fuzzy extractor construction of the co-PI~\cite{EC:CFPRS16}.  The idea is as follows:
 
