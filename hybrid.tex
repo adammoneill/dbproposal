@@ -1,20 +1,19 @@
 %!TEX root = dbproposal.tex
 
-\subsection{Hybrid approache to improve accuracy in approximate DRE}
+\subsection{Hybrid approach to improve accuracy in approximate DRE}
 
 Even after our improvements above, the fully-interactive POPE and
 BlindSeer schemes may still not be sufficiently scalable for the largest
-databases and composable with existing softare. We not propose a novel,
+databases. We now propose a novel,
 \emph{hybrid approach} that uses interaction alongside the Approximate
-Distance Revealing Encryption schemes we discussed in \Cref{sec:adre}.
+DRE schemes discussed in \Cref{sec:adre}:
 
-The basic idea is as follows:
 \begin{itemize}\setlength{\itemsep}{0em}
   \item User encrypts keys using a noisy Approximate DRE scheme and
   stores them on the server
   \item User queries for all points within distance $d$ of $a$ by
     sending an (approximate distance-revealing) encryption $a'$ of $a$ to the
-    server, along with a scaling $d'$ of $d$ according to the scaling of
+    server, along with a scaling $d'$ of $d$ according to
     the encryption scheme.
   \item The server finds a set $S$ of all ciphertexts within $d'$ of $a'$
     non-interactively
@@ -39,7 +38,7 @@ the hybrid approach could allow a \emph{more noisy} approximate DRE
 scheme to be used, as the results will always be trimmed down using an
 efficient interactive protocol.
 
-This idea is still preliminary and depends crucially on the success of
-prior portions of the proposal, so we will be flexible to alter this
-approach as necessary depending on the lessons learned in working on the
-building blocks of the hybrid scheme.
+% This idea is still preliminary and depends crucially on the success of
+% prior portions of the proposal, so we will be flexible to alter this
+% approach as necessary depending on the lessons learned in working on the
+% building blocks of the hybrid scheme.

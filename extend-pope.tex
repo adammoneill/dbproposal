@@ -20,24 +20,22 @@ interactive and require help from a client without altering the overall
 indexing structure.
 
 \paragraph{Prior work.}
-We are aware of two main works that follow the approach of PPE with added
-interactivity.  Two of the co-PIs recently introduced a new cryptographic
-approach, called POPE, to support range queries over encrypted data, providing
-stronger security than previous order-preserving encryptions~\cite{CCS:RACY16}.
-In contrast to existing OPE schemes, the server builds a novel indexing
+Two main lines of work follow the approach of PPE with added
+interactivity.  Two co-PIs recently introduced a new cryptographic
+approach, called POPE, to support range queries over encrypted data with
+stronger security than OPE \cite{CCS:RACY16}.
+The server builds a novel indexing
 structure called a POPE tree, in which each node has a {\it unsorted buffer}
 and a sorted list of elements.  Thanks to this, the scheme can perform {\it
 lazy indexing, by sorting values only when necessary}. 
 %In particular, on each range query, the scheme sorts the part of the tree that
 %forms the boundary of the search, leaving much of the data untouched.
 %
-The other work is Arx due to Poddar, Boelter, and
-Popa~\cite{EPRINT:PodBoePop16}.  The Arx protocol builds an index for answering
-range queries without revealing all order relationships to the server. The
-index stores all encrypted values in a binary tree so range queries can be
-answered by traversing this tree for the end points. Using Yao's garbled
-circuits, the server traverses the index without learning the values it is
-comparing or the result of the comparison at each stage.  
+The other work is the Arx protocol
+\cite{EPRINT:PodBoePop16}, which builds an index for answering
+range queries without revealing all order relationships to the server.
+Encrypted values are stored in a binary tree, which is traversed
+privately using Yao's garbled circuits.
 %Each garbled circuit
 %can only be used once for a single comparison.  The client and server work
 %together to create new garbled circuits (and OT pairs).
@@ -67,8 +65,7 @@ $\sf S$, using shuffling and homomorphic public-key encryption.
 %all the records in the database.  
 %\end{itemize}
 
-\subsection{Proposed Work}
-\subsubsection{Extending POPE}
+\subsection{Extending and Improving POPE}
 Our main approach is developing PPE that operates using just-in-time
 advice from the client.  In POPE, this took the form of asking the client to
 sort a small number of nodes to build out a tree and comparing ciphertexts only
@@ -79,23 +76,21 @@ comparisons to only linear.
 \paragraph{Similarity of high-dimensional data.}
 Our first task will be extending the POPE
 paradigm to high dimensional data.  The approach uses random hyperplanes
+\cite{STOC:DasFre08,charikar2002similarity}
 to form a partially-sorted search tree over multidimensional keys.
-Random hyperplanes
-have previously been used in the concept of random projection trees and
-locality-sensitive hashing~\cite{STOC:DasFre08,charikar2002similarity}.  The
-idea is as follows:
+The idea is as follows:
 
 \begin{enumerate}\setlength\itemsep{0em}
 \item The server initially stores an unsorted buffer of the entire dataset.
-\item The client initiates a search for items that are similar to $a$.
-\item The server asks the client to split the root node.
+\item The client searches for items close to $a$,
+  initiating a partial sort of the buffer into a POPE tree.
 \item The client generates a random hyperplane $x$ and splits 
   the stored elements $b_i$ based on whether $b_i$ is above $x$ or not.  (In
     the Euclidean space, this means checking whether $\langle x^T,b_i \rangle$
     is positive.)
 \item The client and server repeat the process with the relevant subtree
   until reaching an upper bound on the size of an unsorted leaf node.
-\item The leaf node containing $a$ is returned to the client.
+  This leaf node which would contain $a$ is returned to the client.
 \end{enumerate}
 
 The problem with this preliminary approach is a substantial chance that
@@ -132,7 +127,7 @@ must be stored and queryable to build the tree on demand.  Balancing the speed
 and privacy of querying the original string represents an important tradeoff in
 this approach.
 
-\paragraph{Forward security.} Leakage attacks are particularly problematic when
+\paragraph{Improved security.} Leakage attacks are particularly problematic when
 the adversary is able to correlate leakage from multiple queries.  Forward
 security of searchable encryption can decouple the adversary's leakage and force
 them to execute their attack with less information.  
@@ -159,7 +154,7 @@ In POPE, each search query leaks the ordering  for the following reasons:
   in the tree, and how it was brought down to some leaf node.  
 \end{itemize}
 
-We plan to address these issues as follows. To address the first issue, for
+To address the first issue, for
 each POPE node, the order of the links to its children may be shuffled. Since
 POPE is an interactive protocol, when a tree node is created, we can slightly
 modify the original protocol so that the client additionally change the order
@@ -168,7 +163,7 @@ of the links with a randomly selected permutation.\footnote{Similar ideas were u
 Search can still be performed correctly even with this
 modification, since the interactive guidance of the client can help the server
 traverse the tree nodes correctly. 
-    
+
 To address the second issue, we observe that when the ciphertexts in an
 unsorted buffer are streamed down to lower-level buffers during a search query,
 the client first {\em decrypts} them in order to indicate the correct unsorted
@@ -216,5 +211,5 @@ the leakage for SSE (symmetric searchable encryption) schemes which support
 keyword search over encrypted
 data~\cite{NDSS:StePapShi14,C:GarMohPap16,RSA:IKLO16}. We will investigate how
 to incorporate ORAM into POPE trees so that the resulting system enjoys
-stronger privacy while only having marginal performance degradation.  
+stronger privacy with only marginal performance degradation.  
 

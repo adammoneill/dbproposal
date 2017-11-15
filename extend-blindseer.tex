@@ -1,15 +1,12 @@
 %!TEX root = dbproposal.tex
 
-\subsubsection{BlindSeer in the Cloud Setting}
+\subsection{BlindSeer in the Cloud Setting}
 \label{sec:ext-blindseer}
 \paragraph{Simplified threat model.}
 When a database is outsourced, the database owner is often the client
 itself, in which case we don't need to worry about whether the plaintext data
-would be leaked to the client.  In this proposal, we will consider this setting
-of the client as the data owner and significantly simplify the architecture of
-the BlindSeer system to fit into our threat model. This will bring us a
-construction that has better efficiency, still enjoying a rich set of
-functionalities. In particular:
+would be leaked to the client. Considering this setting will allow
+numerous performance improvements:
 
 \begin{itemize}\setlength\itemsep{0em}
 \item {\em Much simpler, more efficient setup.}
@@ -17,8 +14,8 @@ In this new simpler threat model, the client can be regarded as playing as both
 $\sf S$ and $\sf C$ in the original BlindSeer architecture. Therefore, the
 client can just hold one symmetric key in contrast to the original BlindSeer
 system where a slow public-key encryption scheme and a random shuffling
-must be introduced in the setup stage, none of which we need in our new
-setting. This also gives us {\em better backward compatibility}.
+must be introduced in the setup stage.
+This also improves backward compatibility.
 
 \item {\em MPC is not necessary.} In the original BlindSeer system, in order to
 hide from $\sf C$ the BF data stored in each node of the search tree, $\sf
@@ -27,27 +24,25 @@ C$ and $\sf IS$ have to execute costly MPC computation. In our setting, the
     since we don't need to hide anything from the client.  
 
 
-\item {\em Dynamic record insertion.} In the original BlindSeer, one cannot
-insert new encrypted BF data to the search tree dynamically.  It is mainly
-because the decryption key for each record must be arranged in the setup
-stage.
-%
-Furthermore, in the original BlindSeer, BF data are encrypted with a very
+\item {\em Dynamic record insertion.}
+The original BlindSeer required all BF data to be known during the setup
+stage in order to arrange for decryption keys.
+Furthermore, data was encrypted with a very
 simple mechanism of one-time pad so that MPC computation may be reasonably
-efficient. Dynamic addition of BF data will lead to a more complicated
-encryption structure, and the MPC computation will be much more costly.
+efficient.
+Both of these choices prevent adding or removing data after initialization.
 In our setting, however, we don't need any key setup, nor MPC computation.
 Therefore, we can add BF data directly to the search tree with much more
 efficiency.  
 \end{itemize}
 %
-We believe that it is important to provide an efficient solution for
-various settings. For use cases where this new setting is appropriate, we
+For use cases where this new setting is appropriate, we
 believe this simplified construction will be an {\em order of magnitude faster}
 than the current BlindSeer system.
 
 \paragraph{Proximity of high-dimensional data.}
-BlindSeer already provides conjunctions and range queries.  These queries can be combined to answer proximity queries on a Euclidean space.
+BlindSeer already provides conjunctions and range queries. We will
+use these queries in combination to answer proximity queries on a Euclidean space.
 In particular, a query that searches for the points close to $(x, y)$ can be defined as a 2D rectangle defined by the top-left point $(x_1, y_1)$ and the
 bottom-right point $(y_1, y_2)$ can be described with range queries and
 conjunctions as follows: $$ x_1 \le x \le x_2 ~~{\sf AND}~~~ y_1 \le y \le y_2.
@@ -58,17 +53,18 @@ Using Bloom filters we can encode a graph structure as follows:
 \begin{itemize}
 \item For each edge $(a, b)$ from vertex $a$ to vertex $b$, we insert an
   encryption $c = \Enc((a,b) \| w(a,b) )$, where $w(a,b)$ is the weight of the edge
-    $(a,b)$. Moreover, have the ciphertext $c$ indexed by a BF keyword `$\sf edge$:a*'. 
+    $(a,b)$, indexed by a BF keyword `$\sf edge$:a*'. 
 \end{itemize}
 
 \noindent
 We can find all the neighbors of vertex $a$ along with the weight of the
 associated edge. Therefore, we can run variants of Dijkstra's algorithm and
-compute compute the shortest path, given two vertices $a$ and $b$ and a limit
+compute the shortest path, given two vertices $a$ and $b$ and a limit
 on the maximum number of arcs. The key to this approach is the ``native''
-ability of Bloom filters to handle conjunction queries.  BlindSeer is based on
-the Bloom filters so it can support proximity and graph structure by adding
-relevant keyword index appropriately.
+ability of Bloom filters to handle conjunction queries.
+% BlindSeer is based on
+% the Bloom filters so it can support proximity and graph structure by adding
+% relevant keyword index appropriately.
 %
 %Moreover, considering that BlindSeer allows disjunctions and conjunctions, the
 %client can enjoy a much richer set of functionalities.  
@@ -93,13 +89,13 @@ execute the following:
 query is satisfied. 
 \end{enumerate}
 
-The the look-up positions that are sent from the client to the server leaks
-$Pos(\alpha)$ to a significantly degree, since $q$ is a small number most of
-the time. Moreover, $Pos(\alpha)$ is a deterministic function on $\alpha$.
+The look-up positions that are sent from the client to the server leak
+$Pos(\alpha)$ to a significant degree, since $q$ is generally small.
+Moreover, $Pos(\alpha)$ is a deterministic function on $\alpha$.
 This implies that the server can infer with a reasonable probability whether
-two queries contain the same keyword, although it doesn't know what the keyword
-is.  If the server is given  auxiliary information about query statistics, the
-server may be able to infer queries. 
+two queries contain the same keyword.
+Given  auxiliary information about query statistics, the
+server may be able to infer the plaintext keywords.
 
 %\paragraph{Removing the leakage of BF indices.}
 
@@ -112,12 +108,11 @@ computation would be significantly slower.
 
 However, as noted above, we don't need secure computation in our simplified
 system. In this case, we can actually remove the leakage by completely hiding
-the look-up positions. As one promising direction, we can achive this goal by
+the look-up positions. As one promising direction, we can achieve this goal by
 storing the encrypted BF using ORAM techniques. Note that the look-up positions
 can be regarded as the metadata (i.e., ``addresses") for the encrypted data
-(i.e., BF contents), which fits perfectly into the scneario that ORAM tries to
-make secure. 
+(i.e., BF contents), which fits perfectly into the use case for ORAM.
 %
-Even using the ORAM, we expect that the resulting system will be faster than
-the system using two-party secure computation, since two-party computation is
+We expect that the resulting system will be faster than the current one,
+since two-party computation is
 known to be significantly slower than ORAM. 
