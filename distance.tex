@@ -4,23 +4,64 @@
 \label{sec:ppe}
 
 In spatial databases, nearest neighbor queries (\emph{e.g.}, finding the closest soldier in the field) and clustering queries are pervasive.  %Algorithms for executing these query types need to understand distance relationships between tuples o perform the fundamental operation of \emph{distance comparison} between points in the database, \emph{i.e.}, determining which of two candidates points are closer to a target point.  
-In large scale biometric databases, the fundamental operation is comparison of the distance between a target point and all stored points. Often, biometric databases return the nearest match if the distance is less than some threshold.  For example, the Aadhaar system in India links biometrics with a unique 12 digit number with over 1 billion numbers issued~\cite{daugman2014600}.  Lastly, many machine learning algorithms depend on computing distance between points. Linear regression finds the line that minimizes the sum of distances between the line and each data point.  Similarly, the first principal component minimizes the sum of distances between the selected line and the dataset~\cite{wold1987principal}.  The remaining principal components are defined similarly subject to being orthogonal to previously defined principal components.
+In large scale biometric databases, the fundamental operation is
+comparison of the distance between a target point and all stored points.
+Often, biometric databases return the nearest match if the distance is
+less than some threshold.
+% these examples are already in the intro
+% For example, the Aadhaar system in India
+% links biometrics with a unique 12 digit number with over 1 billion
+% numbers issued~\cite{daugman2014600}.  Lastly, many machine learning
+% algorithms depend on computing distance between points. Linear
+% regression finds the line that minimizes the sum of distances between
+% the line and each data point.  Similarly, the first principal component
+% minimizes the sum of distances between the selected line and the
+% dataset~\cite{wold1987principal}.  The remaining principal components
+% are defined similarly subject to being orthogonal to previously defined
+% principal components.
+In this component of the proposal, we will consider encryption
+algorithms which support various types of proximity queries.
 
+\paragraph{Core operations.}
 Despite the varied use of proximity functionality in databases, we find two core operations.     The first core operation is computing the distance between two points $a$ and $b$ or $d(a,b)$ according to some metric $d$.  This distance can be granular, for example $d(a, b) =15$ or coarse, $d(a,b)\in\{0,1,2\}$ corresponding to $\{equal, close, far\}$.  Even with this small set of outputs, users expect the function $d$ to behave as a metric so we restrict our attention to metric functions.  We call property-preserving encryption where $d(\enc(a), \enc(b)) = d(a,b)$ \emph{distance preserving encryption} or DPE.  Using the same language as for order-revealing and order-preserving encryption, we define a variant called \emph{distance-revealing encryption} or DRE where distance is computable  via some metric on the output space.
 
 The second core operation takes a triple of points $a,b$ and $c$ and outputs the bit whether $d(a,c)<d(b,c)$.  This type of computation is frequently used in clustering, nearest neighbor, and learning algorithms.   We call a property-preserving encryption that achieves this functionality \emph{distance-comparison revealing encryption} or DCRE. When the distance comparison on ciphertexts uses the \emph{same} metric as on the plaintext we call \emph{distance-comparison preserving encryption} or DCPE.  The goal for this technique is to \emph{not} allow computation of $d(a,b)$.
  A related notion is \emph{approximate} distance-preserving encryption, where  $\delta_1 \cdot d(a,b) \leq d(\enc(a), \enc(b)) \leq \delta_2  \cdot d(a,b)$ for some functions $\delta_1, \delta_2$.  This can be used much like distance-preserving encryption in algorithms to give approximate guarantees.
 
+\paragraph{Goals.}
 The security achievable by DPE and DCPE is unclear even for the ideal objects.
-Our research on encryption for proximity  consists of three tasks: 1) understanding security of DPE, and constructing DPE and DRE, we expect the ideal security to vary widely based on the underlying metric properties 2) understanding security of DCPE, and constructing DCPE and DCRE,  and 3) the connection to approximate distance-revealing encryption. (We believe that approximate distance-revealing encryption is equivalent to distance-comparison preserving encryption.)
+Our research on encryption for proximity  consists of three tasks:
+\begin{itemize}\setlength{\itemsep}{0em}
+\item Understanding security of DPE and constructing DPE and DRE
+schemes. (We expect the ideal security to vary widely based on the underlying metric
+properties.)
+\item Understanding the security of DCPE, and constructing DCPE and DCRE
+schemes.
+\item Exploring the connection to approximate distance-revealing
+encryption. (We believe that approximate distance-revealing encryption
+may be equivalent to distance-comparison preserving encryption.)
+\end{itemize}
 
 \subsection{DPE and DRE}
 
 \paragraph{Prior work.}
-The most relevant work is due to Boldyreva and Chenette~\cite{boldyreva2014efficient}, generalizing the work of and Li et al.~\cite{li2010fuzzy,wang2013efficient}. They defined a \emph{closeness-preserving tagging function} where $\enc(a)$ and $\enc(b)$ have associated tag sets.  If the tag sets intersect, this implies that $d(a,b) \in\{equal, close\}$ with high probability.  The plaintexts $a$ and $b$ are said to be $far$ if the tag sets do not intersect.  
+Generalizing the work of and Li
+et al.~\cite{li2010fuzzy,wang2013efficient},
+Boldyreva and Chenette~\cite{boldyreva2014efficient}
+defined a
+\emph{closeness-preserving tagging function} where $\enc(a)$ and
+$\enc(b)$ have associated tag sets.  If the tag sets intersect, this
+implies that $d(a,b) \in\{equal, close\}$ with high probability;
+otherwise the $d(a,b)$ is deemed to be $far$.
 %This work generalizes the work of who construct a tagging function for particular string functions.  
 %
-The construction creates a tag for every possible neighbor and thus {\em do not scale} to metrics where an exponential number of values are considered close. Boldyreva and Chenette also present a negative result: there is a closeness function where any tagging function requires storage proportional to the number of close neighbors~\cite[Theorem 5.2]{boldyreva2014efficient}.  This result is not known to hold if the closeness function is a (well-known) metric.  
+The construction creates a tag for every possible neighbor and thus {\em
+does not scale} to metrics where many values are considered close.
+Boldyreva and Chenette also present a negative result: there is a
+closeness function which \emph{requires} storage
+proportional to the number of close neighbors~\cite[Theorem
+5.2]{boldyreva2014efficient}.  This result is not known to hold if the
+closeness function is a (well-known) metric.  
 
 \iffalse
 The approach can be summarized as follows:
@@ -33,7 +74,13 @@ The approach can be summarized as follows:
 
 Alternatively, the plaintext $a$ can be encrypted (without tags) and the client can search for the disjunction of all neighbors of $b$ (rather than just $b$).  Woodage et al.~apply this approach in the context of password authentication with typos~\cite{C:WCDJR17}.  Both of these approaches {\em require time linear in the number of neighbors} and are not viable for high dimensional data.
 
-Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a pseudoentropic isometric which is variant of distance-preserving encryption.  The definition of pseudoentropic isometries allows that $d(\enc(a), \enc(b)) <d(a,b)$.  However, it is possible to modify the construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) = d(a,b)$, but this construction {\em only works for the set-difference metric and requires strong cryptographic assumptions}.
+Lastly, the co-PI~\cite{EPRINT:ABCFG16} constructed an object called a
+pseudoentropic isometric which is variant of distance-preserving
+encryption.  This definition allows that
+$d(\enc(a), \enc(b)) <d(a,b)$. It is possible to modify the
+construction of \cite{EPRINT:ABCFG16} so that $d(\enc(a), \enc(b)) =
+d(a,b)$, but this construction {\em only works for the set-difference
+metric and requires strong cryptographic assumptions}.
 
 \subsubsection{Proposed Work}
 
