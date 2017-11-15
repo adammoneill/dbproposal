@@ -92,12 +92,28 @@ never explicitly defines distance-revealing encryption.   Given the history of o
 
 %Ongoing work by the PIs indicates the viability of distance-preserving encryptionthis structure is highly metric dependent.  
 The PIs first propose to study distance-revealing encryption for the Hamming metric space.
-Consider the Hamming metric over $\mathcal{M}^\ell$ defined as $d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.  Ongoing work by the PIs indicates that there is no secure distance-preserving encryption for this metric unless $|\mathcal{M}|$ is super polynomial.  Define the following: 
-\begin{itemize}\setlength\itemsep{0em}
-\item Let $f: \mathcal{M}^\ell \rightarrow \mathcal{M}^\ell$ permute its input coordinates, and let $g_i: \mathcal{M}\rightarrow \mathcal{M}$ be a permutation.
-%\item Let $x\in\mathcal{M}^\ell$ be a plaintext points.  
-\end{itemize}
-All distance-preserving encryption schemes $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$ are of the form $\enc(x) = f(g_1(x_1),..., g_\ell(x_\ell))$.  The permutation $f$ rotates the dimensions and $g_i$ shuffles individual dimensions.  These are the only operations that preserve distance across the entire metric space.
+Consider the Hamming metric over $\mathcal{M}^\ell$ defined as
+the number of positions in which two length-$\ell$ strings differ.
+%$d(a,b) = | \{ 1\le i\le \ell | a_i \neq b_i\}|$.
+Ongoing work by the PIs indicates that there is no secure
+distance-preserving encryption for this metric unless the size of the
+character set $|\mathcal{M}|$ is
+super-polynomial.
+
+% Define the following: 
+% \begin{itemize}\setlength\itemsep{0em}
+% \item Let $f: \mathcal{M}^\ell \rightarrow \mathcal{M}^\ell$ permute its input coordinates, and let $g_i: \mathcal{M}\rightarrow \mathcal{M}$ be a permutation.
+% %\item Let $x\in\mathcal{M}^\ell$ be a plaintext points.  
+% \end{itemize}
+All distance-preserving encryption schemes
+% $\enc: \mathcal{M}^\ell\rightarrow \mathcal{M}^\ell$
+are of the form $\enc(x) =
+f(g_1(x_1),..., g_\ell(x_\ell))$, where $f$ is a permutation of the
+input coordinates and each $g_i$ is a permutation of $\mathcal{M}$.
+% The permutation $f$ rotates the dimensions and $g_i$ shuffles individual dimensions.
+These are the only
+operations that preserve distance across the entire metric space, which
+limits the potential security unless $\mathcal{M}^\ell$ is very large.
 
 Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary can completely learn $\enc(x)$ with a polynomial number of plaintext/ciphertext pairs (linear for binary strings).  Prior work of the PI only provided security when $\mathcal{M}$ was superpolynomial in size~\cite{EPRINT:ABCFG16}, which our ongoing work shows is necessary.  However, the PIs also plan to investigate security of distance-preserving encryption for the Hamming metric when the adversary does not know any plaintext-ciphertext pairs (i.e., a so-called ciphertext-only attack) or a very small number of them, as was previously done for order-preserving encryption~\cite{C:BolCheONe11}.
  
@@ -108,7 +124,8 @@ Whenever $|\mathcal{M}|$ is polynomial in the security parameter, the adversary 
  connected to property-preserving encryption for \emph{graph data}.  A
  course metric can be represented by a graph where neighboring vertices
  are near according to the metric.  Intuitively, our goal is to encrypt
- a graph as another graph with a subgraph of the same structure. We believe this could lead to interesting questions in graph theory.
+ a graph as another graph with a subgraph of the same structure,
+ which could lead to interesting questions in graph theory.
 
 \paragraph{Understanding ideal distance-revealing encryption.}
 In the case of \emph{ideal} distance-revealing encryption, a foundational question is whether it can be constructed from multilinear or bilinear maps.  There also may be interesting ``intermediate'' leakage profiles that are not ideal but leak less information than distance preserving encryption.   This direction has recently been pursued fruitfully by the PI in the case of order-revealing encryption~\cite{EPRINT:CLOZ16}.
@@ -131,14 +148,19 @@ We expect the output of this component to be 1) evidence on which metrics are su
 We call encryption that supports distance comparison \emph{distance-comparison revealing} encryption (DCRE).  As described above, many learning algorithms do not require direct computation of $d(a,b)$.  Rather it suffices to indicate which of two points is closer to a target point.  That is, it is sufficient to compute $d(a,c)\overset{?}<d(b,c)$.  Following the literature on order-revealing vs.~order-preserving encryption, we call the special case where ciphertexts themselves are spatial points \emph{distance-comparison preserving encryption} (DCPE).  The hope is that the weaker functionality of DCRE and DCPE can be secure for more metrics than distance-revealing and distance-preserving encryption respectively.
 This leads to the following questions:
 
-\begin{question}
-Can we design efficient DCPE?  What security can be achieved by such schemes?
-\end{question}
-\begin{question}
-Can we design efficient DCRE with better security?
-\end{question}
+\begin{enumerate}\setlength{\itemsep}{0ex}
+\item Can we design efficient DCPE?  What security can be achieved by such schemes?
+\item Can we design efficient DCRE with better security?
+\end{enumerate}
 
-To answer the first question, in on-going work we have found that distance comparison preserving functions do not seem to have a nice ``recursive'' property as in the case of order-preserving functions, which was crucially exploited by~\cite{EC:BCLO09}.  However, based on computer experiments, we conjecture that \emph{distance-comparison preserving functions are approximately distance-preserving}.    So far, we have proven this conjecture in one dimension.  The intuition is that as the number of points in the metric spaces the number of degrees of freedom decreases.  The intuition is as follows:
+To answer the first question, in ongoing work we have found that
+distance comparison preserving functions do not seem to have a nice
+``recursive'' property as in the case of order-preserving functions,
+which was crucially exploited by~\cite{EC:BCLO09}.  However, based on
+computer experiments, we conjecture that \emph{distance-comparison
+preserving functions are approximately distance-preserving}.    So far,
+we have proven this conjecture in one dimension.  The intuition is that
+as the number of points in the metric spaces increases, the number of degrees of freedom decreases.  The intuition is as follows:
 \begin{enumerate}\setlength\itemsep{0em}
 \item Suppose that $d(b,c) = k$ is known by the attacker, 
 \item Learning that $d(a,c) < d(b,c)$ tells the attacker that $d(a,c)<k$.  
@@ -146,25 +168,41 @@ To answer the first question, in on-going work we have found that distance compa
 \item The attacker can determine that $k/2< d(a,c) <k$.  
 \item As more of these constraints are added, $d(a,c)$ is limited to smaller ranges.
 \end{enumerate}
-That is, the encryption mechanism reveal more accurate estimations on  the distance between $d(a,c)$.
+That is, the encryption mechanism reveals more accurate estimations on  the distance between $d(a,c)$.
 If this conjecture is true, then for the first question we could equivalently turn our attention to the design and analysis of  an \emph{approximately distance-preserving} encryption scheme explored next.  That is, we expect a major outcome of this component to be 1) an understanding of the relationship between distance-comparison preserving encryption and approximate distance-preserving encryption (which we believe are equivalent), and 2) distance-comparison \emph{revealing} schemes (at least based on bilinear maps, hopefully even PRFs) achieving stronger security.
 
 \subsection{Approximate Distance Revealing Encryption}
 \label{sec:adre}
 \paragraph{Prior work.}
-The recent GRECS work allows minimum distance between any pair of points~\cite{CCS:MKNK15}.  Rather than storing or computing distance between pairs of points $a,b$, the work uses a primitive called a sketch-based oracle.\footnote{This sketch-based oracle is different from the cryptographic primitive called a secure sketch that used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
+The recent GRECS work allows minimum distance between any pair of
+points~\cite{CCS:MKNK15}.  Rather than storing or computing distance
+between pairs of points $a,b$, the work uses a primitive called a
+sketch-based oracle.\footnote{This sketch-based oracle is different from
+the notion of a secure sketch used in fuzzy extractor constructions.}  A logarithmic number of reference points $r_1,..., r_k$ are selected and the distance between $r_i$ and every point in the graph is computed and encrypted.  This structure is transmitted to the server.  Then at query time the client encrypts their pair $a,b$.  The server finds all reference points which are connected to $a,b$ and returns $\min_{r_i, r_j} d(a,r_i) + d(r_i, r_j) + d(r_j, b)$.  Given a careful selection of the reference points this distance can be shown to approximate the minimum distance between $d(a,b)$.
 
-A second line of work uses locality-sensitive hashes which are designed to allow more efficient computation of nearest neighbor in high dimensional spaces~\cite{datar2004locality,slaney2008locality}.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.  \begin{definition}
-  Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$ locality sensitive hash (where $r_1< r_2$ and $p_1 >p_2$) if for any $x, y$ the following hold:
-\begin{itemize}\setlength\itemsep{0em}
-\item If $d(x, y) \le r_1$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \ge p_1$, and 
-\item If $d(x, y) \ge r_2$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \le p_2$.
-\end{itemize}
-\end{definition}
- 
+A second line of work uses locality-sensitive hashes which are designed to allow more efficient computation of nearest neighbor in high dimensional spaces~\cite{datar2004locality,slaney2008locality}.  A locality sensitive hash is function that is more likely to have collisions when two inputs are ``close'' in the input space.
+% \begin{definition}
+%   Let $(R,d)$ be a metric space.  A family of functions $\mathcal{H}$ is a $(r_1, r_2, p_1, p_2)$ locality sensitive hash (where $r_1< r_2$ and $p_1 >p_2$) if for any $x, y$ the following hold:
+% \begin{itemize}\setlength\itemsep{0em}
+% \item If $d(x, y) \le r_1$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \ge p_1$, and 
+% \item If $d(x, y) \ge r_2$ then $\Pr_{h\leftarrow \mathcal{H}}[h(x) = h(y)] \le p_2$.
+% \end{itemize}
+% \end{definition}
+
 Kuzu, Islam and Kantarcioglu~\cite{kuzu2012efficient} use locality sensitive hashing to create an approximate distance-preserving data structure.  To create the index, for plaintext $a$ the client samples multiple locality sensitive hashes $h_1(a), h_2(a),...,h_k(a)$ and associates each output as a keyword with $a$ using deterministic encryption.
-
-Then to query for $b$ the client queries computes $h_1(b), h_2(b),...,h_k(b)$. They then ask the server for all results that match a single hash (this requires the ability to perform disjunctive queries).\footnote{More precisely, they build an inverted index for each locality sensitive hash that allows them to retrieve the document identifiers.}  The client locally retrieves results and then restricts to those documents that have a high number of hash matches.  With good probability, these will correspond to those records that were close to the original query.  Bringer et al.~\cite{bringer2011identification,bringer2009error} use similar techniques but insert the output of the locality sensitive hash into a Bloom filter.  Both of these works provide relatively weak security and make no attempt to hide records that match a small number of hash function outputs.  
+Then to query for $b$ the client queries computes $h_1(b),...,h_k(b)$. They then ask the server for all results that match
+a single hash.% (this requires the ability to perform disjunctive queries).%
+\footnote{To achieve this, they build an inverted index for each
+locality sensitive hash that allows them to retrieve the document
+identifiers.}  The client locally retrieves results and then restricts
+to those documents that have a high number of hash matches.  With good
+probability, these will correspond to those records that were close to
+the original query.  Bringer et
+al.~\cite{bringer2011identification,bringer2009error} use similar
+techniques but insert the output of the locality sensitive hash into a
+Bloom filter.  Both of these works provide relatively weak security and
+make no attempt to hide records that match a small number of hash
+function outputs.  
 
 \paragraph{Proposed work.}
 Distance-preserving functions are easy to characterize geometrically, in terms of a scaling factor plus flips, rotations and reflections.  To approximately preserve distance, we can also  ``perturb'' each image point within a ball of given radius.  
@@ -174,10 +212,10 @@ We can show that independent random such perturbations yields a function that, w
 
 \begin{enumerate}\setlength\itemsep{0em}
 \item For input $a$, compute $a_1 = h_1(a), a_2 = h_2(a),..., a_k = h_k(a)$.
-\item For $i=1,...., \ell$:
-\begin{enumerate}\setlength\itemsep{0em}
-\item Sample $i_1,..., i_\eta\overset{\$}\leftarrow [k]$ and compute $\alpha_i = H(a_{i_1} || ... || a_{i_\eta})$. Append $\alpha_i$ as keyword to $a$ (using deterministic encryption).
-\end{enumerate}
+\item For $i=1,...., \ell$,
+sample $i_1,..., i_\eta\overset{\$}\leftarrow [k]$, compute $\alpha_i =
+H(a_{i_1} || ... || a_{i_\eta})$, and append $\alpha_i$ as keyword to $a$
+(using deterministic encryption).
 \end{enumerate}
 \noindent
 This approach appends multiple locality sensitive hashes that individually have a small probability of matching but overall there is a high probability of a single match.  The probability of finding any matches between $a,b$ that are not close is small (see Canetti et al.~\cite{EC:CFPRS16}).
