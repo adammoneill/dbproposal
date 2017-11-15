@@ -130,7 +130,7 @@ Lastly, secure enclaves such as Intel SGX offer a promising hardware approach th
 The goal of this proposal is to create secure outsourced databases that
 will be adopted and used by industry.  Towards achieving this goal we
 recognize two lessons from the past: (1) PPE must be carefully analyzed
-to understanding security and (2) there are tremendous benefits of
+to understand security and (2) there are tremendous benefits of
 maintaining backwards compatibility with existing database systems.
 Together, these lessons tell us that some modification of database
 systems may be necessary but these modifications should be judicious.
@@ -166,21 +166,20 @@ of the following tasks:
 distance-revealing encryption appears inadequate for an application, we
 will change the model to allow operators to call interactive protocols.
 We will show what functionality can be built using \emph{interactive
-operators}, drawing on recent work of the
+operators}, drawing on partial order-preserving encryption (POPE), recent work of the
 co-PIs~\cite{SP:PKVKMC14,CCS:RACY16}.  This component will consist of
 the following tasks:
 \begin{enumerate}
 \setlength\itemsep{0em}
-\item Developing Partial \emph{Distance}-Preserving Encryption and
-  applying it to Euclidean proximity and edit distance queries
-\item Improving the security of POPE with forward security via
+\item Developing \emph{Partial Distance-Preserving Encryption} for Euclidean and distance proximity  queries
+\item Adding forward security to POPE via
   re-insertions and random shuffling
 \item Enabling multidimensional queries in BlindSeer and removing the need for
-  additive homomorphic encryption and secure two-party computation in the cloud
+  additive homomorphic encryption and secure two-party computation in the outsourced storage
   setting 
-\item Combining ORAM and interactive approaches to reduce leakage
-\item Developing a new hybrid approach with approximate
-  distance-revealing encryption and partial interaction, to obtain
+\item Judiciously incorporating oblivious RAM (ORAM) to reduce leakage
+\item Developing a new hybrid approach that uses approximate
+  distance-revealing encryption and interactive protocols to obtain
   better performance and backwards compatibility
 \end{enumerate}
 
@@ -194,7 +193,7 @@ We will use the UConn HPC Cluster to evaluate our
 implementations on realistic-size databases (\url{https://hpc.uconn.edu}).
 We expect this evaluation
 to use and extend the database and query generator created as part of
-the IARPA SPAR project~\cite{varia2015automated}. Specifically, our
+the IARPA SPAR project~\cite{varia2015automated}. The co-PI oversaw development of the most recent version of these tools. Specifically, our
 tasks are:
 \begin{enumerate}
 \setlength\itemsep{0em}
